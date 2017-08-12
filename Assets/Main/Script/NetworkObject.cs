@@ -13,9 +13,7 @@ public class NetworkObject : MonoBehaviour {
 		if (MonobitEngine.MonobitNetwork.inRoom)
         {
             GameObject obj = MonobitEngine.MonobitNetwork.Instantiate(objName, Vector3.zero, Quaternion.identity, group);
-            obj.transform.parent = transform;
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localRotation = Quaternion.identity;
+            obj.GetComponent<AttackObject>().AttachObj = gameObject;
         }
 	}
 }
