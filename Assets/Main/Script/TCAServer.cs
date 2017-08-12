@@ -42,8 +42,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 
     private void OnDisconnectedFromServer()
     {
-        message.SetMessage("Disconnected.");
-        Debug.Log(message.Message.Value);
+        SetMessage("Disconnected.");
 	    Observable.Timer(System.TimeSpan.FromSeconds(reconnectTime)).Subscribe(_ =>
         {
             ConnectServer ();
@@ -53,15 +52,13 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 
 	private void ConnectServer()
 	{
-        message.SetMessage("Connecting Server...");
-        Debug.Log(message.Message.Value);
+        SetMessage("Connecting Server...");
 	    MonobitNetwork.ConnectServer(SERVER_NAME);
 	}
 
         private void OnJoinedLobby()
         {
-            message.SetMessage("Enter Lobby.");
-            Debug.Log(message.Message.Value);
+            SetMessage("Enter Lobby.");
 
             MonobitEngine.RoomSettings settings = new MonobitEngine.RoomSettings();
             settings.maxPlayers = maxPlayer;
@@ -75,8 +72,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 
         private void OnJoinedRoom()
         {
-            message.SetMessage("Enter Room.");
-            Debug.Log(message.Message.Value);    
+            SetMessage("Enter Room.");
 
             enterRoom.OnNext(Unit.Default);
         }
@@ -92,4 +88,13 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 		    }
 	    }
     
+
+        private void SetMessage(string msg)
+        {
+            if (message)
+            {
+                message.SetMessage(msg);
+                Debug.Log(message.Message.Value);   
+            }
+        }
 }

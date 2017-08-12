@@ -39,22 +39,7 @@ namespace MonobitEngine.Editor
         public void OnDestroy()
         {
             // 変数取得
-            m_View = target as MonobitView;
-            if (m_View == null)
-            {
-                return;
-            }
-
-            // 0 以外が入っていた場合には MonobitView.RemoveSceneViewID() で自動削除
-            bool bPrefab = EditorUtility.IsPersistent(m_View.gameObject);
-            if (!bPrefab && m_View.viewID != 0)
-            {
-                MonobitView.RemoveSceneViewID(m_View.viewID);
-                m_View.viewID = 0;
-
-                // セーブ
-                EditorUtility.SetDirty(m_View);
-            }
+            
         }
 
         /**
