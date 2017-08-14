@@ -20,6 +20,8 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 	private Color TestColor = Color.black;
     [SerializeField]
     private Messager message;
+    [SerializeField]
+    private bool offLine;
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
@@ -29,14 +31,21 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
     public IObservable<Unit> OnEnterRoom { get { return enterRoom; } }
 
     private void Start() {
-        MonobitNetwork.updateStreamRate = updateStreamRate;
-        MonobitNetwork.sendRate = sendRate;
-
-        MonobitNetwork.autoJoinLobby = true;
-
-        if (!MonobitNetwork.inRoom)
+        if (offLine)
         {
-            ConnectServer();
+            enterRoom.OnNext(Unit.Default);
+        }
+        else
+        {
+            MonobitNetwork.updateStreamRate = updateStreamRate;
+            MonobitNetwork.sendRate = sendRate;
+
+            MonobitNetwork.autoJoinLobby = true;
+
+            if (!MonobitNetwork.inRoom)
+            {
+                ConnectServer();
+            }
         }
     }
 
@@ -93,8 +102,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
         {
             if (message)
             {
-                message.SetMessage(msg);
-                Debug.Log(message.Message.Value);   
+                message.SetMessage(msg); 
             }
         }
 }

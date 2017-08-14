@@ -10,22 +10,25 @@ public class MainScene : MonoBehaviour {
     private GameObject player;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+    {
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
+        {
+            MainManager.ChangeState(MainManager.GameState.GAME_TITLE);
+        }
+
 		InitPlayerPosition();
 	}
 
     void InitPlayerPosition()
     {
-        if (MonobitEngine.MonobitNetwork.inRoom)
-        {
-            int PlayerNo = MonobitEngine.MonobitNetwork.playerList.ToList().IndexOf(MonobitEngine.MonobitNetwork.player);
-            Debug.Log("PlayerNo: " + PlayerNo);
+        int PlayerNo = MainManager.PlayerNo;
+        Debug.Log("PlayerNo: " + PlayerNo);
 
-            if (player && PlayerNo != -1 && PlayerNo < startPosition.Count)
-            {
-                player.transform.position = startPosition[PlayerNo].transform.position;
-                player.transform.rotation = startPosition[PlayerNo].transform.rotation;
-            }
+        if (player && PlayerNo >= 0 && PlayerNo < startPosition.Count)
+        {
+            player.transform.position = startPosition[PlayerNo].transform.position;
+            player.transform.rotation = startPosition[PlayerNo].transform.rotation;
         }
     }
 }

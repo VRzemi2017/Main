@@ -10,6 +10,11 @@ public class MessageDisplayer_TextMesh : MonoBehaviour {
     private void Start() {
         TextMesh mesh = GetComponent<TextMesh>();
 
+        if (msger == null)
+        {
+            msger = GameObject.FindObjectOfType<Messager>();
+        }
+
         if (msger)
         {
             msger.Message.Subscribe(s => 

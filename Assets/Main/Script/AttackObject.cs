@@ -10,11 +10,14 @@ public class AttackObject : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        this.LateUpdateAsObservable().Subscribe(_ => 
+        if (AttachObj)
         {
-            transform.position = AttachObj.transform.position;
-            transform.rotation = AttachObj.transform.rotation;
-            transform.localScale = AttachObj.transform.localScale;
-        });
+            this.LateUpdateAsObservable().Subscribe(_ => 
+            {
+                transform.position = AttachObj.transform.position;
+                transform.rotation = AttachObj.transform.rotation;
+                transform.localScale = AttachObj.transform.localScale;
+            });
+        }
 	}
 }
