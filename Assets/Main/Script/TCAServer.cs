@@ -87,7 +87,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
         SetMessage("Enter Room.");
 
         playerNo = MonobitEngine.MonobitNetwork.playerCountInRoom - 1;
-        Debug.Log("PlayerNo: " + playerNo);
+        Debug.Log("Player: " + (playerNo + 1) + "P");
 
         enterRoom.OnNext(Unit.Default);
     }
@@ -100,6 +100,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 	        GUILayout.Label (MonobitNetwork.isConnect ? "Connected." : "Disconnected.");
 	        GUILayout.Label (MonobitNetwork.inRoom ? "In Room." : "Not In Room.");
 	        GUILayout.Label (MonobitNetwork.isHost ? "Host." : "Not Host.");	
+            GUILayout.Label ("Player: " + (playerNo + 1) + "P");	
 	    }
 	}
     
