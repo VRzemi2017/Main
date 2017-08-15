@@ -30,6 +30,9 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
     private Subject<Unit> enterRoom = new Subject<Unit>();
     public IObservable<Unit> OnEnterRoom { get { return enterRoom; } }
 
+    private static int playerNo = -1;
+    public static int PlayerNo { get { return playerNo; } }
+
     private void Start() {
         if (offLine)
         {
@@ -65,44 +68,47 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 	    MonobitNetwork.ConnectServer(SERVER_NAME);
 	}
 
-        private void OnJoinedLobby()
-        {
-            SetMessage("Enter Lobby.");
+    private void OnJoinedLobby()
+    {
+        SetMessage("Enter Lobby.");
 
-            MonobitEngine.RoomSettings settings = new MonobitEngine.RoomSettings();
-            settings.maxPlayers = maxPlayer;
-            settings.isVisible = true;
-            settings.isOpen = true;
-            MonobitEngine.LobbyInfo lobby = new MonobitEngine.LobbyInfo();
-            lobby.Kind = LobbyKind.Default;
-            lobby.Name = LOBBY_NAME;
-            MonobitEngine.MonobitNetwork.JoinOrCreateRoom(LOBBY_NAME, settings, lobby);
-        }
+        MonobitEngine.RoomSettings settings = new MonobitEngine.RoomSettings();
+        settings.maxPlayers = maxPlayer;
+        settings.isVisible = true;
+        settings.isOpen = true;
+        MonobitEngine.LobbyInfo lobby = new MonobitEngine.LobbyInfo();
+        lobby.Kind = LobbyKind.Default;
+        lobby.Name = LOBBY_NAME;
+        MonobitEngine.MonobitNetwork.JoinOrCreateRoom(LOBBY_NAME, settings, lobby);
+    }
 
-        private void OnJoinedRoom()
-        {
-            SetMessage("Enter Room.");
+    private void OnJoinedRoom()
+    {
+        SetMessage("Enter Room.");
 
-            enterRoom.OnNext(Unit.Default);
-        }
+        playerNo = MonobitEngine.MonobitNetwork.playerCountInRoom - 1;
+        Debug.Log("PlayerNo: " + playerNo);
 
-	    private void OnGUI()
+        enterRoom.OnNext(Unit.Default);
+    }
+
+	private void OnGUI()
+	{
+	    if (GUIDisplay) 
 	    {
-		    if (GUIDisplay) 
-		    {
-			    GUI.color = TestColor;
-			    GUILayout.Label (MonobitNetwork.isConnect ? "Connected." : "Disconnected.");
-			    GUILayout.Label (MonobitNetwork.inRoom ? "In Room." : "Not In Room.");
-			    GUILayout.Label (MonobitNetwork.isHost ? "Host." : "Not Host.");	
-		    }
+	        GUI.color = TestColor;
+	        GUILayout.Label (MonobitNetwork.isConnect ? "Connected." : "Disconnected.");
+	        GUILayout.Label (MonobitNetwork.inRoom ? "In Room." : "Not In Room.");
+	        GUILayout.Label (MonobitNetwork.isHost ? "Host." : "Not Host.");	
 	    }
+	}
     
 
-        private void SetMessage(string msg)
+    private void SetMessage(string msg)
+    {
+        if (message)
         {
-            if (message)
-            {
-                message.SetMessage(msg); 
-            }
+            message.SetMessage(msg); 
         }
+    }
 }

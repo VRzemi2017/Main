@@ -22,13 +22,10 @@ public class MainScene : MonoBehaviour {
 
     void InitPlayerPosition()
     {
-        int PlayerNo = MainManager.PlayerNo;
-        Debug.Log("PlayerNo: " + PlayerNo);
-
-        if (player && PlayerNo >= 0 && PlayerNo < startPosition.Count)
+        if (player && TCAServer.PlayerNo >= 0 && TCAServer.PlayerNo < startPosition.Count)
         {
-            player.transform.position = startPosition[PlayerNo].transform.position;
-            player.transform.rotation = startPosition[PlayerNo].transform.rotation;
+            player.transform.position = startPosition[TCAServer.PlayerNo].transform.position;
+            player.transform.rotation = startPosition[TCAServer.PlayerNo].transform.rotation;
         }
     }
 }

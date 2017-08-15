@@ -34,19 +34,6 @@ public class MainManager : MonoBehaviour {
     private static GameState _state = GameState.GAME_INIT;
     public static GameState CurrentState { get { return _state; } }
 
-    public static int PlayerNo 
-    {
-        get 
-        {
-            if (MonobitNetwork.inRoom)
-            {
-                return MonobitEngine.MonobitNetwork.playerList.ToList().IndexOf(MonobitEngine.MonobitNetwork.player);
-            }
-
-            return 0;
-        }
-    }
-
     private void Awake() 
     {
         DontDestroyOnLoad(gameObject);
