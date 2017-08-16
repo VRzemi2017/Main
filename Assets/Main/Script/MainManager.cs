@@ -34,6 +34,9 @@ public class MainManager : MonoBehaviour {
     private static GameState _state = GameState.GAME_INIT;
     public static GameState CurrentState { get { return _state; } }
 
+    System.IDisposable disFidin;
+    System.IDisposable disFidout;
+
     private void Awake() 
     {
         DontDestroyOnLoad(gameObject);
@@ -52,21 +55,55 @@ public class MainManager : MonoBehaviour {
             }
         }).AddTo(this);
 
-        this.UpdateAsObservable().Where(_ => Input.GetMouseButtonDown(0)).Subscribe(_ => 
+        this.UpdateAsObservable().Subscribe(_ => 
         {
-            int next = ((int)_state + 1) % (int)GameState.GAME_STATE_MAX;
-            if (next == (int)GameState.GAME_START)
+            SteamVR_ControllerManager m = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
+            if (m)
             {
-                SceneManager.LoadScene(mainName);
-            }
+                var leftObj = m.left.GetComponent<SteamVR_TrackedObject>();
+                var rightObj = m.right.GetComponent<SteamVR_TrackedObject>();
 
-            if (next == (int)GameState.GAME_INIT)
-            {
-                SceneManager.LoadScene(titleName);
-                return;
-            }
+                var left = (leftObj.index != SteamVR_TrackedObject.EIndex.None) ? SteamVR_Controller.Input((int)leftObj.index) : null;
+                var right = (rightObj.index != SteamVR_TrackedObject.EIndex.None) ? SteamVR_Controller.Input((int)rightObj.index) : null;
 
-            ChangeState((GameState)next);
+                if ((left != null && left.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)) || (right != null && right.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)))
+                {
+                    if (_state == GameState.GAME_FADIN || _state == GameState.GAME_FINISH)
+                    {
+                        return;
+                    }
+
+                    int next = ((int)_state + 1) % (int)GameState.GAME_STATE_MAX;
+                    if (next == (int)GameState.GAME_FADIN) {
+                        FadControl fad = GameObject.FindObjectOfType<FadControl>();
+                        if (fad)
+                        {
+                            fad.Fadin();
+                            disFidin = fad.OnFadinEnd.Subscribe(i => 
+                            {
+                                MonobitNetwork.LoadLevel(mainName);
+                                disFidin.Dispose();
+                            });
+                        }
+                    }
+
+                    if (next == (int)GameState.GAME_FINISH) {
+                        FadControl fad = GameObject.FindObjectOfType<FadControl>();
+                        if (fad)
+                        {
+                            fad.Fadin();
+                            disFidin = fad.OnFadinEnd.Subscribe(i => 
+                            {
+                                MonobitNetwork.LoadLevel(titleName);
+                                disFidin.Dispose();
+                            });
+                        }
+                    }
+
+                    ChangeState((GameState)next);
+                }
+                
+            }
         });
 	}
 

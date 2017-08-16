@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class line2 : MonoBehaviour {
+public class LineRendererController : MonoBehaviour {
 
-    [SerializeField] GameObject player;
+    SteamVR_ControllerManager player;
     [SerializeField] GameObject Pointer; //移動位置のTarget
     [SerializeField] float GroundAngle = 30.0f; //角度
 
     [SerializeField] float initialVelocity = 10.0f;
     [SerializeField] float timeResolution = 0.02f;
     [SerializeField] float MaxTime = 10.0f;
-    [SerializeField] float LineLegth = 5.0f;
+    //[SerializeField] float LineLegth = 5.0f;
     [SerializeField] Vector3 PositionDiff;
-    [SerializeField] SteamVR_TrackedObject TrackedObject;
-
     [SerializeField] LayerMask layerMask = -1;
 
     bool ProjectileColor_judge = false; //放物線の色判断
@@ -26,15 +24,16 @@ public class line2 : MonoBehaviour {
     Vector3 Point;
 
     private GameObject PointerInstance;
-
     private LineRenderer lineRenderer;
+    private SteamVR_TrackedObject TrackedObject;
 
     public Vector3 TargetPoint { get { return Point; } }
     public bool IsWarpInput { get { return isWarpInput; } }
 
-
     void Start() {
         lineRenderer = GetComponent<LineRenderer>();
+        player = GameObject.FindObjectOfType<SteamVR_ControllerManager>( );
+        TrackedObject = player.right.GetComponent<SteamVR_TrackedObject>( );
     }
 
     void Update() {
@@ -52,7 +51,7 @@ public class line2 : MonoBehaviour {
         Vector3 currentPosition = postion;
 
         if (!havePointer) {
-            PointerInstance = Instantiate(Pointer, Point, Quaternion.Euler(-90, 0, 0));
+            PointerInstance = Instantiate(Pointer, Point, Quaternion.identity);
             havePointer = true;
         }
 
@@ -62,7 +61,7 @@ public class line2 : MonoBehaviour {
 
         currentPosition.y = postion.y - 0.01f;
 
-        float nowLineLength = 0.0f;
+        //float nowLineLength = 0.0f;
         for (float t = 0.0f; t < MaxTime; t += timeResolution) {
 
             lineRenderer.SetPosition(index, currentPosition);
@@ -109,9 +108,7 @@ public class line2 : MonoBehaviour {
             index++;
             //nowLineLength += ;
 
-
         }
-
 
         //Targetの判断
         ProjectileColor_judge = ColliderTag(Point);
