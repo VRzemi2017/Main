@@ -2,30 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UniRx;
+using UniRx.Triggers;
 
-public class MainScene : MonoBehaviour {
-    [SerializeField]
-    private List<GameObject> startPosition;
-    [SerializeField]
-    private GameObject player;
-
-	// Use this for initialization
-	void Start () 
+public class MainScene : SceneBase
+{
+    private void Awake()
     {
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Title")
-        {
-            MainManager.ChangeState(MainManager.GameState.GAME_TITLE);
-        }
+        ChangeState(GameState.GAME_INIT);
+    }
 
-		InitPlayerPosition();
-	}
-
-    void InitPlayerPosition()
+    // Use this for initialization
+    void Start () 
     {
-        if (player && TCAServer.PlayerNo >= 0 && TCAServer.PlayerNo < startPosition.Count)
-        {
-            player.transform.position = startPosition[TCAServer.PlayerNo].transform.position;
-            player.transform.rotation = startPosition[TCAServer.PlayerNo].transform.rotation;
-        }
+        InitPlayerPosition();
+        FadeIn();
     }
 }

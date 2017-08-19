@@ -16,57 +16,48 @@ public class FadControl : MonoBehaviour
     private Subject<Unit> fadout = new Subject<Unit>();
     public IObservable<Unit> OnFadoutEnd { get { return fadout; } }
 
-    bool fading;
+    public bool Fading { get; private set; }
+
 
     void Start()
     {
         anim = GetComponent<Animation>();
-
-        if (MainManager.CurrentState == MainManager.GameState.GAME_FADIN || MainManager.CurrentState == MainManager.GameState.GAME_TITLE)
-        {
-            Fadout();
-
-            if (MainManager.CurrentState == MainManager.GameState.GAME_FADIN)
-            {
-                MainManager.ChangeState(MainManager.GameState.GAME_START);
-            }
-        }
     }
 
     void FadinEnd()
     {
+        Fading = false;
         fadin.OnNext(Unit.Default);
-        fading = false;
     }
 
     void FadoutEnd()
     {
+        Fading = false;
         fadout.OnNext(Unit.Default);
-        fading = false;
     }
 
     public void Fadin()
     {
-        if (fading)
+        if (Fading)
         {
             return;
         }
 
         anim.clip = fadinClip;
         anim.Play();
-        fading = true;
+        Fading = true;
         
     }
 
     public void Fadout()
     {
-        if (fading)
+        if (Fading)
         {
             return;
         }
 
         anim.clip = fadoutClip;
         anim.Play();
-        fading = true;
+        Fading = true;
     }
 }
