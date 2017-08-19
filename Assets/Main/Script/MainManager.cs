@@ -34,6 +34,9 @@ public class MainManager : MonoBehaviour {
     private static GameState _state = GameState.GAME_INIT;
     public static GameState CurrentState { get { return _state; } }
 
+    private static Subject<GameState> stateChanged = new Subject<GameState>();
+    public static IObservable<GameState> OnStateChanged { get { return stateChanged; } }
+
     System.IDisposable disFidin;
     System.IDisposable disFidout;
 
@@ -112,6 +115,7 @@ public class MainManager : MonoBehaviour {
         SetMessage(state.ToString() + " state ending...");
         _state = state;
         SetMessage( "Change to state " + state.ToString());
+        stateChanged.OnNext(_state);
     }
 
     private static void SetMessage(string msg)
