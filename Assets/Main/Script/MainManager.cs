@@ -9,12 +9,25 @@ using System.Linq;
 using MonobitNetwork = MonobitEngine.MonobitNetwork;
 
 public class MainManager : MonoBehaviour {
-    [SerializeField]
-    private TCAServer server;
-    [SerializeField]
-    private SceneControler scene;
-    [SerializeField]
-    private string titleName;
+    [SerializeField] MonobitServer server;
+    [SerializeField] Messager message;
+    [SerializeField] string titleName;
+
+    public int PlayerNo 
+    {
+        get 
+        {
+            if (server && MonobitServer.PlayerNo >= 0)
+            {
+                return MonobitServer.PlayerNo;
+            }
+
+            return 0;
+        }
+    }
+
+    private Subject<Unit> sceneLoaded = new Subject<Unit>();
+    public IObservable<Unit> OnSceneLoaded { get { return sceneLoaded; } }
 
     private void Awake() 
     {
@@ -23,92 +36,25 @@ public class MainManager : MonoBehaviour {
 
     void Start ()
     {
-        server.OnEnterRoom.Subscribe(_ => 
+        if (server)
         {
-            SceneManager.LoadScene(titleName);
-        }).AddTo(this);
-
-        this.UpdateAsObservable().Subscribe(_ =>
-        {
-            SteamVR_ControllerManager m = GameObject.FindObjectOfType<SteamVR_ControllerManager>();
-            if (m)
+            server.OnEnterRoom.Subscribe(_ =>
             {
-                var leftObj = m.left.GetComponent<SteamVR_TrackedObject>();
-                var rightObj = m.right.GetComponent<SteamVR_TrackedObject>();
-
-                var left = (leftObj.index != SteamVR_TrackedObject.EIndex.None) ? SteamVR_Controller.Input((int)leftObj.index) : null;
-                var right = (rightObj.index != SteamVR_TrackedObject.EIndex.None) ? SteamVR_Controller.Input((int)rightObj.index) : null;
-
-                //SceneBase sb = GameObject.FindObjectOfType<SceneBase>();
-
-                //if ((left != null && left.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)) || (right != null && right.GetTouchDown(SteamVR_Controller.ButtonMask.Trigger)))
-                //{
-                //    if (_state == GameState.GAME_FADIN || _state == GameState.GAME_FINISH)
-                //    {
-                //        return;
-                //    }
-
-                //    int next = ((int)_state + 1) % (int)GameState.GAME_STATE_MAX;
-                //    if (next == (int)GameState.GAME_FADIN)
-                //    {
-                //        ChangeScene(mainName);
-                //    }
-
-                //    if (next == (int)GameState.GAME_FINISH)
-                //    {
-                //        ChangeScene(titleName);
-                //    }
-
-                //    ChangeState((GameState)next);
-                //}
-
-            }
-        });
-    }
-
-    private void ChangeScene(string sceneName)
-    {
-        var fadDis = new SingleAssignmentDisposable();
-        var loadDis = new SingleAssignmentDisposable();
-
-        FadControl fad = GameObject.FindObjectOfType<FadControl>();
-        if (fad)
-        {
-            fad.Fadin();
-            fadDis.Disposable = fad.OnFadinEnd.Subscribe(i =>
-            {
-                DoChangeScene();
-                fadDis.Dispose();
-            }).AddTo(this);
-        }
-
-        if (scene != null)
-        {
-            scene.LoadScene(sceneName);
-            loadDis.Disposable = scene.OnSceneLoaded.Subscribe(i =>
-            {
-                DoChangeScene();
-                loadDis.Dispose();
+                LoadSceneAsync(titleName);
             }).AddTo(this);
         }
     }
 
-    private void DoChangeScene()
+    public void SetMessage(string msg)
     {
-        FadControl fad = GameObject.FindObjectOfType<FadControl>();
-        if (fad && !fad.Fading && scene && !scene.Loading)
-        {
-            scene.DoChangeScene();
-        }
-    }
-
-    public static void SetMessage(string msg)
-    {
-        Messager message = GameObject.FindObjectOfType<Messager>();
-
         if (message)
         {
             message.SetMessage(msg);
         }
+    }
+
+    public void LoadSceneAsync(string name)
+    {
+        SteamVR_LoadLevel.Begin(name);
     }
 }

@@ -13,7 +13,7 @@ public class SceneControler : MonoBehaviour
     public string LoadingScene { get; private set; }
     public bool Loading { get; private set; }
 
-    public void LoadScene(string name)
+    public void LoadSceneAsync(string name)
     {
         if (LoadingScene != null)
         {

@@ -5,7 +5,7 @@ using MonobitEngine;
 using UniRx;
 using UniRx.Triggers;
 
-public class TCAServer : MonobitEngine.MonoBehaviour {
+public class MonobitServer : MonobitEngine.MonoBehaviour {
     [SerializeField]
     private byte maxPlayer = 2;
     [SerializeField]
@@ -25,7 +25,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
-    const string ROOM_NAME = "TCA_MT_ROOM";
+    const string ROOM_NAME = "TCA_JACK_ROOM";
 
     private Subject<Unit> enterRoom = new Subject<Unit>();
     public IObservable<Unit> OnEnterRoom { get { return enterRoom; } }
@@ -87,7 +87,7 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
         SetMessage("Enter Room.");
 
         playerNo = MonobitEngine.MonobitNetwork.playerCountInRoom - 1;
-        Debug.Log("Player: " + (playerNo + 1) + "P");
+        SetMessage("Player: " + (playerNo + 1) + "P");
 
         enterRoom.OnNext(Unit.Default);
     }
@@ -103,7 +103,6 @@ public class TCAServer : MonobitEngine.MonoBehaviour {
             GUILayout.Label ("Player: " + (playerNo + 1) + "P");	
 	    }
 	}
-    
 
     private void SetMessage(string msg)
     {
