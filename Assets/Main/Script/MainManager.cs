@@ -13,6 +13,22 @@ public class MainManager : MonoBehaviour {
     [SerializeField] Messager message;
     [SerializeField] string titleName;
 
+    public enum GameState
+    {
+        GAME_INIT,
+        GAME_FADIN,
+
+        GAME_START,
+        GAME_PLAYING,
+        GAME_RESULT,
+
+        GAME_FADOUT,
+        GAME_FINISH,
+    }
+
+    private static GameState _state = GameState.GAME_START;
+    public static GameState CurrentState { get { return _state; } }
+
     public int PlayerNo 
     {
         get 
