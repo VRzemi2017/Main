@@ -65,7 +65,7 @@ public class Crawler: MonoBehaviour {
 				nowTarget++;
 				timer = 0;
 			}
-		} else if (playerSpotted) {
+		} else if (playerSpotted) { // Attack player
 			target = player1.position;
 			dir = player1.position - myTransform.position;
 			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
@@ -85,7 +85,7 @@ public class Crawler: MonoBehaviour {
 			stopTimer = 3.0f;
 			moveSpeed = 15.0f;
 		} else {
-			moveSpeed = 5.0f;
+			moveSpeed = 5.0f;                    // usual speed
 		}
 
 		// Rotate transform towards next target

@@ -26,6 +26,8 @@ public class CharaManager : MonoBehaviour {
 	private GameObject enemy10;
 	[SerializeField]
 	private GameObject enemy11;
+	[SerializeField]
+	private GameObject enemy12;
 
 	private void Activator() {
 		//Enemy 1
@@ -81,6 +83,11 @@ public class CharaManager : MonoBehaviour {
 		//Enemy 11
 		if ( !enemy11.activeInHierarchy ){
 			enemy11.SetActive (true);
+		}
+
+		//Enemy 12
+		if ( !enemy12.activeInHierarchy ){
+			enemy12.SetActive (true);
 		}
 	}
 }
