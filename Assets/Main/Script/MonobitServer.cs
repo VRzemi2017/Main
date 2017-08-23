@@ -30,6 +30,12 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private Subject<Unit> enterRoom = new Subject<Unit>();
     public IObservable<Unit> OnEnterRoom { get { return enterRoom; } }
 
+    private Subject<Unit> remoteReady = new Subject<Unit>();
+    public IObservable<Unit> OnRemoteReady { get { return remoteReady; } }
+
+    private Subject<Unit> recieveStart = new Subject<Unit>();
+    public IObservable<Unit> OnStartGame { get { return recieveStart; } }
+
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
 
@@ -110,5 +116,39 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         {
             message.SetMessage(msg); 
         }
+    }
+
+    public void ReadyToStart()
+    {
+        if (monobitView)
+        {
+            if (!MonobitNetwork.isHost)
+            {
+                monobitView.RPC("RemoteReady", MonobitTargets.Host);
+            }
+        }
+    }
+
+    public void StartGame()
+    {
+        if (monobitView)
+        {
+            if (MonobitNetwork.isHost)
+            {
+                monobitView.RPC("RecieveStart", MonobitTargets.All);
+            }
+        }
+    }
+
+    [MunRPC]
+    void RemoteReady()
+    {
+        remoteReady.OnNext(Unit.Default);
+    }
+
+    [MunRPC]
+    void RecieveStart()
+    {
+        recieveStart.OnNext(Unit.Default);
     }
 }

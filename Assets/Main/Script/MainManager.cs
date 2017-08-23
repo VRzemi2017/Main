@@ -10,24 +10,29 @@ using MonobitNetwork = MonobitEngine.MonobitNetwork;
 
 public class MainManager : MonoBehaviour {
     [SerializeField] MonobitServer server;
-    [SerializeField] Messager message;
     [SerializeField] string titleName;
 
     public enum GameState
     {
         GAME_INIT,
-        GAME_FADIN,
+        GAME_NETWORK,
 
         GAME_START,
         GAME_PLAYING,
         GAME_RESULT,
 
-        GAME_FADOUT,
         GAME_FINISH,
+
+        GAME_STATE_MAX,
     }
+
+    private static Messager message;
 
     private static GameState _state = GameState.GAME_START;
     public static GameState CurrentState { get { return _state; } }
+
+    private static Subject<GameState> stateChanged = new Subject<GameState>();
+    public static IObservable<GameState> OnStateChanged { get { return stateChanged; } }
 
     public int PlayerNo 
     {
@@ -42,8 +47,8 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    private Subject<Unit> sceneLoaded = new Subject<Unit>();
-    public IObservable<Unit> OnSceneLoaded { get { return sceneLoaded; } }
+    private static bool remoteReady;
+
 
     private void Awake() 
     {
@@ -58,19 +63,71 @@ public class MainManager : MonoBehaviour {
             {
                 LoadSceneAsync(titleName);
             }).AddTo(this);
+
+            server.OnRemoteReady.Subscribe(_ =>
+            {
+                remoteReady = true;
+                if (CurrentState == GameState.GAME_NETWORK)
+                {
+                    server.StartGame();
+                }
+            }).AddTo(this);
+
+            server.OnStartGame.Subscribe(_ =>
+            {
+                ChangeState(GameState.GAME_START);
+            }).AddTo(this);
+
+            OnStateChanged.Subscribe(s =>
+            {
+                switch (s)
+                {
+                    case GameState.GAME_NETWORK:
+                        {
+                            ReadyToStart();
+                        }
+                        break;
+                }
+            }).AddTo(this);
         }
     }
 
-    public void SetMessage(string msg)
+    public static void ChangeState(GameState state)
     {
+        SetMessage(state.ToString() + " state ending...");
+        _state = state;
+        SetMessage("Change to state " + state.ToString());
+        stateChanged.OnNext(_state);
+    }
+
+    public static void SetMessage(string msg)
+    {
+        if (!message)
+        {
+            message = GameObject.FindObjectOfType<Messager>();
+        }
+
         if (message)
         {
             message.SetMessage(msg);
         }
     }
 
-    public void LoadSceneAsync(string name)
+    public static void LoadSceneAsync(string name)
     {
+        remoteReady = false;
         SteamVR_LoadLevel.Begin(name);
+    }
+
+    public void ReadyToStart()
+    {
+        if (!remoteReady)
+        {
+            server.ReadyToStart();
+        }
+        else
+        {
+            server.StartGame();
+        }
     }
 }
