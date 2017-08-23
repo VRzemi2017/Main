@@ -4,90 +4,30 @@ using UnityEngine;
 
 public class CharaManager : MonoBehaviour {
 
-	[SerializeField]
-	private GameObject enemy01;
-	[SerializeField]
-	private GameObject enemy02;
-	[SerializeField]
-	private GameObject enemy03;
-	[SerializeField]
-	private GameObject enemy04;
-	[SerializeField]
-	private GameObject enemy05;
-	[SerializeField]
-	private GameObject enemy06;
-	[SerializeField]
-	private GameObject enemy07;
-	[SerializeField]
-	private GameObject enemy08;
-	[SerializeField]
-	private GameObject enemy09;
-	[SerializeField]
-	private GameObject enemy10;
-	[SerializeField]
-	private GameObject enemy11;
-	[SerializeField]
-	private GameObject enemy12;
+	private GameObject[] enemy;
 
-	private void Activator() {
-		//Enemy 1
-		if ( !enemy01.activeInHierarchy ){
-			enemy01.SetActive (true);
-		}
+	void Start(){
+		enemy [0] = GameObject.Find ("Creature_flea 1");
+		enemy [1] = GameObject.Find ("Creature_flea 2");
+		enemy [2] = GameObject.Find ("Creature_flea 3");
+		enemy [3] = GameObject.Find ("Creature_flea 4");
+		enemy [4] = GameObject.Find ("Creature_flea 5");
+		enemy [5] = GameObject.Find ("Creature_flea 6");
+		enemy [6] = GameObject.Find ("Creature_flea 7");
+		enemy [7] = GameObject.Find ("Creature_flea 8");
+		enemy [8] = GameObject.Find ("Creature_flea 9");
+		enemy [9] = GameObject.Find ("Creature_flea 10");
+		enemy [10] = GameObject.Find ("Creature_flea 11");
+		enemy [11] = GameObject.Find ("Creature_flea 12");
+	}
 
-		//Enemy 2
-		if ( !enemy02.activeInHierarchy ){
-			enemy02.SetActive (true);
-		}
+	public void SetEnemyActive ( int index, bool active ) {
+		enemy [index].SetActive (active);
+	}
 
-		//Enemy 3
-		if ( !enemy03.activeInHierarchy ){
-			enemy03.SetActive (true);
-		}
-
-		//Enemy 4
-		if ( !enemy04.activeInHierarchy ){
-			enemy04.SetActive (true);
-		}
-
-		//Enemy 5
-		if ( !enemy05.activeInHierarchy ){
-			enemy05.SetActive (true);
-		}
-
-		//Enemy 6
-		if ( !enemy06.activeInHierarchy ){
-			enemy06.SetActive (true);
-		}
-
-		//Enemy 7
-		if ( !enemy07.activeInHierarchy ){
-			enemy07.SetActive (true);
-		}
-
-		//Enemy 8
-		if ( !enemy08.activeInHierarchy ){
-			enemy08.SetActive (true);
-		}
-
-		//Enemy 9
-		if ( !enemy09.activeInHierarchy ){
-			enemy09.SetActive (true);
-		}
-
-		//Enemy 10
-		if ( !enemy10.activeInHierarchy ){
-			enemy10.SetActive (true);
-		}
-
-		//Enemy 11
-		if ( !enemy11.activeInHierarchy ){
-			enemy11.SetActive (true);
-		}
-
-		//Enemy 12
-		if ( !enemy12.activeInHierarchy ){
-			enemy12.SetActive (true);
+	public void SetAllEnemyActive( bool active ) {
+		foreach( GameObject enemyUnit in enemy ){
+			enemyUnit.SetActive (active);
 		}
 	}
 }

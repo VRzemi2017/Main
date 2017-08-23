@@ -78,6 +78,7 @@ public class Crawler: MonoBehaviour {
 		if (other.tag == "SpeedUp") { 			 // speed boost to simulate jumping ( blue spheres )
 			moveSpeed = 15.0f;
 			stopTimer = 0f;
+			myTransform.localScale = new Vector3 (3f, 3f, 3f);
 		} else if (other.tag == "SpeedNormal") { // reset speed to normal ( yellow spheres ) !! buggy
 			stopTimer = 3.0f;
 			moveSpeed = 5.0f;
@@ -104,6 +105,8 @@ public class Crawler: MonoBehaviour {
 	private void OnTriggerExit ( Collider other ) {
 		if (other.tag == "Wait" || other.tag == "SpeedUp" ) {
 			stopTimer = 0.5f;
+			myTransform.localScale = new Vector3 (2f, 2f, 2f);
+
 		}
 
 		if (other.tag == "Player") {
