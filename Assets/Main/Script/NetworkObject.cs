@@ -10,10 +10,22 @@ public class NetworkObject : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (MonobitEngine.MonobitNetwork.inRoom)
+        if (MonobitEngine.MonobitNetwork.inRoom)
         {
             GameObject obj = MonobitEngine.MonobitNetwork.Instantiate(objName, Vector3.zero, Quaternion.identity, group);
-            obj.AddComponent<AttachObject>().Target = gameObject;
+            if (obj)
+            {
+                obj.AddComponent<AttachObject>().Target = gameObject;
+            }
+        }
+        else
+        {
+            GameObject obj = Resources.Load(objName) as GameObject;
+            if (obj)
+            {
+                obj = Instantiate(obj);
+                obj.transform.parent =  transform;
+            }
         }
 	}
 }

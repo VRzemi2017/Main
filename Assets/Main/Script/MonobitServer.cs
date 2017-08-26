@@ -21,7 +21,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     [SerializeField]
     private Messager message;
     [SerializeField]
-    private bool singlePlay;
+    private bool offline;
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
@@ -40,14 +40,24 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     public static int PlayerNo { get { return playerNo; } }
 
     private void Start() {
-        MonobitNetwork.updateStreamRate = updateStreamRate;
-        MonobitNetwork.sendRate = sendRate;
-
-        MonobitNetwork.autoJoinLobby = true;
-
-        if (!MonobitNetwork.inRoom)
+        if (offline)
         {
-            ConnectServer();
+            MonobitView mv = GetComponent<MonobitView>();
+            DestroyObject(mv);
+
+            enterRoom.OnNext(Unit.Default);
+        }
+        else
+        {
+            MonobitNetwork.updateStreamRate = updateStreamRate;
+            MonobitNetwork.sendRate = sendRate;
+
+            MonobitNetwork.autoJoinLobby = true;
+
+            if (!MonobitNetwork.inRoom)
+            {
+                ConnectServer();
+            }
         }
     }
 
@@ -113,7 +123,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     public void ReadyToStart()
     {
-        if (singlePlay)
+        if (offline)
         {
             RecieveStart();
             return;

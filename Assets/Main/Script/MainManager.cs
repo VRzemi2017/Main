@@ -19,6 +19,7 @@ public class MainManager : MonoBehaviour {
 
         GAME_START,
         GAME_PLAYING,
+        GAME_TIMEUP,
         GAME_RESULT,
 
         GAME_FINISH,
