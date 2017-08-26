@@ -1,0 +1,45 @@
+～prefab～
+
+Info_Mgr:インスタンス型
+Info_Mgr 1:単一型
+
+Mess_img:インスタンス型
+Message_quad1:インスタンス型
+Message_quad2:単一型
+
+～Script～
+info_VR/line2:
+ infoを呼び出す関数を一番下に追加
+ ワープ時に、その関数を呼び出す一文を追加
+↓
+呼び出したいタイミング（ワープ時など）で、
+
+※インスタンス型の時
+info_Mgr call = GameObject.Find( "Info_Mgr" ).GetComponent<info_Mgr>( );
+                    call.Generat( ); // message window 呼び出し
+
+
+※単一型の時
+info_mgr1 call = GameObject.Find( "Info_Mgr 1" ).GetComponent<info_mgr1>( );
+                    call.call_info( ); // message window 呼び出し
+を加える。
+
+Move/:動作確認用
+
+Window/stretch_window:
+ウィンドウの伸び縮み（インスタンス型
+
+Window/str_mgr1:
+ウィンドウの伸び縮み（単一型
+
+Window/info_Mgr,info_Mgr1:
+名前はプレハブと同じ。ウィンドウを呼び出す用
+
+Window/call_info,img_point:
+使っていない。
+
+
+～Scene～
+動作確認用。Line2のせいで動作しない。
+
+
