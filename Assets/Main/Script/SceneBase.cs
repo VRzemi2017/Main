@@ -25,7 +25,14 @@ public class SceneBase : MonoBehaviour {
         
         if (player && main && main.PlayerNo < startPosition.Count)
         {
-            player.transform.position = startPosition[main.PlayerNo].transform.position;
+            Vector3 shift = new Vector3();
+            SteamVR_Camera eye = GameObject.FindObjectOfType<SteamVR_Camera>();
+            if (eye)
+            {
+                shift = eye.gameObject.transform.localPosition;
+            }
+
+            player.transform.position = startPosition[main.PlayerNo].transform.position + shift;
             player.transform.rotation = startPosition[main.PlayerNo].transform.rotation;
         }
     }

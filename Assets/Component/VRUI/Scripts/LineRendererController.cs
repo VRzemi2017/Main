@@ -5,25 +5,47 @@ using UnityEngine;
 public class LineRendererController : MonoBehaviour {
 
     SteamVR_ControllerManager player;
-    [SerializeField] GameObject Pointer; //移動位置のTarget
-    [SerializeField] float GroundAngle = 30.0f; //角度
+    [SerializeField]
+    GameObject Pointer; //移動位置のTarget
+    //[SerializeField] GameObject MoveTarget;
+    [SerializeField]
+    float GroundAngle = 30.0f; //角度
 
-    [SerializeField] float initialVelocity = 10.0f; //力
-    [SerializeField] float timeResolution = 0.02f;  //点と点の距離
-    [SerializeField] float MaxTime = 10.0f;  //線の長さ
-    [SerializeField] Vector3 PositionDiff;
-    [SerializeField] LayerMask layerMask = -1;
-    [SerializeField] GameObject ControllerRatation;
+    [SerializeField]
+    float initialVelocity = 10.0f; //力
+    [SerializeField]
+    float timeResolution = 0.02f;  //点と点の距離
+    [SerializeField]
+    float MaxTime = 10.0f;  //線の長さ
+    [SerializeField]
+    int RelayPoint = 15; //中継点
+    [SerializeField]
+    float Curvature = 0.9f; //キャンバ
+    [SerializeField]
+    float Delay = 1.0f; //転移時間
 
-    bool ProjectileColor_judge = false; //放物線の色判断
-    bool TargetSetActive = false;
+    [SerializeField]
+    Vector3 PositionDiff;
+    [SerializeField]
+    LayerMask layerMask = -1;
+
+    float DelTime = 0.0f;
+
+    GameObject GetControllerRotation;
+    GameObject EyeObject;
+
+    bool Move = false;　//時間判断
+    bool Projectile_judge = false; //放物線判断
+    bool TargetSetActive = false; //Target表示判断
     bool GroundAngle_judge = false; //地形角度の判断
     bool havePointer = false;
     bool isWarpInput = false;
 
     Vector3 Point;
+    Vector3 GetPosition;
 
     private GameObject PointerInstance;
+    private GameObject MoveTargetInstance;
     private LineRenderer lineRenderer;
     private SteamVR_TrackedObject TrackedObject;
 
@@ -35,23 +57,30 @@ public class LineRendererController : MonoBehaviour {
         lineRenderer = GetComponent<LineRenderer>();
         player = GameObject.FindObjectOfType<SteamVR_ControllerManager>( );
         TrackedObject = player.right.GetComponent<SteamVR_TrackedObject>( );
+        GetControllerRotation = GameObject.Find( "Controller (right)" );
+        EyeObject = GameObject.Find( "Camera (eye)" );
     }
 
     void Update() {
+
         //update毎にリセットする物はここに書く
         ResetState();
+        Quaternion ControllerRotation = GetControllerRotation.transform.rotation;
+
         Vector3 postion = (PositionDiff.magnitude * TrackedObject.transform.forward.normalized ) + TrackedObject.transform.position;
+        Vector3 CameraEyePosition = EyeObject.transform.localPosition;
 
         //VRコントローラの処理
         var device = SteamVR_Controller.Input((int)TrackedObject.index);
 
-        //放物線とTargetの処理
+        //線とTargetの処理
         int index = 0;
 
         Vector3 velocityVector = TrackedObject.transform.forward * initialVelocity;
         Vector3 currentPosition = postion;
 
-        if (!havePointer) {
+        //Target生成処理
+        if ( !havePointer) {
             PointerInstance = Instantiate( Pointer, Point, Quaternion.identity);
             havePointer = true;
         }
@@ -76,10 +105,17 @@ public class LineRendererController : MonoBehaviour {
 
                 lineRenderer.SetPosition( index + 1, hit.point );
 
+                
                 //VRコントローラの処理
-                if ( device.GetTouchDown( SteamVR_Controller.ButtonMask.Trigger ) && ProjectileColor_judge == false ) {
-                    player.transform.position = hit.point;
-                    isWarpInput = true;
+                if ( device.GetTouchDown( SteamVR_Controller.ButtonMask.Trigger ) && Projectile_judge == false ) {
+
+                    GetPosition = Point;
+
+                    /*if ( Move == false ) {
+                        MoveTargetInstance = Instantiate( MoveTarget, new Vector3( GetPosition.x, GetPosition.y + 1.3f, GetPosition.z ), Quaternion.identity );
+                        MoveTargetInstance.transform.rotation = Quaternion.LookRotation( hit.normal );
+                    }*/
+                    TimeDel( );
                 }
 
                 //角度の判断
@@ -100,26 +136,45 @@ public class LineRendererController : MonoBehaviour {
                 TargetSetActive = true;
             }
 
-            //物体を投げるの放物線重力シミュレーション
+            //キャンバシミュレーション
             currentPosition += velocityVector * timeResolution;
-            velocityVector += Physics.gravity * timeResolution;
-            if ( index >= 15 ) {
-                velocityVector *= 0.9f;
+            
+            velocityVector += ControllerRotation * Physics.gravity * timeResolution;
+
+            if ( index >= RelayPoint ) {
+                velocityVector *= Curvature;
             }
             index++;
-            //Debug.Log( velocityVector );
-            if ( index >= ( int )( MaxTime / timeResolution ) ) {
+            if ( index >= lineRenderer.positionCount ) {
                 index -= 2;
             }
 
         }
 
-        //Targetの判断
-        ProjectileColor_judge = ColliderTag(Point);
+        //転移処理
+        if ( Move ) {
+            DelTime += Time.deltaTime;
 
+            if ( DelTime >= Delay ) {
+
+                player.transform.position = GetPosition + CameraEyePosition;
+                
+                isWarpInput = true;
+                DelTime = 0.0f;
+                Move = false;
+
+            }
+        }
+        //Targetの判断
+        Projectile_judge = ColliderTag(Point);
+        
     }
 
-    private void ResetState() {
+    private void TimeDel( ) {
+            Move = true;
+    }
+
+    private void ResetState( ) {
         isWarpInput = false;
     }
 
@@ -139,7 +194,9 @@ public class LineRendererController : MonoBehaviour {
     }
 
     public void DeleteLine() {
-        lineRenderer.positionCount = 0;
+        if ( lineRenderer ) {
+            lineRenderer.positionCount = 0;
+        }
     }
 
     public void DeleteTarget() {

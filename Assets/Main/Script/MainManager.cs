@@ -94,9 +94,9 @@ public class MainManager : MonoBehaviour {
 
     public static void ChangeState(GameState state)
     {
-        SetMessage(state.ToString() + " state ending...");
+        SetMessage(_state.ToString() + " state ending...");
         _state = state;
-        SetMessage("Change to state " + state.ToString());
+        SetMessage("Change to state " + _state.ToString());
         stateChanged.OnNext(_state);
     }
 
