@@ -25,6 +25,9 @@ public class NetworkObject : MonoBehaviour {
             {
                 obj = Instantiate(obj);
                 obj.transform.parent =  transform;
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localRotation = Quaternion.identity;
+                obj.transform.localScale = Vector3.one;
             }
         }
 	}

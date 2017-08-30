@@ -46,15 +46,17 @@ public class InfoManager : MonoBehaviour {
         start_tmp = (int)MainManager.GameState.GAME_START;
         timeup_tmp = (int)MainManager.GameState.GAME_TIMEUP;
         result_tmp = (int)MainManager.GameState.GAME_RESULT;
-    }
-	
-	// Update is called once per frame
-	void Update () {
+
         user1 = P1.GetComponent<User1>();
         player1_name.text = user1.user1_name.text;
 
         user2 = P2.GetComponent<User2>();
         player2_name.text = user2.user2_name.text;
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        
 
         //スタート、タイムアップ、リザルトを呼び出す
         state_tmp = (int)MainManager.CurrentState;
