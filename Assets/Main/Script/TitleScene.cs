@@ -22,7 +22,8 @@ public class TitleScene : SceneBase
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (MainManager.CurrentState == MainManager.GameState.GAME_START ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_NETWORK)
+                    MainManager.CurrentState == MainManager.GameState.GAME_NETWORK ||
+                    MainManager.CurrentState == MainManager.GameState.GAME_PLAYING)
                 {
                     MainManager.LoadSceneAsync(sceneName);
                     MainManager.ChangeState(MainManager.GameState.GAME_FINISH);

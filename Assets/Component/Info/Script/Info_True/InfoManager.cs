@@ -1,0 +1,120 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class InfoManager : MonoBehaviour {
+
+    //infomation呼び出し用
+    public enum InfoCase
+    {
+        INFO_WAIT,  //待機
+        
+        INFO_DAMAGE,
+        INFO_GET,
+
+        INFO_CASE_MAX,
+    }
+    public static InfoCase Info_Case = InfoCase.INFO_WAIT;      //待機
+    public GameObject called_window;           //他スクリプトから呼び出されるウィンドウ
+    public TextMesh info_text;
+
+    //ゲームスタート、タイムアップ、リザルト呼び出し用
+    public GameObject state_window;   //ゲームスタート、タイムアップ用のウィンドウ
+    public GameObject result_window;  //リザルト画面用のウィンドウ
+    int state_tmp = 0;          //現在のGameStateを参照
+    int start_tmp;          //スタート
+    int timeup_tmp;         //タイムアップ
+    int result_tmp;         //リザルト
+    public int state_pattern = 0;  //スタートとタイムアップの使い分け用
+    int tmp_case = 0;       //３ケースの使い分け用
+
+    public TextMesh player1_name;
+    GameObject P1;
+    User1 user1;
+
+    public TextMesh player2_name;
+    GameObject P2;
+    User2 user2;
+
+
+    // Use this for initialization
+    void Start () {
+        P1 = GameObject.Find("Player_1");
+        P2 = GameObject.Find("Player_2");
+
+        //MainManagerからGameStateを参照
+        start_tmp = (int)MainManager.GameState.GAME_START;
+        timeup_tmp = (int)MainManager.GameState.GAME_TIMEUP;
+        result_tmp = (int)MainManager.GameState.GAME_RESULT;
+    }
+	
+	// Update is called once per frame
+	void Update () {
+        user1 = P1.GetComponent<User1>();
+        player1_name.text = user1.user1_name.text;
+
+        user2 = P2.GetComponent<User2>();
+        player2_name.text = user2.user2_name.text;
+
+        //スタート、タイムアップ、リザルトを呼び出す
+        state_tmp = (int)MainManager.CurrentState;
+
+        if (tmp_case == 0 & state_tmp == start_tmp)
+        {
+            state_pattern = 0;
+            State_Call();
+            tmp_case = 1;
+        }
+        else if (tmp_case == 1 & state_tmp == timeup_tmp)
+        {
+            state_pattern = 1;
+            State_Call();
+            tmp_case = 2;
+        }
+        else if (tmp_case == 2 & state_tmp == result_tmp)
+        {
+            Result_Call();
+            tmp_case = 0;
+        }
+
+        //infomationを呼び出す
+        if (Info_Case == InfoCase.INFO_DAMAGE)
+        {
+            Info_Called();
+            Info_Case = InfoCase.INFO_WAIT;
+            info_text.text = ("石取られた");
+        }
+        if (Info_Case == InfoCase.INFO_GET)
+        {
+            Info_Called();
+            Info_Case = InfoCase.INFO_WAIT;
+            info_text.text = ("石拾った");
+        }
+    }
+
+    void State_Call()   //スタート、タイムアップのウィンドウを呼び出す
+    {
+        // 生成
+        Instantiate(state_window);        //呼び出すウィンドウ
+    }
+
+    void Result_Call()
+    {
+        Instantiate(result_window);     //呼び出すウィンドウ
+    }
+
+    void Info_Called()
+    {
+        Instantiate(called_window);     //呼び出すウィンドウ
+    }
+
+    public static void CallCase(InfoCase state)     //他スクリプトからのinfomation呼び出し用
+    {
+        Info_Case = state;
+    }
+
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+}

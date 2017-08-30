@@ -6,7 +6,7 @@ using System.Linq;
 
 public class info_mgr1 : MonoBehaviour {
 
-    [SerializeField] GameObject window_single = null;
+    //[SerializeField] GameObject callTest_win = null;        //他スクリプトから呼び出されたときに表示されるもの
     public int state_num = 0;
 
     int start_tmp = 0;
@@ -19,6 +19,8 @@ public class info_mgr1 : MonoBehaviour {
     public GameObject state_window;   //ゲームスタート、ゲームオーバー
     public GameObject state_stick;   //くっつくウィンドウ
     public GameObject result_window;        //リザルト画面
+
+    public GameObject callTest_win = null;        //他スクリプトから呼び出されたときに表示されるもの
 
     void Start () {
         /*
@@ -138,4 +140,8 @@ public class info_mgr1 : MonoBehaviour {
         Instantiate(result_window, pos, qua);
     }
 
+    public void Info_callWin( )
+    {
+        Instantiate(callTest_win);
+    }
 }
