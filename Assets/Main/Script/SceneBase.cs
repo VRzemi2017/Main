@@ -9,12 +9,12 @@ public class SceneBase : MonoBehaviour {
     [SerializeField]
     protected List<GameObject> startPosition;
     [SerializeField]
-    protected GameObject player;
-    [SerializeField]
     protected string sceneName;
 
     protected MainManager main;
     protected Messager message;
+
+    GameObject player;
 
     protected void InitPlayerPosition()
     {
@@ -22,7 +22,12 @@ public class SceneBase : MonoBehaviour {
         {
             main = GameObject.FindObjectOfType<MainManager>();
         }
-        
+
+        if (!player)
+        {
+            player = GameObject.FindObjectOfType<SteamVR_ControllerManager>().gameObject;
+        }
+
         if (player && main && main.PlayerNo < startPosition.Count)
         {
             Vector3 shift = new Vector3();
