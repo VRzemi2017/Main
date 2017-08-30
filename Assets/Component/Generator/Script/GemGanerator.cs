@@ -109,6 +109,7 @@ public class GemGanerator : MonoBehaviour {
     private void SetGemWaveActive( bool flg_act ) {
         for (int i = 0; i < m_GemWaveList[m_gem_wave_num].m_List.Count; i++){
             m_GemWaveList[m_gem_wave_num].m_List[i].SetActive(flg_act);
+            m_GemWaveList[m_gem_wave_num].m_List[i].GetComponent<FieldObjectController>().SetSoundActive(flg_act);
         }
     }
 
@@ -116,6 +117,7 @@ public class GemGanerator : MonoBehaviour {
         for (int i = 0; i < m_GemWaveList.Count; i++) {
             for (int j = 0; j < m_GemWaveList[i].m_List.Count; j++) {
                 m_GemWaveList[i].m_List[j].SetActive(false);
+                m_GemWaveList[m_gem_wave_num].m_List[i].GetComponent<FieldObjectController>().SetSoundActive(false);
             }
         }
     }
