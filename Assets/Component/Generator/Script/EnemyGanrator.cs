@@ -38,7 +38,7 @@ public class EnemyGanrator : MonoBehaviour {
 
     private void Start( ) {
         m_now_wave = 0;
-        m_charaManager.SetEnemyAllActive(false);
+        m_charaManager.SetAllEnemyActive(false);
         SetEnemyWaveActice(true);
     }
 
@@ -78,7 +78,7 @@ public class EnemyGanrator : MonoBehaviour {
                 break;
             case ADD_MODE.CHANGE:
                 //前のものの表示を消す
-                m_charaManager.SetEnemyAllActive(false);
+                m_charaManager.SetAllEnemyActive(false);
                 m_now_wave++;
                 SetEnemyWaveActice(true);
                 break;

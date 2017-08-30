@@ -10,7 +10,7 @@ public class Crawler: MonoBehaviour {
 
 	//Self components
 	private Transform myTransform;
-	private Rigidbody rbody;
+	//private Rigidbody rbody;
 
 	//Targeting
 	[SerializeField]
@@ -21,21 +21,25 @@ public class Crawler: MonoBehaviour {
 	// Time manager
 	private float timer;
 	public float stopTimer = 0f;
+	private float attackTimer = 0f;
 
-	// Path loop
-	public bool patrolLoop;
+	public bool patrolLoop; 			// path loop
 	private bool playerSpotted = false; // Player spotted
 	public float agroDis = 10.0f; 		// Player attack distance
 
 	//Players
 	private Transform player1;
 	private Transform player2;
+	private Transform mainCamera;
+	private Transform wand;
 
 	private void Start( ){
-		rbody = GetComponent<Rigidbody> (); 						     // RBody get
+		//rbody = GetComponent<Rigidbody> (); 						     // RBody get
 		myTransform = transform; 										 // Transform set
-		player1 = GameObject.FindGameObjectWithTag("MainCamera").transform; // find Player1 position
+		player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
 //		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;// find Player2 position
+		mainCamera = GameObject.FindGameObjectWithTag ( "MainCamera" ).transform;
+		wand = GameObject.FindGameObjectWithTag ("Wand").transform;
 	}
 		
 	private void Update(){
@@ -44,17 +48,8 @@ public class Crawler: MonoBehaviour {
 		if (nowTarget < targets.Length) {
 			Move ();
 		} else if (patrolLoop) {
-			nowTarget = 0;
-		} else if (Vector3.Distance (myTransform.position, player1.position) <= agroDis) {
-			AttackPlayer1 ();
-		}
-
-		// Attack player within range 
-		/*if (Vector3.Distance (myTransform.position, player1.position) <= agroDis) {
-			AttackPlayer1 ();
-		} else if (Vector3.Distance (myTransform.position, player2.position) <= agroDis) {
-			AttackPlayer2 ();
-		} */
+			nowTarget = 0; // loop
+		} 
 	}
 		
 	// Move towards target
@@ -65,62 +60,77 @@ public class Crawler: MonoBehaviour {
 		Vector3 dir = targets[nowTarget].position - myTransform.position;
 		myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
 
-		// Target swtich
+		// Targeting
 		if (dir.magnitude < 0.5f) {
 			if (timer == 0) {
 				timer = Time.time;
 			}
 			if ((Time.time - timer) >= stopTimer) {
 				nowTarget++;
-				timer = 0;
+				timer = 0; 
 			}
+		} else if (playerSpotted) { // Attack player
+			target = player1.position;
+			dir = player1.position - myTransform.position;
+			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
+			myTransform.LookAt (mainCamera);
 		}
 	}
 
-	//Change speed to simulate jump 
+	//ENTER COLLIDER
 	private void OnTriggerEnter( Collider other ) {
-		if (other.tag == "SpeedUp") {
+		if (other.tag == "SpeedUp") { 			 // speed boost to simulate jumping ( blue spheres )
 			moveSpeed = 15.0f;
 			stopTimer = 0f;
-		} else if (other.tag == "SpeedNormal") {
+			myTransform.localScale = new Vector3 (2f, 2f, 2f);
+			myTransform.localRotation = Quaternion.identity;
+		} else if (other.tag == "SpeedNormal") { // reset speed to normal ( yellow spheres ) !! buggy
 			stopTimer = 3.0f;
-			moveSpeed = 2.0f;
-		} else if (other.tag == "Wait") {
+			moveSpeed = 5.0f;
+		} else if (other.tag == "Wait") {		 // wait before moving / jumping ( orange spheres )
 			stopTimer = 3.0f;
 			moveSpeed = 15.0f;
+			myTransform.localScale = new Vector3 (2.5f, 2.5f, 2.5f);
+			myTransform.localRotation = Quaternion.identity;
 		} else {
-			moveSpeed = 5.0f;
+			moveSpeed = 5.0f;                    // usual speed
+		}
+
+
+		// Be killed if touched by Wand 
+		if (other.tag == "Wand" && myTransform.localScale.x >= 0 && myTransform.localScale.y >= 0 && myTransform.localScale.z >= 0 ) {
+			myTransform.localScale -= new Vector3 (0.3f, 0.3f, 0.3f);
 		}
 
 		// Rotate transform towards next target
-		if (other.tag == "SpeedUp" || other.tag == "SpeedNormal" || other.tag == "nowTarget" || other.tag == "Wait" ) {
-			myTransform.LookAt (targets [nowTarget + 1]);
+		if (other.tag == "SpeedUp" || other.tag == "SpeedNormal" || other.tag == "nowTarget" || other.tag == "Wait") {
+			myTransform.LookAt (targets [nowTarget + 1].position);
+		}
+
+		// Spot player
+		if (other.tag == "Player") {
+			playerSpotted = true;
+			moveSpeed = 15.0f;
 		}
 	}
 
-	// Reset wait time to normal
+	// EXIT COLLIDER
 	private void OnTriggerExit ( Collider other ) {
+		// reset timer to normal
 		if (other.tag == "Wait" || other.tag == "SpeedUp" ) {
 			stopTimer = 0.5f;
 		}
+
+		// Lose player
+		if (other.tag == "Player") {
+			playerSpotted = false;
+		}
+			
+		// Destroy game object if it leaves Plyzone ( DEBUG )
+		if (other.tag == "Playzone") {
+			Destroy (gameObject);
+		}
 	}
-
 		
-  // Player1 interaction
-    private void AttackPlayer1() {
-		Debug.Log ("Attacked Player1");
-		moveSpeed = 5.0f;
-		Vector3 target = player1.position;
-		Vector3 dir = player1.position - myTransform.position;
-		myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
-    }
-
-	/*// Player2 interaction
-	private void AttackPlayer2() {
-		moveSpeed = 5.0f;
-		Vector3 target = player2.position;
-		Vector3 dir = player2.position - myTransform.position;
-		myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
-	}*/
 }
 

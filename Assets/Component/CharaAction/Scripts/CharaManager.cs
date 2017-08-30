@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class CharaManager : MonoBehaviour {
 
-	[SerializeField]
-	private List<GameObject> enemy;
+	private GameObject[] enemy;
 
-    public void SetEnemyActive(int num, bool active) {
-        enemy[num].SetActive(active);
-    }
+	void Start(){
+		
+	}
 
-    public void SetEnemyAllActive(bool active) {
-        foreach (GameObject _ in enemy ) {
-            _.SetActive(active);
-        }
-    }
+	public void SetEnemyActive ( int index, bool active ) {
+		enemy [index].SetActive (active);
+	}
+
+	public void SetAllEnemyActive( bool active ) {
+		foreach( GameObject enemyUnit in enemy ){
+			enemyUnit.SetActive (active);
+		}
+	}
 }
