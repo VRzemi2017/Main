@@ -119,4 +119,24 @@ public class ParentChanger : MonoBehaviour {
 
 
 
+	//
+	//ここから外部からの使用専用の関数(アクセスできるようにstaticで宣言します)
+	//
+
+	//---obj2の子のオブジェクトを探索し、AudioSourceがアタッチされていれば、obj1の子のオブジェクトにする関数
+	static public void ExploreAudioSource( GameObject obj1, GameObject obj2 ) {
+		bool find_flag = false;
+		for (int i = 0; i < obj2.transform.childCount; i++) {
+			if ( obj2.transform.GetChild(i).gameObject.GetComponent<AudioSource>() ) {
+				obj2.transform.GetChild(i).parent = obj1.transform;
+				find_flag = true;
+				Debug.Log ( i );
+				Debug.Log ( obj2.transform.GetChild(i - 1).gameObject.name + "にAudioSourceがアタッチされていました" );
+			}
+		}
+
+		if (!find_flag) {
+			Debug.Log ("何も見つかりませんでした");
+		}
+	}
 }

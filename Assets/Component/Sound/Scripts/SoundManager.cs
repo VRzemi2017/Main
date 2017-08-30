@@ -52,20 +52,6 @@ public class SoundManager : MonoBehaviour {
 
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	//---SoundManagerのInspectorを初期化する関数
 	public SoundData InitializeAudioSource( AudioSource _music ) {
 		SoundData x;
@@ -169,7 +155,57 @@ public class SoundManager : MonoBehaviour {
 	}
 
 
+
+	//
+	//ここから外部からの使用専用の関数(アクセスできるようにstaticで宣言します)
+	//
+
 	//---AudioSourceを再生する関数
+	static public SoundData Play( SoundData x ) {
+		if (x._sound_PauseFlag) {
+			x._sound_PauseFlag = false;
+		} else {
+			Debug.Log (x._sound.gameObject.name + "は既に再生されています");
+		}
+		return x;
+	}
+
+
+	//---AudioSourceを一時停止する関数
+	static public SoundData Pause( SoundData x ) {
+		if (x._sound_PauseFlag) {
+			Debug.Log (x._sound.gameObject.name + "は既に一時停止されています");
+		} else {
+			x._sound_PauseFlag = true;
+		}
+		return x;
+	}
+
+
+	//---AudioSourceのVolumeを調整する関数(値を受け取ってその値に変換する)
+	static public SoundData ChangeVolume( SoundData x, float num ) {
+		if (x._sound) {
+			if (num >= 0f && num <= 1f) {
+				x._sound.volume = num;
+			} else {
+				Debug.Log (num + "は音量範囲外です" + "音量は0～1で入力してください");
+			}
+		} else {
+			Debug.Log (x + "に反映させるAudioSourceがありません");
+		}
+		return x;
+	}
+
+
+	//---AudioSourceのspatializeを調整する関数(値を受け取ってその値に変換する)
+	static public SoundData ChangeSpatialize( SoundData x, bool a ) {
+		if (x._sound) {
+			x._sound.spatialize = a;
+		} else {
+			Debug.Log (x + "に反映させるAudioSourceがありません");
+		}
+		return x;
+	}
 
 
 
