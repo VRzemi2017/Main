@@ -14,7 +14,9 @@ ModelImporter:
     400004: dskrg_Mesh_001
     400006: left
     2300000: dskrg_Mesh_001
+    2300002: //RootNode
     3300000: dskrg_Mesh_001
+    3300002: //RootNode
     4300000: dskrg_Mesh_001
     9500000: //RootNode
   materials:
@@ -27,6 +29,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
