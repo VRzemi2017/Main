@@ -38,6 +38,12 @@ public class MainScene : SceneBase
         InitPlayerPosition();
         MainManager.ChangeState(MainManager.GameState.GAME_NETWORK);
 
+        MainManager mm = GameObject.FindObjectOfType<MainManager>();
+        if (!mm)
+        {
+            Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ => MainManager.ChangeState(MainManager.GameState.GAME_START));
+        }
+
         this.UpdateAsObservable().Subscribe(_ =>
         {
             if (Input.GetKeyDown(KeyCode.Space))

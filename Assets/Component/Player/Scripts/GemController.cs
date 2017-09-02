@@ -10,7 +10,6 @@ public class GemController : MonoBehaviour {
     [SerializeField] Vector3 m_SmallGemLenght;
     [SerializeField] GameObject m_LineRenderer;
     [SerializeField] float m_getGemAnimationTime;
-    [SerializeField] GameObject m_getGemAnimation;
     [SerializeField] GameObject m_hitAnimation;
     private bool m_is_hit_gem = false;
     private bool m_is_game_start = false;
