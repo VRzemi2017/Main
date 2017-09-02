@@ -73,8 +73,7 @@ public class MainScene : SceneBase
             System.Nullable<LevelDesignManager.LevelSetting> setting = lv.GetLevelSetting(table.Value.Sequence[index]);
             if (setting != null)
             {
-                setting.Value.GemSetting.gameObject.SetActive(true);
-                setting.Value.EnemySetting.gameObject.SetActive(true);
+                setting.Value.GeneratorSetting.gameObject.SetActive(true);
                 startPosition = setting.Value.StartPositionSet.ToList();
             }
         }

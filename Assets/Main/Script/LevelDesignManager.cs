@@ -12,8 +12,7 @@ public class LevelDesignManager : MonoBehaviour {
         [TextArea(3, 10)]
         public string Memo;
         public GameObject[] StartPositionSet;
-        public EnemyGanrator EnemySetting;
-        public GemGanerator GemSetting;
+        public GaneratorController GeneratorSetting;
     }
 
     [System.Serializable]

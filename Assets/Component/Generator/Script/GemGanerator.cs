@@ -17,7 +17,7 @@ public class ObjectList {
 public class GemGanerator : MonoBehaviour {
 
     //ジェムの加算方法
-    private enum ADD_MODE {
+    public enum ADD_MODE {
         ADD,
         CHANGE,
         MODE_MAX
@@ -39,6 +39,11 @@ public class GemGanerator : MonoBehaviour {
     private int m_gem_wave_num;
     //-------------------------//
 
+    public int NowWave {
+        get {
+            return m_gem_wave_num;
+        }
+    }
 
     void Awake( ) {
     }
@@ -101,6 +106,8 @@ public class GemGanerator : MonoBehaviour {
         }
     }
 
+
+
     //GemParentの更新
     private void NextGems( ) {
         m_gem_wave_num++;
@@ -119,6 +126,33 @@ public class GemGanerator : MonoBehaviour {
                 m_GemWaveList[i].m_List[j].SetActive(false);
                 m_GemWaveList[m_gem_wave_num].m_List[i].GetComponent<FieldObjectController>().SetSoundActive(false);
             }
+        }
+    }
+
+    public void NextWave(ADD_MODE mode) {
+        switch (mode)　{
+            case ADD_MODE.ADD:
+                NextGems();
+                SetGemWaveActive(true);
+                break;
+            case ADD_MODE.CHANGE:
+                //前のものを表示を消す
+                ResetAllWave();
+                NextGems();
+                SetGemWaveActive(true);
+                break;
+        }
+    }
+
+    public void SetWave(bool isAddMode, int wave){
+        if (isAddMode) {
+            m_gem_wave_num = wave;
+            SetGemWaveActive(true);
+        } else {
+            //前のものを表示を消す
+            ResetAllWave();
+            m_gem_wave_num = wave;
+            SetGemWaveActive(true);
         }
     }
 }

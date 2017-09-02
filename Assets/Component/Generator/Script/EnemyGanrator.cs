@@ -15,7 +15,7 @@ public class EnmeyWaveList
 
 public class EnemyGanrator : MonoBehaviour {
     //エネミーの加算方法
-    private enum ADD_MODE {
+    public enum ADD_MODE {
         ADD,
         CHANGE,
         MODE_MAX
@@ -35,6 +35,11 @@ public class EnemyGanrator : MonoBehaviour {
     //現在のWave数
     private int m_now_wave;
 
+    public int NowWave {
+        get {
+            return m_now_wave;
+        }
+    }
 
     private void Start( ) {
         m_now_wave = 0;
@@ -87,7 +92,34 @@ public class EnemyGanrator : MonoBehaviour {
 
     private void SetEnemyWaveActice(bool flg_act) {
         foreach (int index in m_EnemyWave[m_now_wave].m_List) {
-            m_charaManager.SetEnemyActive(index, flg_act);
+            m_charaManager.SetEnemyActive(index - 1, flg_act);
+        }
+    }
+
+    public void NextWave(ADD_MODE mode) {
+        switch (mode) {
+            case ADD_MODE.ADD:
+                m_now_wave++;
+                SetEnemyWaveActice(true);
+                break;
+            case ADD_MODE.CHANGE:
+                //前のものを表示を消す
+                m_charaManager.SetAllEnemyActive(false);
+                m_now_wave++;
+                SetEnemyWaveActice(true);
+                break;
+        }
+    }
+
+    public void SetWave(bool isAddMode, int wave) {
+        if (isAddMode) {
+            m_now_wave = wave;
+            SetEnemyWaveActice(true);
+        } else {
+            //前のものを表示を消す
+            m_charaManager.SetAllEnemyActive(false);
+            m_now_wave = wave;
+            SetEnemyWaveActice(true);
         }
     }
 
