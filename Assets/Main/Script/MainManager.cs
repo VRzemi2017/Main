@@ -131,4 +131,14 @@ public class MainManager : MonoBehaviour {
             server.StartGame();
         }
     }
+
+    public static GameObject LocalPlayer()
+    {
+        return GameObject.Find("local");
+    }
+
+    public static GameObject RemotePlayer()
+    {
+        return GameObject.Find("remote");
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ResultManager : MonoBehaviour {
 
@@ -56,5 +57,49 @@ public class ResultManager : MonoBehaviour {
         [TextArea(3, 10)]
         public string Comment;
         public ScoreCondition[] conditions;
+    }
+
+    public ScoreType GetScore()
+    {
+        Sort();
+
+        ScoreType result = ScoreType.SCORE_D;
+
+        score.ForEach(s =>
+        {
+            bool pass = true;
+
+            s.conditions.ToList().ForEach(c =>
+            {
+
+            });
+        });
+
+        return result;
+    }
+
+    private void Start()
+    {
+        GetScore();
+    }
+
+    [ContextMenu("Sort")]
+    public void Sort()
+    {
+        score.Sort((ScoreSetting x, ScoreSetting y) =>
+        {
+            return x.Score.CompareTo(y.Score);
+        });
+    }
+
+    private bool Compare<T>(T a, T b, OPType op)
+    {
+
+        //switch (op)
+        //{
+        //    case OPType.OP_EQUAL:
+        //}
+
+        return false;
     }
 }
