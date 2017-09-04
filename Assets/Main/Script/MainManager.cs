@@ -77,6 +77,8 @@ public class MainManager : MonoBehaviour {
             server.OnStartGame.Subscribe(_ =>
             {
                 ChangeState(GameState.GAME_START);
+				NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
+				networks.ToList().ForEach(g => g.enabled = true);
             }).AddTo(this);
 
             OnStateChanged.Subscribe(s =>
@@ -130,9 +132,6 @@ public class MainManager : MonoBehaviour {
         {
             server.StartGame();
         }
-
-		NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
-		networks.ToList().ForEach(g => g.enabled = true);
     }
 
     public static GameObject LocalPlayer()
