@@ -8,6 +8,11 @@ public class NetworkObject : MonoBehaviour {
     [SerializeField]
     private int group;
 
+	void Awake()
+	{
+		enabled = false;
+	}
+
 	// Use this for initialization
 	void Start () {
         if (MonobitEngine.MonobitNetwork.inRoom)

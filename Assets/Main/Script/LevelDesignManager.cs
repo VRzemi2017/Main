@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class LevelDesignManager : MonoBehaviour {
     [SerializeField] List<LevelSetting> setting = new List<LevelSetting>();
@@ -23,7 +24,8 @@ public class LevelDesignManager : MonoBehaviour {
 
     private void Awake()
     {
-
+		GaneratorController[] gs = GameObject.FindObjectsOfType<GaneratorController>();
+		gs.ToList().ForEach(g => g.gameObject.SetActive(false));
     }
 
     private void Start()

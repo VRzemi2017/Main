@@ -130,6 +130,9 @@ public class MainManager : MonoBehaviour {
         {
             server.StartGame();
         }
+
+		NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
+		networks.ToList().ForEach(g => g.enabled = true);
     }
 
     public static GameObject LocalPlayer()

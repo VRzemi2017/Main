@@ -23,13 +23,7 @@ public class MainScene : SceneBase
             {
                 table = lv.RandomPickTable();
             }
-        }
-
-        GemGanerator[] gems = GameObject.FindObjectsOfType<GemGanerator>();
-        gems.ToList().ForEach(g => g.gameObject.SetActive(false));
-
-        EnemyGanrator[] enemies = GameObject.FindObjectsOfType<EnemyGanrator>();
-        enemies.ToList().ForEach(e => e.gameObject.SetActive(false));
+		}
     }
 
     void Start () 
