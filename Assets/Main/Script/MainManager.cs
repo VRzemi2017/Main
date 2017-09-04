@@ -136,11 +136,11 @@ public class MainManager : MonoBehaviour {
 
     public static GameObject LocalPlayer()
     {
-        return GameObject.Find("local");
+		return Camera.main.gameObject;
     }
 
     public static GameObject RemotePlayer()
     {
-        return GameObject.Find("remote");
+		return null;
     }
 }

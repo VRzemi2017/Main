@@ -1,45 +1,68 @@
-～prefab～
+・使用するプレハブとスクリプトについて
+	各フォルダ内のInfo_True内にあるものを使ってください。
 
-Info_Mgr:インスタンス型
-Info_Mgr 1:単一型
+・シーンについて
+	Info_TitleとInfo_Mainがメインです。
 
-Mess_img:インスタンス型
-Message_quad1:インスタンス型
-Message_quad2:単一型
+・infomation呼び出し時
 
-～Script～
-info_VR/line2:
- infoを呼び出す関数を一番下に追加
- ワープ時に、その関数を呼び出す一文を追加
-↓
-呼び出したいタイミング（ワープ時など）で、
+	呼び出したいタイミングで
+		InfoManager.CallCase(InfoManager.InfoCase.INFO_〇〇);を追加
+			→InfoManager.cs内のInfoCaseにパターンの追加、
+			　Update内で表示する文字の決定
+				※同時に別のinfomationの表示が現状不可能
 
-※インスタンス型の時
-info_Mgr call = GameObject.Find( "Info_Mgr" ).GetComponent<info_Mgr>( );
-                    call.Generat( ); // message window 呼び出し
+・Infomationの呼び出しテストについて
+	どのキーを使っているのかわからなくなるので、
+	infoManager内のUpdateで
+	if (Info_Case == InfoCase.INFO_TEST)
+        {
+			[呼び出したいウィンドウ]
+        }
 
+	InfoCall_testのUpdateで呼び出しをお願いします。
+	追記…ヒエラルキー上のInfoTesterにInfoCall_testをくっつけてあるので、
+			使わない場合はオブジェクトを消してください
 
-※単一型の時
-info_mgr1 call = GameObject.Find( "Info_Mgr 1" ).GetComponent<info_mgr1>( );
-                    call.call_info( ); // message window 呼び出し
-を加える。
+・プレイヤーの名前表示について
+	各カメラか何かの上に文字を表示して、"Player_Icon"内のスクリプトを張り付けてください。
 
-Move/:動作確認用
+・リザルト画面について（鋭意製作中）
+	リザルトログの表示→値はどこかから受け取る。
+		宝石の取得数
+		敵との接触回数
+		テレポート回数
+		(？)特定の場所に行った（イベント
 
-Window/stretch_window:
-ウィンドウの伸び縮み（インスタンス型
+	評価とコメントの表示
+	合計２窓で表示→リザルト(親)
+						リザルトログ
+						評価
 
-Window/str_mgr1:
-ウィンドウの伸び縮み（単一型
+・タイトル画面について（鋭意製作中）
+	タイトルロゴの表示（一窓）→ロゴの画像を張り付ける
+	プレイヤーの準備中・準備完了のステータス（一窓）*2
+	お待ちください→始まりますの表示（一窓）
+		合計四窓を表示（バトルウィンドウズ(in Kirby)みたいな感じ）
 
-Window/info_Mgr,info_Mgr1:
-名前はプレハブと同じ。ウィンドウを呼び出す用
+	１Pと２Pで同じウィンドウを見せるか別々に見せるかはとりあえず保留。今は後者で進める感じで。
+	タイトルシーンでワープできるかどうかも保留。タイトルシーン内で遊べる時間があるかどうかも不明
+	
+・各infomationのウィンドウについて
+	呼び出しはInfoMgrから。
+	位置調節については各ウィンドウ内につけるスクリプト内で変更
+	高さ→info_pos_yの値を変更
+	距離front = camera.transform.forward * 0.7f;
+											↑ここ
 
-Window/call_info,img_point:
-使っていない。
+・固定ウィンドウについて
+	INFO_ROOTの制作、その下にプレハブを表示
+	単一型でいいと思いました
+	とりあえず形だけつくって保留でいいと思う
 
+・見栄えについて
+	鋭意調節中
 
-～Scene～
-動作確認用。Line2のせいで動作しない。
-
-
+・その他
+	日付-時間	更新
+	0902-14		メモ制作
