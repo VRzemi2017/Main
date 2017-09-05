@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SpotControl : MonoBehaviour {
-    [SerializeField] int ID;
 
     private bool reached;
     public bool IsReached { get { return reached; } }

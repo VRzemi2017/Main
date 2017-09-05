@@ -14,6 +14,13 @@ public class ResultManager : MonoBehaviour {
     private List<string> comment = new List<string>();
     public string[] Comment { get { return comment.ToArray(); } }
 
+    public int GemCount { get { return 0; } }
+    public int DamageCount { get { return 0; } }
+    public int TeleportCount { get { return 0; } }
+
+    private List<SpotControl> spots = new List<SpotControl>();
+    public SpotControl[] Spots { get { return spots.ToArray(); } }
+
     public enum ScoreType
     {
         SCORE_D,
@@ -102,6 +109,14 @@ public class ResultManager : MonoBehaviour {
     public void AddComment(string str)
     {
         comment.Add(str);
+    }
+
+    public void AddSpot(SpotControl spot)
+    {
+        if (spot && !spots.Contains(spot))
+        {
+            spots.Add(spot);
+        }
     }
 
     private bool CheckCondition(ScoreCondition sc)
