@@ -35,7 +35,12 @@ public class MainScene : SceneBase
         MainManager mm = GameObject.FindObjectOfType<MainManager>();
         if (!mm)
         {
-            Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ => MainManager.ChangeState(MainManager.GameState.GAME_START));
+            Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ =>
+            {
+                MainManager.ChangeState(MainManager.GameState.GAME_START);
+                NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
+                networks.ToList().ForEach(g => g.enabled = true);
+            });
         }
 
         this.UpdateAsObservable().Subscribe(_ =>

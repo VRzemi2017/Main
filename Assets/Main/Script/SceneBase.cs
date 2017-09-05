@@ -18,9 +18,12 @@ public class SceneBase : MonoBehaviour {
 
     protected void InitPlayerPosition()
     {
-        if (!main)
+        int playerNo = 0;
+
+        MainManager main = GameObject.FindObjectOfType<MainManager>();
+        if (main)
         {
-            main = GameObject.FindObjectOfType<MainManager>();
+            playerNo = main.PlayerNo;
         }
 
         if (!player)
@@ -28,7 +31,7 @@ public class SceneBase : MonoBehaviour {
             player = GameObject.FindObjectOfType<SteamVR_ControllerManager>().gameObject;
         }
 
-        if (player && main && main.PlayerNo < startPosition.Count)
+        if (player && playerNo < startPosition.Count)
         {
             Vector3 shift = new Vector3();
             SteamVR_Camera eye = GameObject.FindObjectOfType<SteamVR_Camera>();
@@ -37,8 +40,8 @@ public class SceneBase : MonoBehaviour {
                 shift = eye.gameObject.transform.localPosition;
             }
 
-            player.transform.position = startPosition[main.PlayerNo].transform.position + shift;
-            player.transform.rotation = startPosition[main.PlayerNo].transform.rotation;
+            player.transform.position = startPosition[playerNo].transform.position + shift;
+            player.transform.rotation = startPosition[playerNo].transform.rotation;
         }
     }
 
