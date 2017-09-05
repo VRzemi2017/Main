@@ -10,7 +10,7 @@ public class NetworkObject : MonoBehaviour {
 
 	void Awake()
 	{
-		enabled = false;
+        enabled = (int)MainManager.CurrentState > (int)MainManager.GameState.GAME_NETWORK;
 	}
 
 	// Use this for initialization
