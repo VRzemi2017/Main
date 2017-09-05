@@ -5,8 +5,14 @@ using System.Linq;
 
 public class ResultManager : MonoBehaviour {
 
-    [SerializeField] List<ScoreSetting> score = new List<ScoreSetting>();
-    [SerializeField] List<CommentSetting> comment = new List<CommentSetting>();
+    [SerializeField] List<ScoreSetting> scoreSetting = new List<ScoreSetting>();
+    [SerializeField] List<CommentSetting> commentSetting = new List<CommentSetting>();
+
+    private ScoreType score = ScoreType.SCORE_D;
+    public ScoreType Score { get { return score; } }
+
+    private List<string> comment = new List<string>();
+    public string[] Comment { get { return comment.ToArray(); } }
 
     public enum ScoreType
     {
@@ -59,46 +65,99 @@ public class ResultManager : MonoBehaviour {
         public ScoreCondition[] conditions;
     }
 
-    public ScoreType GetScore()
+    private void Start()
+    {
+        ComputeScore();
+    }
+
+    public void ComputeScore()
     {
         Sort();
 
-        ScoreType result = ScoreType.SCORE_D;
-
-        score.ForEach(s =>
+        scoreSetting.ForEach(s =>
         {
             bool pass = true;
 
             s.conditions.ToList().ForEach(c =>
             {
-
+                pass &= CheckCondition(c);
             });
+
+            if (pass)
+            {
+                score = s.Score;
+            }
         });
-
-        return result;
-    }
-
-    private void Start()
-    {
-        GetScore();
     }
 
     [ContextMenu("Sort")]
     public void Sort()
     {
-        score.Sort((ScoreSetting x, ScoreSetting y) =>
+        scoreSetting.Sort((ScoreSetting x, ScoreSetting y) =>
         {
             return x.Score.CompareTo(y.Score);
         });
     }
 
-    private bool Compare<T>(T a, T b, OPType op)
+    public void AddComment(string str)
     {
+        comment.Add(str);
+    }
 
-        //switch (op)
-        //{
-        //    case OPType.OP_EQUAL:
-        //}
+    private bool CheckCondition(ScoreCondition sc)
+    {
+        switch (sc.Type)
+        {
+            case ConditionType.CONDI_DAMEGE:
+                {
+                    return CompareCondition(sc.OP, 0, sc.Param);
+                }
+            case ConditionType.CONDI_GEM:
+                {
+                    return CompareCondition(sc.OP, 0, sc.Param);
+                }
+            case ConditionType.CONDI_SPOT:
+                {
+                    return CompareCondition(sc.OP, 0, sc.Param);
+                }
+            case ConditionType.CONDI_TELEPORT:
+                {
+                    return CompareCondition(sc.OP, 0, sc.Param);
+                }
+        }
+
+        return false;
+    }
+
+    private bool CompareCondition(OPType op, int source, int param)
+    {
+        switch (op)
+        {
+            case OPType.OP_EQUAL:
+                {
+                    return source == param;
+                }
+            case OPType.OP_GEQUAL:
+                {
+                    return source >= param;
+                }
+            case OPType.OP_GREATER:
+                {
+                    return source > param;
+                }
+            case OPType.OP_LEQUAL:
+                {
+                    return source <= param;
+                }
+            case OPType.OP_LESS:
+                {
+                    return source < param;
+                }
+            case OPType.OP_NOT_EQUAL:
+                {
+                    return source != param;
+                }
+        }
 
         return false;
     }
