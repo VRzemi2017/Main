@@ -32,6 +32,7 @@ public class MainScene : SceneBase
         InitPlayerPosition();
         MainManager.ChangeState(MainManager.GameState.GAME_NETWORK);
 
+#if UNITY_EDITOR
         MainManager mm = GameObject.FindObjectOfType<MainManager>();
         if (!mm)
         {
@@ -57,6 +58,8 @@ public class MainScene : SceneBase
                 }
             }
         });
+#endif
+
     }
 
     void InitLevelSetting()

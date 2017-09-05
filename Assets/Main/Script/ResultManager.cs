@@ -125,19 +125,26 @@ public class ResultManager : MonoBehaviour {
         {
             case ConditionType.CONDI_DAMEGE:
                 {
-                    return CompareCondition(sc.OP, 0, sc.Param);
+                    return CompareCondition(sc.OP, DamageCount, sc.Param);
                 }
             case ConditionType.CONDI_GEM:
                 {
-                    return CompareCondition(sc.OP, 0, sc.Param);
+                    return CompareCondition(sc.OP, GemCount, sc.Param);
                 }
             case ConditionType.CONDI_SPOT:
                 {
-                    return CompareCondition(sc.OP, 0, sc.Param);
+                    bool result = false;
+
+                    spots.ForEach(s => 
+                    {
+                        result |= CompareCondition(OPType.OP_EQUAL, s.SpotID, sc.Param);
+                    });
+
+                    return result;
                 }
             case ConditionType.CONDI_TELEPORT:
                 {
-                    return CompareCondition(sc.OP, 0, sc.Param);
+                    return CompareCondition(sc.OP, TeleportCount, sc.Param);
                 }
         }
 
