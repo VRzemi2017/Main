@@ -29,7 +29,7 @@ public class MainManager : MonoBehaviour {
 
     private static Messager message;
 
-    private static GameState _state = GameState.GAME_START;
+    private static GameState _state = GameState.GAME_INIT;
     public static GameState CurrentState { get { return _state; } }
 
     private static Subject<GameState> stateChanged = new Subject<GameState>();
