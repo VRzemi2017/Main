@@ -50,6 +50,12 @@ public class MainManager : MonoBehaviour {
         }
     }
 
+    public enum GameEvent
+    {
+        EVENT_GEM,
+        EVENT_DAMAGE,
+    }
+
     private static bool remoteReady;
 
 
@@ -116,6 +122,11 @@ public class MainManager : MonoBehaviour {
         {
             message.SetMessage(msg);
         }
+    }
+
+    public static void EventTriggered(GameEvent e)
+    {
+
     }
 
     public static void LoadSceneAsync(string name)
