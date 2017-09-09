@@ -8,10 +8,20 @@ namespace MonobitEngine.Editor
      * MonobitView のInspector表示用クラス.
      */
     [CustomEditor(typeof(MonobitView))]
+    [ExecuteInEditMode]
     public class MonobitViewInspector : UnityEditor.Editor
     {
         /** MonobitViewオブジェクト. */
         private MonobitView m_View = null;
+
+        /** MonobitViewが保持するゲームオブジェクト. */
+        private GameObject m_GameObject = null;
+
+        /** MonobitViewのID. */
+        private Int32 m_ViewID = 0;
+
+        /** IDが他と重複するかどうかのフラグ. */
+        private bool m_ViewIdOverlapped = false;
 
         /**
          * @brief   Inspector に追加されたときの処理.
@@ -24,13 +34,18 @@ namespace MonobitEngine.Editor
             {
                 return;
             }
+            m_GameObject = m_View.gameObject;
 
             // 0 が入っていた場合には MonobitView.AllocateSceneViewID() で自動割り当て
             bool bPrefab = EditorUtility.IsPersistent(m_View.gameObject);
             if (!bPrefab && m_View.viewID == 0)
             {
-                m_View.viewID = MonobitView.AllocateSceneViewID();
+                Int32 tmp = MonobitView.AllocateSceneViewID();
+                m_View.viewID = (tmp >= MonobitNetwork.PERSONAL_VIEW_ID_MAX) ? 0 : tmp;
             }
+
+            // シーン内のオブジェクトでIDが重複している場合、警告を促す
+            m_ViewIdOverlapped = MonobitView.OverlappedSceneViewID(m_View.viewID);
         }
 
         /**
@@ -39,7 +54,21 @@ namespace MonobitEngine.Editor
         public void OnDestroy()
         {
             // 変数取得
-            
+            m_View = target as MonobitView;
+            if (m_View != null)
+            {
+                return;
+            }
+
+            if (m_GameObject != null)
+            {
+                bool bPrefab = EditorUtility.IsPersistent(m_GameObject);
+                if (!bPrefab && m_ViewID != 0)
+                {
+                    // 0 以外が入っていた場合には MonobitView.RemoveSceneViewID() で自動削除
+                    MonobitView.RemoveSceneViewID(m_ViewID);
+                }
+            }
         }
 
         /**
@@ -123,28 +152,20 @@ namespace MonobitEngine.Editor
             {
                 // MonobitView ID の手動登録
                 int viewID = (int)EditorGUILayout.IntField("MonobitView ID", m_View.viewID);
-
                 if (viewID != m_View.viewID)
                 {
-                    // 古いIDをシーン管理リストから削除
                     MonobitView.RemoveSceneViewID(m_View.viewID);
-
-                    // シーン内のオブジェクトでIDが重複している場合、警告を促す
-                    if (MonobitView.SearchSceneViewID(m_View.viewID))
-                    {
-                        EditorGUILayout.HelpBox("This \"MonobitView ID\" is stored in another object.", MessageType.Warning, true);
-                        m_View.viewID = viewID;
-                    }
-                    else
-                    {
-                        // シーンIDを登録する
-                        m_View.viewID = MonobitView.AssignedSceneViewID(viewID);
-                    }
+                    m_View.viewID = MonobitView.AssignedSceneViewID(viewID);
+                    m_ViewIdOverlapped = MonobitView.OverlappedSceneViewID(viewID);
                 }
-                else
+
+                // MonobitView ID の退避
+                m_ViewID = m_View.viewID;
+
+                // シーン内のオブジェクトでIDが重複している場合、警告を促す
+                if (m_ViewIdOverlapped)
                 {
-                    // そのまま入力されたデータを登録
-                    m_View.viewID = viewID;
+                    EditorGUILayout.HelpBox("This \"MonobitView ID\" is stored in another object.", MessageType.Warning, true);
                 }
 
                 // 登録されたIDが不正である場合、エラーを出力する
