@@ -1,0 +1,11 @@
+BackGround：風の音、葉音、最初と最後の音
+M00_ENEMY：敵BGM
+M01_Elise
+M02_ONBRA
+M03_GreenSleeves
+M04_ARIA_RE（仮）
+se_Enemy_Jump
+se_GEM_GET:宝石獲得
+se_GEM_TAME：宝石取得時の溜める音
+se_KIERU1：宝石消える
+se_KIERU2：同上（別候補、または重ねる）
