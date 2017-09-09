@@ -3,29 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Crawler: MonoBehaviour {
+public class CreatureScript: MonoBehaviour {
 		
 	//Basic parametrs
 	public float moveSpeed = 15.0f;     // move speed
 
 	//Self components
 	private Transform myTransform;
-	//private Rigidbody rbody;
+	Animator anim;
 
 	//Targeting
 	[SerializeField]
 	private Transform[] targets; // target array
-
 	private int nowTarget; // current target
 
 	// Time manager
 	private float timer;
-	public float stopTimer = 0f;
-	private float attackTimer = 0f;
+	private float stopTimer = 0f;
+
+	private float timer2;
+
+	[Range(1f, 10f)]
+	public float attackTimer = 4f;
+
+	[Range(1f, 100f)]
+	public float damage = 1f;
 
 	public bool patrolLoop; 			// path loop
 	private bool playerSpotted = false; // Player spotted
-	public float agroDis = 10.0f; 		// Player attack distance
+
+	private bool onGround = false;
+	private bool isJumping = false;
 
 	//Players
 	private Transform player1;
@@ -33,21 +41,22 @@ public class Crawler: MonoBehaviour {
 	private Transform mainCamera;
 
 	private void Start( ){
-		//rbody = GetComponent<Rigidbody> (); 						     // RBody get
 		myTransform = transform; 										 // Transform set
 		player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
-//		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;// find Player2 position
+//		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;	// find Player2 position
 		mainCamera = GameObject.FindGameObjectWithTag ( "MainCamera" ).transform;
+		anim = GetComponent<Animator> ();
 	}
 		
 	private void Update(){
-	
 		// Move along array of targets
 		if (nowTarget < targets.Length) {
 			Move ();
 		} else if (patrolLoop) {
 			nowTarget = 0; // loop
 		} 
+
+		Animate ();
 	}
 		
 	// Move towards target
@@ -63,7 +72,7 @@ public class Crawler: MonoBehaviour {
 			if (timer == 0) {
 				timer = Time.time;
 			}
-			if ((Time.time - timer) >= stopTimer) {
+			if ((Time.time - timer) >= stopTimer ) {
 				nowTarget++;
 				timer = 0; 
 			}
@@ -72,31 +81,43 @@ public class Crawler: MonoBehaviour {
 			dir = player1.position - myTransform.position;
 			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
 			myTransform.LookAt (mainCamera);
+			timer2 += Time.deltaTime;
+			//leave player alone after 4 seconds
+			if (timer2 >= attackTimer) {
+				timer2 = 0;
+				playerSpotted = false;
+			}
 		}
 	}
 
 	//ENTER COLLIDER
 	private void OnTriggerEnter( Collider other ) {
-		if (other.tag == "SpeedUp") { 			 // speed boost to simulate jumping ( blue spheres )
+		if (other.CompareTag("SpeedUp")) { 			 // speed boost to simulate jumping ( blue spheres )
 			moveSpeed = 15.0f;
 			stopTimer = 0f;
 			myTransform.localRotation = Quaternion.identity;
-		} else if (other.tag == "SpeedNormal") { // reset speed to normal ( yellow spheres ) !! buggy, try not to use
+			isJumping = true;
+			onGround = false;
+		} /*else if (other.tag == "SpeedNormal") { // reset speed to normal ( yellow spheres ) !! buggy, try not to use
 			stopTimer = 3.0f;
 			moveSpeed = 5.0f;
-		} else if (other.tag == "Wait") {		 // wait before moving / jumping ( orange spheres )
+		}*/ else if (other.CompareTag("Wait") || other.CompareTag("Spawn")) {		 // wait before moving / jumping ( orange spheres )
 			stopTimer = 3.0f;
 			moveSpeed = 15.0f;
 			myTransform.localRotation = Quaternion.identity;
+			isJumping = false;
+			onGround = true;
 		} 
 			
 		// Rotate transform towards next target
-		if (other.tag == "SpeedUp" || other.tag == "SpeedNormal" || other.tag == "nowTarget" || other.tag == "Wait") {
+		if (other.CompareTag ("SpeedUp") || other.CompareTag ("Wait")) {
+			myTransform.LookAt (targets [nowTarget + 1].position);
+		} else if (other.CompareTag ("Spawn")) {
 			myTransform.LookAt (targets [nowTarget + 1].position);
 		}
 
 		// Spot player
-		if (other.tag == "Player") {
+		if (other.CompareTag("Player")) {
 			playerSpotted = true;
 			moveSpeed = 15.0f;
 		}
@@ -105,18 +126,26 @@ public class Crawler: MonoBehaviour {
 	// EXIT COLLIDER
 	private void OnTriggerExit ( Collider other ) {
 		// reset timer to normal
-		if (other.tag == "Wait" || other.tag == "SpeedUp" ) {
+		if (other.CompareTag("Wait") || other.CompareTag("SpeedUp")) {
 			stopTimer = 0.5f;
 		}
 
 		// Lose player
-		if (other.tag == "Player") {
+		if (other.CompareTag("Player")) {
 			playerSpotted = false;
 		}
 			
 		// Destroy game object if it leaves Playzone ( DEBUG )
-		if (other.tag == "Playzone") {
+		if (other.CompareTag("Playzone")) {
 			Destroy (gameObject);
+		}
+	}
+
+	private void Animate(){
+		if (isJumping == true || playerSpotted == true ) {
+			anim.SetTrigger ("Wait");
+		} else if (isJumping == false) {
+			anim.SetTrigger ("Jump");
 		}
 	}
 		

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class CharaManager : MonoBehaviour {
 
-    [SerializeField]
 	private GameObject[] enemy;
 
-	void Start(){
-		
-	}
+	public int damage = 1;
+
 
 	public void SetEnemyActive ( int index, bool active ) {
-		enemy[index].SetActive (active);
+		enemy [index].SetActive (active);
 	}
 
 	public void SetAllEnemyActive( bool active ) {
