@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharaManager : MonoBehaviour {
-
+    [SerializeField]
 	private GameObject[] enemy;
 
 	public int damage = 1;
