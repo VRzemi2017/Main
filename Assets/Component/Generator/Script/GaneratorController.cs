@@ -33,12 +33,13 @@ public class GaneratorController : MonoBehaviour {
     [SerializeField]
     private float m_totalTime;
 
+    //一度消すためにジェムを管理させる
     [SerializeField]
-    private List<GameObject> m_ControllGems;
+    private List<GameObject> m_ControllGemList;
 
     private void Awake( ) {
-        for( int i = 0; i < m_ControllGems.Count; i++ ) {
-            m_ControllGems[ i ].gameObject.SetActive( false );
+        for( int i = 0; i < m_ControllGemList.Count; i++ ) {
+            m_ControllGemList[ i ].gameObject.SetActive( false );
         }
     }
 
@@ -76,6 +77,7 @@ public class GaneratorController : MonoBehaviour {
             if (m_totalGem >= m_WaveList[m_nowWaveNum].Tem_Num_GemOnWarpView) {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
+                m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
                 return;
             }
         }
@@ -85,6 +87,8 @@ public class GaneratorController : MonoBehaviour {
             if (m_totalTime >= m_WaveList[m_nowWaveNum].Tem_Sce_TimeOnWarpView) {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
+                m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
+
                 return;
             }
         }
@@ -93,6 +97,8 @@ public class GaneratorController : MonoBehaviour {
         if (m_totalTime >= m_WaveList[m_nowWaveNum].Get_Sce_TimeNextView && m_WaveList[m_nowWaveNum].Get_Sce_OnTimeNextView) {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
+            m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
+
             return;
         }
 
@@ -100,6 +106,7 @@ public class GaneratorController : MonoBehaviour {
         if (m_totalGem >= m_WaveList[m_nowWaveNum].Get_Num_GemNumNextView && m_WaveList[m_nowWaveNum].Get_Num_OnGemNumNextView) {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
+            m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
             return;
         }
 

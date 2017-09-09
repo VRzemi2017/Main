@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharaManager : MonoBehaviour {
 
+    [SerializeField]
 	private GameObject[] enemy;
 
 	void Start(){
@@ -11,7 +12,7 @@ public class CharaManager : MonoBehaviour {
 	}
 
 	public void SetEnemyActive ( int index, bool active ) {
-		enemy [index].SetActive (active);
+		enemy[index].SetActive (active);
 	}
 
 	public void SetAllEnemyActive( bool active ) {
