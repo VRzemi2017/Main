@@ -36,6 +36,7 @@ public class GemGanerator : MonoBehaviour {
     
     //--------メンバ変数--------//
     //生成されるGemの配列番号
+    [SerializeField]
     private int m_gem_wave_num;
     //-------------------------//
 
@@ -46,6 +47,13 @@ public class GemGanerator : MonoBehaviour {
     }
 
     void Awake( ) {
+        //Start内でFalseにする場合、自分の管轄内のジェムしかFalseにしないため
+        //AwakeはActiveFalseでも呼び出される
+        for (int i = 0; i < m_GemWaveList.Count; i++) {
+            for ( int j = 0; j < m_GemWaveList[ i ].m_List.Count; j++ ) {
+                m_GemWaveList[ i ].m_List[ j ].SetActive( false );
+            }
+        }
     }
 
 	void Start ( ) {
@@ -64,7 +72,7 @@ public class GemGanerator : MonoBehaviour {
 	
 	void Update ( ) {
 		MainManager.GameState game_state = MainManager.CurrentState;
-        GenerateUpdate();
+        GenerateUpdate( );
 
         switch ( game_state ) {
             case MainManager.GameState.GAME_START:
@@ -99,7 +107,7 @@ public class GemGanerator : MonoBehaviour {
                 break;
             case ADD_MODE.CHANGE:
                 //前のものを表示を消す
-                ResetAllWave();
+                ResetAllWave( );
                 NextGems( );
                 SetGemWaveActive(true);
                 break;

@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerNoDisplay : MonoBehaviour {
     [SerializeField] TextMesh mesh;
 
+    MainManager main;
+
     // Use this for initialization
     void Start ()
     {
@@ -17,5 +19,19 @@ public class PlayerNoDisplay : MonoBehaviour {
                 mesh.gameObject.SetActive(true);
             }
         }
+
+        main = GameObject.FindObjectOfType<MainManager>();
+        if (main)
+        {
+            main.AddPlayer(gameObject);
+        }
 	}
+
+    private void OnDestroy()
+    {
+        if (main)
+        {
+            main.RemovePlayer(gameObject);
+        }
+    }
 }
