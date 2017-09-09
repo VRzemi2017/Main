@@ -5,7 +5,9 @@ using System.Linq;
 
 public class SpotControl : MonoBehaviour {
     [SerializeField] int ID;
+    [SerializeField] string spotName;
 
+    public string SpotName { get { return spotName; } }
     public int SpotID { get { return ID; } }
 
     private bool reached;

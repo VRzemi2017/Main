@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InfoCall_test : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
+    
+    // Use this for initialization
+    void Start () {
 		
 	}
 	
@@ -14,10 +14,12 @@ public class InfoCall_test : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Keypad1))
         {
             InfoManager.CallCase(InfoManager.InfoCase.INFO_DAMAGE);
+            Debug.Log(InfoManager.rob);
         }
         if (Input.GetKeyDown(KeyCode.Keypad2))
         {
             InfoManager.CallCase(InfoManager.InfoCase.INFO_GET);
+            Debug.Log(InfoManager.pickup);
         }
     }
 }

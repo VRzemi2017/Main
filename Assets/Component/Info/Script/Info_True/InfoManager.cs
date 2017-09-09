@@ -28,7 +28,11 @@ public class InfoManager : MonoBehaviour {
     int result_tmp;         //リザルト
     public int state_pattern = 0;  //スタートとタイムアップの使い分け用
     int tmp_case = 0;       //３ケースの使い分け用
-    
+    public int pickup_score; //宝石を拾った時のスコア（器）
+    public int rob_score;// 宝石を取られた時のスコア（器）
+    public static int pickup; 　// 宝石を拾った時のスコア
+    public static int rob; // 宝石を取られた時のスコア
+    public static int teleport; //テレポテト回数
     // Use this for initialization
     void Start () {
         //MainManagerからGameStateを参照
@@ -67,15 +71,11 @@ public class InfoManager : MonoBehaviour {
         }
         if (Info_Case == InfoCase.INFO_DAMAGE)
         {
-            Info_Called();
-            Info_Case = InfoCase.INFO_WAIT;
-            info_text.text = ("石取られた");
+            Info_Rob();
         }
         if (Info_Case == InfoCase.INFO_GET)
         {
-            Info_Called();
-            Info_Case = InfoCase.INFO_WAIT;
-            info_text.text = ("石拾った");
+            Info_Pickup();
         }
     }
 
@@ -88,11 +88,28 @@ public class InfoManager : MonoBehaviour {
     void Result_Call()
     {
         Instantiate(result_window);     //呼び出すウィンドウ
+
     }
 
     void Info_Called()
     {
         Instantiate(called_window);     //呼び出すウィンドウ
+    }
+
+    void Info_Rob()
+    {
+        Info_Called();
+        Info_Case = InfoCase.INFO_WAIT;
+        info_text.text = ("石取られた");
+        rob += rob_score;
+    }
+
+    void Info_Pickup()
+    {
+        Info_Called();
+        Info_Case = InfoCase.INFO_WAIT;
+        info_text.text = ("石拾った");
+        pickup += pickup_score;
     }
 
     public static void CallCase(InfoCase state)     //他スクリプトからのinfomation呼び出し用

@@ -12,7 +12,7 @@ public class playerRemote_info : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        targetCamera = gameObject;  //プレイヤーのカメラの取得
+        targetCamera = Camera.main.gameObject;  //プレイヤーのカメラの取得
         this.transform.LookAt(this.targetCamera.transform.position);
         this.transform.Rotate(new Vector3(0f, 180f, 0f));
         
