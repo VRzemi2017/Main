@@ -7,6 +7,8 @@ using UniRx.Triggers;
 
 public class MainScene : SceneBase
 {
+    [SerializeField] float playTime = 60f;
+
     static System.Nullable<LevelDesignManager.RandomTable> table;
     static int index = -1;
 
@@ -15,6 +17,14 @@ public class MainScene : SceneBase
     private void Awake()
     {
         MainManager.ChangeState(MainManager.GameState.GAME_INIT);
+
+        MainManager.OnStateChanged.Subscribe(s =>
+        {
+            if (s == MainManager.GameState.GAME_PLAYING)
+            {
+                Observable.Timer(System.TimeSpan.FromSeconds(playTime)).Subscribe(_ => MainManager.ChangeState(MainManager.GameState.GAME_TIMEUP));
+            }
+        }).AddTo(this);
 
         if (table == null)
         {
