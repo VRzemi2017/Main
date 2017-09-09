@@ -14,9 +14,45 @@ public class ResultManager : MonoBehaviour {
     private List<string> comment = new List<string>();
     public string[] Comment { get { return comment.ToArray(); } }
 
-    public int GemCount { get { return 0; } }
-    public int DamageCount { get { return 0; } }
-    public int TeleportCount { get { return 0; } }
+    public int GemCount 
+    {
+        get 
+        {
+            PlayerManager player = GameObject.FindObjectOfType<PlayerManager>();
+            if (player)
+            {
+                return player.GEM_NUM;
+            }
+
+            return 0;
+        }
+    }
+    public int DamageCount 
+    {
+        get 
+        {
+            CharaManager chara = GameObject.FindObjectOfType<CharaManager>();
+            if (chara)
+            {
+                return 0;
+            }
+
+            return 0;
+        }
+    }
+    public int TeleportCount 
+    {
+        get 
+        {
+            LineRendererController line = GameObject.FindObjectOfType<LineRendererController>();
+            if (line)
+            {
+                return line.TeleportCount;
+            }
+
+            return 0;
+        }
+    }
 
     private List<SpotControl> spots = new List<SpotControl>();
     public SpotControl[] Spots { get { return spots.ToArray(); } }

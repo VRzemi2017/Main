@@ -20,9 +20,22 @@ public class MainScene : SceneBase
 
         MainManager.OnStateChanged.Subscribe(s =>
         {
-            if (s == MainManager.GameState.GAME_PLAYING)
+            switch (s)
             {
-                Observable.Timer(System.TimeSpan.FromSeconds(playTime)).Subscribe(_ => MainManager.ChangeState(MainManager.GameState.GAME_TIMEUP));
+                case MainManager.GameState.GAME_PLAYING:
+                    {
+                        Observable.Timer(System.TimeSpan.FromSeconds(playTime)).Subscribe(_ => MainManager.ChangeState(MainManager.GameState.GAME_TIMEUP));
+                    }
+                    break;
+                case MainManager.GameState.GAME_TIMEUP:
+                    {
+                        ResultManager result = GameObject.FindObjectOfType<ResultManager>();
+                        if (result)
+                        {
+                            result.ComputeScore();
+                        }
+                    }
+                    break;
             }
         }).AddTo(this);
 

@@ -27,6 +27,8 @@ public class MainManager : MonoBehaviour {
         GAME_STATE_MAX,
     }
 
+    private List<GameObject> players = new List<GameObject>();
+
     private static Messager message;
 
     private static GameState _state = GameState.GAME_INIT;
@@ -134,13 +136,24 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public static GameObject LocalPlayer()
+    public GameObject[] GetPlayers()
     {
-		return Camera.main.gameObject;
+        return players.ToArray();
     }
 
-    public static GameObject RemotePlayer()
+    public void AddPlayer(GameObject obj)
     {
-		return null;
+        if (obj && !players.Contains(obj))
+        {
+            players.Add(obj);
+        }
+    }
+
+    public void RemovePlayer(GameObject obj)
+    {
+        if (obj && players.Contains(obj))
+        {
+            players.Remove(obj);
+        }
     }
 }
