@@ -103,6 +103,9 @@ public class LineRendererController : MonoBehaviour {
             WandEffect.SetActive( true );
         }
 
+        Gemeffect();
+
+
 
         for ( float t = 0.0f; t < MaxTime; t += timeResolution ) {
 
@@ -122,7 +125,7 @@ public class LineRendererController : MonoBehaviour {
                 //VRコントローラの処理
                 if ( device.GetPressDown( SteamVR_Controller.ButtonMask.Trigger ) && Projectile_judge == false ) {
                     GetPosition = Point;
-                    if ( Move == false && MoveTargetInstance == null) {
+                    if ( Move == false && MoveTargetInstance == null ) {
                         MoveTargetInstance = Instantiate( MoveTarget, new Vector3( GetPosition.x, GetPosition.y + 0.1f, GetPosition.z ), Quaternion.identity );
                         MoveTargetInstance.transform.rotation = Quaternion.LookRotation( hit.normal );
                     }
@@ -250,6 +253,14 @@ public class LineRendererController : MonoBehaviour {
     public void DeleteLine() {
         if ( lineRenderer ) {
             lineRenderer.positionCount = 0;
+        }
+    }
+
+    private void Gemeffect()
+    {
+        if (GameObject.Find("crystal_mesh_001").GetComponent<GemController>().IsHitGem == true && MoveTargetInstance != null)
+        {
+            Destroy(MoveTargetInstance);
         }
     }
 
