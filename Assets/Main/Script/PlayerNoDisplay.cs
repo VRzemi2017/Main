@@ -9,15 +9,12 @@ public class PlayerNoDisplay : MonoBehaviour {
     void Start ()
     {
         MonobitEngine.MonobitView view = GetComponent<MonobitEngine.MonobitView>();
-        if (view)
+        if (view && MonobitEngineBase.MonobitNetwork.inRoom)
         {
-            if (view.isMine)
-            {
-                mesh.gameObject.SetActive(false);
-            }
-            else
+            if (!view.isMine)
             {
                 mesh.text = view.owner.ID + "P";
+                mesh.gameObject.SetActive(true);
             }
         }
 	}
