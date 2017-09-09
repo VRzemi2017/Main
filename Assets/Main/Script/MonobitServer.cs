@@ -68,7 +68,6 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         {
             ConnectServer ();
         });
-
     }
 
 	private void ConnectServer()
@@ -95,8 +94,8 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     {
         SetMessage("Enter Room.");
 
-        playerNo = MonobitEngine.MonobitNetwork.playerCountInRoom - 1;
-        SetMessage("Player: " + (playerNo + 1) + "P");
+        playerNo = MonobitNetwork.player.ID - 1;
+        SetMessage("Player: " + MonobitNetwork.player.ID + "P");
 
         enterRoom.OnNext(Unit.Default);
     }
