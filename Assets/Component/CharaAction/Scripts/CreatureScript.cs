@@ -136,9 +136,9 @@ public class CreatureScript: MonoBehaviour {
 		}
 			
 		// Destroy game object if it leaves Playzone ( DEBUG )
-		if (other.CompareTag("Playzone")) {
-			Destroy (gameObject);
-		}
+		//if (other.CompareTag("Playzone")) {
+		//	Destroy (gameObject);
+		//}
 	}
 
 	private void Animate(){
