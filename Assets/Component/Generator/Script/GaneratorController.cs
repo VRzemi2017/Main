@@ -33,7 +33,16 @@ public class GaneratorController : MonoBehaviour {
     [SerializeField]
     private float m_totalTime;
 
-    private void Start() {
+    [SerializeField]
+    private List<GameObject> m_ControllGems;
+
+    private void Awake( ) {
+        for( int i = 0; i < m_ControllGems.Count; i++ ) {
+            m_ControllGems[ i ].gameObject.SetActive( false );
+        }
+    }
+
+    private void Start( ) {
         m_totalGem = 0;
         m_nowWaveNum = 0;
     }

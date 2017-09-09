@@ -72,7 +72,7 @@ public class GemGanerator : MonoBehaviour {
 	
 	void Update ( ) {
 		MainManager.GameState game_state = MainManager.CurrentState;
-        GenerateUpdate();
+        GenerateUpdate( );
 
         switch ( game_state ) {
             case MainManager.GameState.GAME_START:
