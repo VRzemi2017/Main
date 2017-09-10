@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 //Inspectorに二重で配列を表示するために使用
 [System.Serializable]
@@ -30,6 +32,7 @@ public class GaneratorController : MonoBehaviour {
 
     private int m_totalGem;
     private int m_nowWaveNum;
+    private List<PlayerManager> m_PlayerManagers; 
     [SerializeField]
     private float m_totalTime;
 
@@ -46,6 +49,10 @@ public class GaneratorController : MonoBehaviour {
     private void Start( ) {
         m_totalGem = 0;
         m_nowWaveNum = 0;
+        MainManager.OnEventHappaned.Subscribe(e =>
+        {
+            IsGetGem();
+        }).AddTo(this);
     }
 
     public void IsGetGem( ) {
@@ -61,6 +68,7 @@ public class GaneratorController : MonoBehaviour {
                 m_totalTime = 0;
                 break;
             case MainManager.GameState.GAME_PLAYING:
+                
                 m_totalTime += Time.deltaTime;
                 UpdateWave();
                 break;

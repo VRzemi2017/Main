@@ -37,6 +37,9 @@ public class MainManager : MonoBehaviour {
     private static Subject<GameState> stateChanged = new Subject<GameState>();
     public static IObservable<GameState> OnStateChanged { get { return stateChanged; } }
 
+    private static Subject<GameEvent> eventHappaned = new Subject<GameEvent>();
+    public static IObservable<GameEvent> OnEventHappaned { get { return eventHappaned; } }
+
     public int PlayerNo 
     {
         get 
@@ -124,9 +127,9 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public static void EventTriggered(GameEvent e)
-    {
+    public static void EventTriggered(GameEvent e) {
 
+        eventHappaned.OnNext(e);
     }
 
     public static void LoadSceneAsync(string name)
