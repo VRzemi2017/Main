@@ -92,7 +92,9 @@ public class EnemyGanrator : MonoBehaviour {
 
     private void SetEnemyWaveActice(bool flg_act) {
         foreach (int index in m_EnemyWave[m_now_wave].m_List) {
-            m_charaManager.SetEnemyActive(index - 1, flg_act);
+            if (index > 0) {
+                m_charaManager.SetEnemyActive(index - 1, flg_act);
+            }
         }
     }
 

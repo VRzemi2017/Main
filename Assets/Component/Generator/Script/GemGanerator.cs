@@ -49,22 +49,22 @@ public class GemGanerator : MonoBehaviour {
     void Awake( ) {
         //Start内でFalseにする場合、自分の管轄内のジェムしかFalseにしないため
         //AwakeはActiveFalseでも呼び出される
-        for (int i = 0; i < m_GemWaveList.Count; i++) {
+        /*for (int i = 0; i < m_GemWaveList.Count; i++) {
             for ( int j = 0; j < m_GemWaveList[ i ].m_List.Count; j++ ) {
                 m_GemWaveList[ i ].m_List[ j ].SetActive( false );
             }
-        }
+        }*/
     }
 
 	void Start ( ) {
         m_gem_wave_num = 0;
 
 
-        for (int i = 0; i < m_GemWaveList.Count; i++) {
+        /*for (int i = 0; i < m_GemWaveList.Count; i++) {
             for ( int j = 0; j < m_GemWaveList[ i ].m_List.Count; j++ ) {
                 m_GemWaveList[ i ].m_List[ j ].SetActive( false );
             }
-        }
+        }*/
         //表示するべきGemをActive化させる
         SetGemWaveActive( true );
 
