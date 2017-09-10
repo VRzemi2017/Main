@@ -70,11 +70,11 @@ public class GaneratorController : MonoBehaviour {
                 m_totalTime = 0;
                 break;
             case MainManager.GameState.GAME_PLAYING:
-                
                 m_totalTime += Time.deltaTime;
                 UpdateWave();
                 break;
             case MainManager.GameState.GAME_FINISH:
+                int i = 0;
                 break;
             default:
                 break;
@@ -88,6 +88,7 @@ public class GaneratorController : MonoBehaviour {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
                 m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
+                m_totalTime = 0;
                 return;
             }
         }
@@ -98,7 +99,7 @@ public class GaneratorController : MonoBehaviour {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
                 m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
-
+                m_totalTime = 0;
                 return;
             }
         }
@@ -108,7 +109,7 @@ public class GaneratorController : MonoBehaviour {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
             m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
-
+            m_totalTime = 0;
             return;
         }
 
@@ -117,6 +118,7 @@ public class GaneratorController : MonoBehaviour {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
             m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
+            m_totalTime = 0;
             return;
         }
 

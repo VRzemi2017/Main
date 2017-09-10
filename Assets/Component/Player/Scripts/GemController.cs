@@ -80,7 +80,7 @@ public class GemController : MonoBehaviour {
                     anim.SetBool("Start", true);
                     anim.SetBool("End", false);
                     MainManager.EventData eventData;
-                    eventData.gameEvent = MainManager.GameEvent.EVENT_GEM;
+                    eventData.gameEvent = MainManager.GameEvent.EVENT_HIT_GEM;
                     eventData.eventObject = m_hit_gem;
                     MainManager.EventTriggered(eventData);
                 }
@@ -119,6 +119,7 @@ public class GemController : MonoBehaviour {
     public void SetGemNum( int gem_num ) {
         GameObject gem = m_hit_gem;
         gem.transform.SetParent( m_SmallGemParent, false );
+        gem.GetComponent<Gem>().SetSoundActiveFalse();
         m_SmallGemList.Add( gem );
         for ( int i = 0; i < m_SmallGemList.Count; i++ ) {
             Vector3 position = Quaternion.Euler(0, 0, ( 360 / m_SmallGemList.Count) * i ) * m_SmallGemLenght;

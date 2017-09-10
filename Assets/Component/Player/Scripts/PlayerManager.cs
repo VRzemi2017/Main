@@ -55,16 +55,14 @@ public class PlayerManager : MonoBehaviour {
                 break;
             case MainManager.GameState.GAME_FINISH:
                 //ゲーム終了時に消すものはここで消す。
+                break;
+            case MainManager.GameState.GAME_TIMEUP:
+                //リザルト時に消すものはここで消す。
                 m_Wand.GetComponent<WandController>().SetBehaviorActive(false);
                 m_GemController.SetGameStart(false);
-                m_Line_render_contro.ColorControllerOFF( );
-                break;
-            case MainManager.GameState.GAME_RESULT:
-                //リザルト時に消すものはここで消す。
+                m_Line_render_contro.ColorControllerOFF();
                 break;
         }
-
-        DebugCode();
     }
 
     private void DebugCode() {
