@@ -86,7 +86,10 @@ public class PlayerManager : MonoBehaviour {
         m_gem_num++;
         m_GemController.ResetHitState( );
         m_GemController.SetGemNum( m_gem_num );
-        MainManager.EventTriggered(MainManager.GameEvent.EVENT_GEM);
+        MainManager.EventData eventData;
+        eventData.gameEvent = MainManager.GameEvent.EVENT_GEM;
+        eventData.eventObject = null;
+        MainManager.EventTriggered(eventData);
       
     }
 }
