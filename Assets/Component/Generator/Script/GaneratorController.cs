@@ -24,13 +24,13 @@ public struct WaveData {
 
 
 public class GaneratorController : MonoBehaviour {
-    
-
     [SerializeField] GemGanerator m_gemGanerator;
     [SerializeField] EnemyGanrator m_enemyGanerator;
     [SerializeField] List<WaveData> m_WaveList;
 
-    private int m_totalGem;
+    private int m_totalGem;                         //ゲーム中のGem取得総数
+    private int m_wave_totalGem;                    //Wave中のGem取得総数　別にしないとWave
+    [SerializeField]
     private int m_nowWaveNum;
     private List<PlayerManager> m_PlayerManagers; 
     [SerializeField]
@@ -58,12 +58,12 @@ public class GaneratorController : MonoBehaviour {
     }
 
     public void IsGetGem( ) {
-        m_totalGem++;
+        m_wave_totalGem++;
     }
 
-    private void Update() {
+    private void Update( ) {
         MainManager.GameState game_state = MainManager.CurrentState;
-        UpdateWave();
+        UpdateWave( );
 
         switch (game_state) {
             case MainManager.GameState.GAME_START:
@@ -83,45 +83,56 @@ public class GaneratorController : MonoBehaviour {
 
     private void UpdateWave() {
         //ジェムの数によるシーン移行
-        if (m_WaveList[m_nowWaveNum].Tem_Num_WarpViewOnGemNum) {
-            if (m_totalGem >= m_WaveList[m_nowWaveNum].Tem_Num_GemOnWarpView) {
+        if ( m_WaveList[m_nowWaveNum].Tem_Num_WarpViewOnGemNum ) {
+            if ( m_wave_totalGem >= m_WaveList[m_nowWaveNum].Tem_Num_GemOnWarpView) {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
                 m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
                 m_totalTime = 0;
+                AddWaveGemToTotal( m_wave_totalGem );
+                m_wave_totalGem = 0;
                 return;
             }
         }
 
         //時間経過によるウェーブ移行
-        if (m_WaveList[m_nowWaveNum].Tem_Sce_WarpViewOnTime) {
-            if (m_totalTime >= m_WaveList[m_nowWaveNum].Tem_Sce_TimeOnWarpView) {
+        if ( m_WaveList[m_nowWaveNum].Tem_Sce_WarpViewOnTime ) {
+            if ( m_totalTime >= m_WaveList[m_nowWaveNum].Tem_Sce_TimeOnWarpView ) {
                 m_nowWaveNum = m_WaveList[m_nowWaveNum].Tem_WarpWave;
                 m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
                 m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
                 m_totalTime = 0;
+                AddWaveGemToTotal( m_wave_totalGem );
+                m_wave_totalGem = 0;
                 return;
             }
         }
 
 
-        if (m_totalTime >= m_WaveList[m_nowWaveNum].Get_Sce_TimeNextView && m_WaveList[m_nowWaveNum].Get_Sce_OnTimeNextView) {
+        if ( m_totalTime >= m_WaveList[m_nowWaveNum].Get_Sce_TimeNextView && m_WaveList[m_nowWaveNum].Get_Sce_OnTimeNextView ) {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
             m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
             m_totalTime = 0;
+            AddWaveGemToTotal( m_wave_totalGem );
+            m_wave_totalGem = 0;
             return;
         }
 
 
-        if (m_totalGem >= m_WaveList[m_nowWaveNum].Get_Num_GemNumNextView && m_WaveList[m_nowWaveNum].Get_Num_OnGemNumNextView) {
+        if ( m_wave_totalGem >= m_WaveList[m_nowWaveNum].Get_Num_GemNumNextView && m_WaveList[m_nowWaveNum].Get_Num_OnGemNumNextView) {
             m_nowWaveNum++;
             m_gemGanerator.SetWave(m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum);
             m_enemyGanerator.SetWave( m_WaveList[m_nowWaveNum].IsAddMode, m_nowWaveNum );
             m_totalTime = 0;
+            AddWaveGemToTotal( m_wave_totalGem );
+            m_wave_totalGem = 0;
             return;
         }
+    }
 
+    private void AddWaveGemToTotal( int wave_num ) {
+        m_totalGem += wave_num;
     }
     
 }
