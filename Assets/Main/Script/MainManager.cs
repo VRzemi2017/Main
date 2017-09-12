@@ -27,7 +27,7 @@ public class MainManager : MonoBehaviour {
         GAME_STATE_MAX,
     }
 
-    private List<GameObject> players = new List<GameObject>();
+    private static List<GameObject> players = new List<GameObject>();
 
     private static Messager message;
 
@@ -157,12 +157,12 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public GameObject[] GetPlayers()
+	public static GameObject[] GetPlayers()
     {
         return players.ToArray();
     }
 
-    public void AddPlayer(GameObject obj)
+	public static void AddPlayer(GameObject obj)
     {
         if (obj && !players.Contains(obj))
         {
@@ -170,7 +170,7 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public void RemovePlayer(GameObject obj)
+	public static void RemovePlayer(GameObject obj)
     {
         if (obj && players.Contains(obj))
         {

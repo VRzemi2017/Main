@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 public class CreatureScript: MonoBehaviour {
 
@@ -38,14 +39,17 @@ public class CreatureScript: MonoBehaviour {
 	private bool isJumping = false;
 
 	//Players
-	private Transform player1;
-	private Transform player2;
+	//private Transform player1;
+	//private Transform player2;
+
+	private Transform targetPlayer = null;
+
 	private Transform mainCamera;
 
 	private void Start( ){
 		enemyLayer = gameObject.layer;
 		myTransform = transform; 										 // Transform set
-		player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
+		//player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
 //		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;	// find Player2 position
 		mainCamera = GameObject.FindGameObjectWithTag ( "MainCamera" ).transform;
 		anim = GetComponent<Animator> ();
@@ -79,17 +83,23 @@ public class CreatureScript: MonoBehaviour {
 				nowTarget++;
 				timer = 0; 
 			}
-		} else if (playerSpotted) { // Attack player
-			target = player1.position;
-			dir = player1.position - myTransform.position;
-			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
-			myTransform.LookAt (mainCamera);
-			timer2 += Time.deltaTime;
+		} else if (playerSpotted) {
+
+			if (targetPlayer) 
+			{
+				MainManager.EventTriggered(new MainManager.EventData() { gameEvent = MainManager.GameEvent.EVENT_DAMAGE });
+				target = targetPlayer.position;
+				dir = targetPlayer.position - myTransform.position;
+				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
+				myTransform.LookAt (mainCamera);
+				timer2 += Time.deltaTime;
+				Debug.Log ("player spotted");			}
 
 			//leave player alone after 4 seconds
-			if (timer2 >= attackTimer) {
+			if (targetPlayer == null || timer2 >= attackTimer) {
 				timer2 = 0;
 				playerSpotted = false;
+				targetPlayer = null;
 			}
 		}
 	}
@@ -127,11 +137,16 @@ public class CreatureScript: MonoBehaviour {
 			myTransform.LookAt (targets [nowTarget + 1].position);
 		}
 
-		// Spot player
-		if (other.CompareTag("Player")) {
-			playerSpotted = true;
-			moveSpeed = 15.0f;
-		}
+		MainManager.GetPlayers ().ToList ().ForEach (p => {
+			if (p == other.gameObject)
+			{
+				playerSpotted = true;
+				moveSpeed = 15.0f;
+				Debug.Log("Player spotted");
+
+				targetPlayer = p.transform;
+			}
+		});
 	}
 
 	// EXIT COLLIDER
@@ -139,11 +154,6 @@ public class CreatureScript: MonoBehaviour {
 		// reset timer to normal
 		if (other.CompareTag("Wait") || other.CompareTag("SpeedUp")) {
 			stopTimer = 0.5f;
-		}
-
-		// Lose player
-		if (other.CompareTag("Player")) {
-			playerSpotted = false;
 		}
 			
 		// Destroy game object if it leaves Playzone ( DEBUG )
