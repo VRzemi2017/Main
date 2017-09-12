@@ -250,17 +250,17 @@ public class LineRendererController : MonoBehaviour {
     }
 
     private bool ColliderTag(Vector3 point) {
-        Ray ray = new Ray(point, Vector3.down);
-        RaycastHit hit2;
-        if (Physics.Raycast(ray, out hit2)) {
-            if (hit2.distance > 1f || TargetSetActive == true || GroundAngle_judge == true) {
+        //Ray ray = new Ray(point, Vector3.down);
+        //RaycastHit hit2;
+        //if (Physics.Raycast(ray, out hit2)) {
+            if ( /*hit2.distance > 1f ||*/ TargetSetActive == true || GroundAngle_judge == true) {
                 PointerInstance.SetActive(false);
                 return true;
             } else {
                 PointerInstance.SetActive(true);
                 return false;
             }
-        }
+        //}
         return false;
     }
 

@@ -34,32 +34,7 @@ public class GemController : MonoBehaviour {
         foreach ( GameObject gem in m_SmallGemList ) {
             gem.transform.RotateAround( m_SmallGemParent.position, m_SmallGemParent.forward, 1f );
         }
-        if (m_is_hit_gem){
-            m_hit_gem_time += Time.deltaTime;
-            if (m_hit_gem_time >= m_getGemAnimationTime) {
 
-                m_hit_gem.transform.localScale = new Vector3( 0.2f, 0.2f, 0.2f );
-
-                m_is_get_gem = true;
-                m_is_hit_gem = false;
-                m_hitAnimation.SetActive(false);
-                Animator anim = m_hitAnimation.GetComponent<Animator>();
-                anim.SetBool("End", true);
-                anim.SetBool("Start", false);
-                m_hit_gem_time = 0.0f;
-
-            }
-        } else if (m_hit_gem_time > 0.0f) {
-            m_hit_gem_time -= Time.deltaTime;
-            if (m_hit_gem_time <= 0.0f) {
-                m_hit_gem.GetComponent<Gem>( ).SetAnimationIsEnd( true );
-                m_hit_gem_time = 0.0f;
-                m_hitAnimation.SetActive(false);
-                Animator anim = m_hitAnimation.GetComponent<Animator>();
-                anim.SetBool("End", true);
-                anim.SetBool("Start", false);
-            }
-        }
     }
 
     private void OnTriggerEnter(Collider collision) {
@@ -70,21 +45,22 @@ public class GemController : MonoBehaviour {
         switch (collision.gameObject.tag){
             case "Gem":
                 m_hit_gem = collision.gameObject;
-                if ( m_hit_gem.GetComponent<Gem>( ).Is_End_Animation ) {
-                    m_hit_gem.GetComponent<Gem>( ).SetAnimationIsEnd( false );
-                    m_is_hit_gem = true;                                  
-                    m_hitAnimation.transform.SetParent( null, false );
-                    m_hitAnimation.transform.position = m_hit_gem.transform.position;
-                    m_hitAnimation.SetActive(true);
+                m_hit_gem.GetComponent<Gem>().HitByPlayer( _ => {
+                    GetGemAction(_);
+                });
+                /*if ( m_hit_gem.GetComponent<Gem>( ).Is_End_Animation ) {
+                    //m_hit_gem.GetComponent<Gem>( ).SetAnimationIsEnd( false );
+                    m_hit_gem.GetComponent<Gem>().GemEffect.SetActive(true);
+                    m_hit_gem.GetComponent<Gem>().Gem_Effect_TimeFlag = true;
                     SetHitAnimationSpeed(1);
-                    Animator anim = m_hitAnimation.GetComponent<Animator>();
-                    anim.SetBool("Start", true);
-                    anim.SetBool("End", false);
-                    MainManager.EventData eventData;
-                    eventData.gameEvent = MainManager.GameEvent.EVENT_HIT_GEM;
-                    eventData.eventObject = m_hit_gem;
+                    m_is_hit_gem = true;                                  
+
                     MainManager.EventTriggered(eventData);
-                }
+                }*/
+                MainManager.EventData eventData;
+                eventData.gameEvent = MainManager.GameEvent.EVENT_HIT_GEM;
+                eventData.eventObject = m_hit_gem;
+                MainManager.EventTriggered(eventData);
                 m_Line_render_cont.ColorControllerOFF( );
 
                 break;
@@ -102,7 +78,15 @@ public class GemController : MonoBehaviour {
         switch (other.gameObject.tag) {
             case "Gem":
                 m_is_hit_gem = false;
-                SetHitAnimationSpeed(-1);
+                m_hit_gem.GetComponent<Gem>().HitPlayerLeave();
+                /* m_hit_gem.GetComponent<Gem>().Gem_Effect_TimeFlag = false;
+                 SetHitAnimationSpeed(-1);*/
+
+                MainManager.EventData eventData;
+                eventData.gameEvent = MainManager.GameEvent.EVENT_LEAVR_GEM;
+                eventData.eventObject = m_hit_gem;
+                MainManager.EventTriggered(eventData);
+
                 m_Line_render_cont.ColorControllerON( );
 
                 break;
@@ -113,17 +97,22 @@ public class GemController : MonoBehaviour {
     }
 
     private void SetHitAnimationSpeed(float speed) {
-        Animator anim = m_hitAnimation.GetComponent<Animator>();
+        Animator anim = m_hit_gem.GetComponent<Gem>().GemEffect.GetComponent<Animator>();
         anim.SetFloat("Speed", speed);
     }
 
-    public void SetGemNum( int gem_num ) {
-        GameObject gem = m_hit_gem;
-        gem.transform.SetParent( m_SmallGemParent, false );
+    public void GetGemAction(GameObject gem) {
+        gem.transform.SetParent(m_SmallGemParent, false);
+        m_SmallGemList.Add(gem);
+        gem.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         gem.GetComponent<Gem>().SetSoundActiveFalse();
-        m_SmallGemList.Add( gem );
-        for ( int i = 0; i < m_SmallGemList.Count; i++ ) {
-            Vector3 position = Quaternion.Euler(0, 0, ( 360 / m_SmallGemList.Count) * i ) * m_SmallGemLenght;
+        ResetSmallGemPos();
+        m_Line_render_cont.ColorControllerON();
+    }
+
+    private void ResetSmallGemPos() {
+        for (int i = 0; i < m_SmallGemList.Count; i++) {
+            Vector3 position = Quaternion.Euler(0, 0, (360 / m_SmallGemList.Count) * i) * m_SmallGemLenght;
             m_SmallGemList[i].transform.localPosition = position;
         }
     }

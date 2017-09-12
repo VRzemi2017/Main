@@ -83,7 +83,6 @@ public class PlayerManager : MonoBehaviour {
     private void GetGemAction ( ) {
         m_gem_num++;
         m_GemController.ResetHitState( );
-        m_GemController.SetGemNum( m_gem_num );
         MainManager.EventData eventData;
         eventData.gameEvent = MainManager.GameEvent.EVENT_GEM;
         eventData.eventObject = null;
