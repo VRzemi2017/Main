@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class CreatureScript: MonoBehaviour {
-		
+
+	public LayerMask enemyLayer;
+
 	//Basic parametrs
 	public float moveSpeed = 15.0f;     // move speed
 
@@ -41,6 +43,7 @@ public class CreatureScript: MonoBehaviour {
 	private Transform mainCamera;
 
 	private void Start( ){
+		enemyLayer = gameObject.layer;
 		myTransform = transform; 										 // Transform set
 		player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
 //		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;	// find Player2 position
@@ -82,6 +85,7 @@ public class CreatureScript: MonoBehaviour {
 			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
 			myTransform.LookAt (mainCamera);
 			timer2 += Time.deltaTime;
+
 			//leave player alone after 4 seconds
 			if (timer2 >= attackTimer) {
 				timer2 = 0;
@@ -92,6 +96,13 @@ public class CreatureScript: MonoBehaviour {
 
 	//ENTER COLLIDER
 	private void OnTriggerEnter( Collider other ) {
+
+		if (enemyLayer != LayerMask.NameToLayer ("EnemyLayer")) {
+			return;
+		} else {
+			Debug.Log ("Layers match");
+		}
+
 		if (other.CompareTag("SpeedUp")) { 			 // speed boost to simulate jumping ( blue spheres )
 			moveSpeed = 15.0f;
 			stopTimer = 0f;
@@ -136,9 +147,9 @@ public class CreatureScript: MonoBehaviour {
 		}
 			
 		// Destroy game object if it leaves Playzone ( DEBUG )
-		//if (other.CompareTag("Playzone")) {
-		//	Destroy (gameObject);
-		//}
+//		if (other.CompareTag("Playzone")) {
+//			Destroy (gameObject);
+//		}
 	}
 
 	private void Animate(){

@@ -24,6 +24,7 @@ public class GemController : MonoBehaviour {
     private List<GameObject> m_SmallGemList = new List<GameObject>();
     
     public bool IsGetGem { get { return m_is_get_gem; } }
+    public GameObject GetMyHitGem { get { return m_hit_gem; } }
 
     public void Start ( ) {
         m_Line_render_cont = m_LineRenderer.GetComponent<LineRendererController>( );

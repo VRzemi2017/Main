@@ -22,10 +22,11 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private Messager message;
     [SerializeField]
     private bool offline;
+    [SerializeField]
+    private string roomName = "TCA_JACK_ROOM";
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
-    const string ROOM_NAME = "TCA_JACK_ROOM";
 
     private Subject<Unit> enterRoom = new Subject<Unit>();
     public IObservable<Unit> OnEnterRoom { get { return enterRoom; } }
