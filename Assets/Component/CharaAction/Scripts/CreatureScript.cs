@@ -6,14 +6,15 @@ using System.Linq;
 
 public class CreatureScript: MonoBehaviour {
 
+	//Layer
 	public LayerMask enemyLayer;
 
-	//Basic parametrs
-	public float moveSpeed = 15.0f;     // move speed
+	//Speed
+	private float moveSpeed = 15.0f;     // move speed
 
 	//Self components
 	private Transform myTransform;
-	Animator anim;
+	private Animator anim;
 
 	//Targeting
 	[SerializeField]
@@ -48,14 +49,13 @@ public class CreatureScript: MonoBehaviour {
 
 	private void Start( ){
 		enemyLayer = gameObject.layer;
-		myTransform = transform; 										 // Transform set
-		//player1 = GameObject.FindGameObjectWithTag("Player").transform; // find Player1 position
-//		player2 = GameObject.FindGameObjectWithTag ("Player2").transform;	// find Player2 position
+		myTransform = transform;
 		mainCamera = GameObject.FindGameObjectWithTag ( "MainCamera" ).transform;
 		anim = GetComponent<Animator> ();
 	}
 		
 	private void Update(){
+
 		// Move along array of targets
 		if (nowTarget < targets.Length) {
 			Move ();
@@ -109,20 +109,16 @@ public class CreatureScript: MonoBehaviour {
 
 		if (enemyLayer != LayerMask.NameToLayer ("EnemyLayer")) {
 			return;
-		} else {
-			Debug.Log ("Layers match");
-		}
+		} 
 
-		if (other.CompareTag("SpeedUp")) { 			 // speed boost to simulate jumping ( blue spheres )
+		//Move self to targets and speed change
+		if (other.CompareTag("SpeedUp")) { 
 			moveSpeed = 15.0f;
 			stopTimer = 0f;
 			myTransform.localRotation = Quaternion.identity;
 			isJumping = true;
 			onGround = false;
-		} /*else if (other.tag == "SpeedNormal") { // reset speed to normal ( yellow spheres ) !! buggy, try not to use
-			stopTimer = 3.0f;
-			moveSpeed = 5.0f;
-		}*/ else if (other.CompareTag("Wait") || other.CompareTag("Spawn")) {		 // wait before moving / jumping ( orange spheres )
+		} else if (other.CompareTag("Wait") || other.CompareTag("Spawn")) {
 			stopTimer = 3.0f;
 			moveSpeed = 15.0f;
 			myTransform.localRotation = Quaternion.identity;
@@ -130,20 +126,18 @@ public class CreatureScript: MonoBehaviour {
 			onGround = true;
 		} 
 			
-		// Rotate transform towards next target
+		//Rotate self to targets
 		if (other.CompareTag ("SpeedUp") || other.CompareTag ("Wait")) {
-			myTransform.LookAt (targets [nowTarget + 1].position);
-		} else if (other.CompareTag ("Spawn")) {
-			myTransform.LookAt (targets [nowTarget + 1].position);
-		}
+			myTransform.LookAt (targets [(nowTarget+1)% targets.Length].position);
+		} 
 
+		//Player spotted
 		MainManager.GetPlayers ().ToList ().ForEach (p => {
 			if (p == other.gameObject)
 			{
 				playerSpotted = true;
 				moveSpeed = 15.0f;
 				Debug.Log("Player spotted");
-
 				targetPlayer = p.transform;
 			}
 		});
@@ -156,12 +150,13 @@ public class CreatureScript: MonoBehaviour {
 			stopTimer = 0.5f;
 		}
 			
-		// Destroy game object if it leaves Playzone ( DEBUG )
+// Destroy game object if it leaves Playzone ( DEBUG )
 //		if (other.CompareTag("Playzone")) {
 //			Destroy (gameObject);
 //		}
 	}
 
+	//Animator
 	private void Animate(){
 		if (isJumping == true || playerSpotted == true ) {
 			anim.SetTrigger ("Wait");
