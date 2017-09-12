@@ -32,6 +32,7 @@ public class CreatureScript: MonoBehaviour {
 
 	[Range(1f, 100f)]
 	public float damage = 1f;
+	private bool attacked = false;
 
 	public bool patrolLoop; 			// path loop
 	private bool playerSpotted = false; // Player spotted
@@ -83,25 +84,33 @@ public class CreatureScript: MonoBehaviour {
 				nowTarget++;
 				timer = 0; 
 			}
-		} else if (playerSpotted) {
-
-			if (targetPlayer) 
-			{
-				MainManager.EventTriggered(new MainManager.EventData() { gameEvent = MainManager.GameEvent.EVENT_DAMAGE });
+		} else if (playerSpotted && targetPlayer && attacked == false){
+			
+				MainManager.EventTriggered (new MainManager.EventData () { gameEvent = MainManager.GameEvent.EVENT_DAMAGE });
 				target = targetPlayer.position;
 				dir = targetPlayer.position - myTransform.position;
 				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
 				myTransform.LookAt (mainCamera);
-				timer2 += Time.deltaTime;
-				Debug.Log ("player spotted");			}
+				timer2 = Time.time;
+				Debug.Log ("Player damage");
+				attacked = true;
+			} 
+
+//			if (attacked) {
+//				Debug.Log ("player:" + targetPlayer + " timer: " + timer2);
+//			}
 
 			//leave player alone after 4 seconds
 			if (targetPlayer == null || timer2 >= attackTimer) {
 				timer2 = 0;
 				playerSpotted = false;
 				targetPlayer = null;
+				//Debug.Log ("Leave player");
 			}
-		}
+
+			if (playerSpotted == false) {
+				attacked = false;
+			}
 	}
 
 	//ENTER COLLIDER
