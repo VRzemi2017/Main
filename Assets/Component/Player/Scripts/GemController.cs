@@ -10,9 +10,12 @@ public class GemController : MonoBehaviour {
     [SerializeField] GameObject m_LineRenderer;
     [SerializeField] float m_getGemAnimationTime;
     [SerializeField] GameObject m_hitAnimation;
+    [SerializeField] AudioClip GemGetAudio;
+
     private bool m_is_hit_gem = false;
     public bool Hit_Gem { get { return m_is_hit_gem; } }
 
+    private AudioSource audiosource;
     private bool m_is_game_start = false;
     private bool m_is_get_gem = false;
     private LineRendererController m_Line_render_cont;
@@ -28,6 +31,7 @@ public class GemController : MonoBehaviour {
 
     public void Start ( ) {
         m_Line_render_cont = m_LineRenderer.GetComponent<LineRendererController>( );
+        audiosource = gameObject.GetComponent<AudioSource>();
     }
 
     public void Update ( ) {
@@ -48,21 +52,13 @@ public class GemController : MonoBehaviour {
                 m_hit_gem.GetComponent<Gem>().HitByPlayer( _ => {
                     GetGemAction(_);
                 });
-                /*if ( m_hit_gem.GetComponent<Gem>( ).Is_End_Animation ) {
-                    //m_hit_gem.GetComponent<Gem>( ).SetAnimationIsEnd( false );
-                    m_hit_gem.GetComponent<Gem>().GemEffect.SetActive(true);
-                    m_hit_gem.GetComponent<Gem>().Gem_Effect_TimeFlag = true;
-                    SetHitAnimationSpeed(1);
-                    m_is_hit_gem = true;                                  
-
-                    MainManager.EventTriggered(eventData);
-                }*/
                 MainManager.EventData eventData;
                 eventData.gameEvent = MainManager.GameEvent.EVENT_HIT_GEM;
                 eventData.eventObject = m_hit_gem;
                 MainManager.EventTriggered(eventData);
                 m_Line_render_cont.ColorControllerOFF( );
-
+                //audiosource.clip = GemGetAudio;
+                //audiosource.Play();
                 break;
             default:
                 break;
@@ -79,16 +75,14 @@ public class GemController : MonoBehaviour {
             case "Gem":
                 m_is_hit_gem = false;
                 m_hit_gem.GetComponent<Gem>().HitPlayerLeave();
-                /* m_hit_gem.GetComponent<Gem>().Gem_Effect_TimeFlag = false;
-                 SetHitAnimationSpeed(-1);*/
-
                 MainManager.EventData eventData;
                 eventData.gameEvent = MainManager.GameEvent.EVENT_LEAVR_GEM;
                 eventData.eventObject = m_hit_gem;
                 MainManager.EventTriggered(eventData);
 
                 m_Line_render_cont.ColorControllerON( );
-
+                audiosource.clip = GemGetAudio;
+                audiosource.Stop();
                 break;
             default:
                 break;

@@ -9,8 +9,8 @@ public class Info_State_bg : MonoBehaviour {
 
     int text_timer;             //ウィンドウが伸び始めてから計測
                                 //=========================================================================================//
-    int display_timing = 30;    //ウィンドウが開いてから文字が表示されるまでの間
-    int display_time = 180;        //文字を表示し続ける時間(時間になったら文字が消える)
+
+    int display_time = 120;        //文字を表示し続ける時間(時間になったら文字が消える)
     int shrink_timing = 30;      //文字が消えてからウィンドウが縮み始めるまでの間
     int shrink_time = 0;                //文字が消えてからウィンドウが縮み始めるまでの間
                                         //=========================================================================================//
@@ -30,7 +30,7 @@ public class Info_State_bg : MonoBehaviour {
         size = 0;
         text_timer = 0;
         order_num = 0;
-        shrink_time = display_timing + display_time + shrink_timing;
+        shrink_time = display_time + shrink_timing;
 
         transform.localScale = new Vector3(0, 0, 0);
         mes.SetActive(false);
@@ -60,16 +60,15 @@ public class Info_State_bg : MonoBehaviour {
             if (size >= 1.0)
             {
                 text_timer++;
-
-                if (display_timing <= text_timer && text_timer <= display_time)
-                {
-                    mes.SetActive(true);
-                }
-                else
-                {
-                    mes.SetActive(false);
-                }
+                mes.SetActive(true);
+            } else {
+                mes.SetActive(false);
             }
+        }
+
+        if (text_timer >= display_time + 30)
+        {
+            mes.SetActive(false);
         }
 
         if (text_timer >= shrink_time)

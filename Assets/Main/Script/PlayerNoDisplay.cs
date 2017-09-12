@@ -20,18 +20,11 @@ public class PlayerNoDisplay : MonoBehaviour {
             }
         }
 
-        main = GameObject.FindObjectOfType<MainManager>();
-        if (main)
-        {
-            main.AddPlayer(gameObject);
-        }
+		MainManager.AddPlayer(gameObject);
 	}
 
     private void OnDestroy()
     {
-        if (main)
-        {
-            main.RemovePlayer(gameObject);
-        }
+		MainManager.RemovePlayer(gameObject);
     }
 }
