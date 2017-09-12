@@ -101,6 +101,7 @@ public class GemController : MonoBehaviour {
         gem.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         gem.GetComponent<Gem>().SetSoundActiveFalse();
         ResetSmallGemPos();
+        m_is_get_gem = true; 
         m_Line_render_cont.ColorControllerON();
     }
 
