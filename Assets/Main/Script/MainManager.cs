@@ -56,6 +56,7 @@ public class MainManager : MonoBehaviour {
     public enum GameEvent
     {
         EVENT_HIT_GEM,
+        EVENT_LEAVR_GEM,
         EVENT_GEM,
         EVENT_DAMAGE,
     }
