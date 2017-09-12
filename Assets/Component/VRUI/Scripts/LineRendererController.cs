@@ -35,10 +35,14 @@ public class LineRendererController : MonoBehaviour {
     [SerializeField]
     LayerMask layerMask = -1;
 
+    [SerializeField]
+    AudioClip TeleportAudio;
+
     float DelTime = 0.0f;
 
     GameObject GetControllerRotation;
     GameObject EyeObject;
+    GemController getgemaudioFlag;
 
     bool Move = false;　//時間判断
     bool Projectile_judge = false; //放物線判断
@@ -59,6 +63,7 @@ public class LineRendererController : MonoBehaviour {
     private LineRenderer lineRenderer;
     private SteamVR_TrackedObject TrackedObject;
     private bool CanTeleport;
+    private AudioSource audiosource;
 
     public Vector3 TargetPoint { get { return Point; } }
     public bool IsWarpInput { get { return isWarpInput; } }
@@ -74,6 +79,7 @@ public class LineRendererController : MonoBehaviour {
         PointerInstance = Instantiate( Pointer, Point, Quaternion.identity );
         LineColor = GetComponent<Renderer>( ).material.GetColor( "_TintColor" );
         renderer = GetComponent<Renderer>( );
+        audiosource = gameObject.GetComponent<AudioSource>();
     }
 
     void Update( ) {
@@ -202,6 +208,8 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
+                    audiosource.clip = TeleportAudio;
+                    audiosource.Play();
                     player.transform.position = GetPosition - new Vector3( CameraEyePosition.x, 0, CameraEyePosition.z );
                     Move_quantity++;
                     isWarpInput = true;

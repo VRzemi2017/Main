@@ -10,9 +10,12 @@ public class GemController : MonoBehaviour {
     [SerializeField] GameObject m_LineRenderer;
     [SerializeField] float m_getGemAnimationTime;
     [SerializeField] GameObject m_hitAnimation;
+    [SerializeField] AudioClip GemGetAudio;
+
     private bool m_is_hit_gem = false;
     public bool Hit_Gem { get { return m_is_hit_gem; } }
 
+    private AudioSource audiosource;
     private bool m_is_game_start = false;
     private bool m_is_get_gem = false;
     private LineRendererController m_Line_render_cont;
@@ -27,6 +30,7 @@ public class GemController : MonoBehaviour {
 
     public void Start ( ) {
         m_Line_render_cont = m_LineRenderer.GetComponent<LineRendererController>( );
+        audiosource = gameObject.GetComponent<AudioSource>();
     }
 
     public void Update ( ) {
@@ -85,7 +89,8 @@ public class GemController : MonoBehaviour {
                     MainManager.EventTriggered(eventData);
                 }
                 m_Line_render_cont.ColorControllerOFF( );
-
+                audiosource.clip = GemGetAudio;
+                audiosource.Play();
                 break;
             default:
                 break;
@@ -103,7 +108,8 @@ public class GemController : MonoBehaviour {
                 m_is_hit_gem = false;
                 SetHitAnimationSpeed(-1);
                 m_Line_render_cont.ColorControllerON( );
-
+                audiosource.clip = GemGetAudio;
+                audiosource.Stop();
                 break;
             default:
                 break;
