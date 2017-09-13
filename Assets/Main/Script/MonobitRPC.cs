@@ -10,6 +10,7 @@ public class MonobitRPC : MonobitEngine.MonoBehaviour {
     private void Start()
     {
         Server = GameObject.FindObjectOfType<MonobitServer>();
+        transform.parent = Server.gameObject.transform;
     }
 
     public void RPC(string methodName, MonobitTargets target, params object[] parameters)
