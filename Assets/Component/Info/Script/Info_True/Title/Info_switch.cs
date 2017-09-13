@@ -14,6 +14,7 @@ public class Info_switch : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        AdjustTitle();
     }
 	
 	// Update is called once per frame
@@ -77,7 +78,7 @@ public class Info_switch : MonoBehaviour {
 
     private void AdjustTitle( )
     {
-        float info_pos_y = 1.0f;     //ウィンドウの高さ
+        float info_pos_y = 0.0f;     //ウィンドウの高さ
         GameObject camera = GameObject.Find("Camera (eye)");  //プレイヤーのカメラの取得
         Vector3 camera_pos = camera.transform.position;         //プレイヤーのカメラ座標
         Vector3 front = camera.transform.forward * 5f;        //カメラの正面*距離
