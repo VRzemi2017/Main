@@ -112,6 +112,12 @@ public class MainManager : MonoBehaviour {
                             e.eventObject.GetComponent<Gem>().HitPlayerLeave();
                         }
                         break;
+                    case GameEvent.EVENT_GEM:
+                        {
+                            e.eventObject = e.eventObject.GetComponentInChildren<GemController>().gameObject;
+                            eventHappaned.OnNext(e);
+                        }
+                        break;
                 }
             }).AddTo(this);
         }
@@ -159,7 +165,7 @@ public class MainManager : MonoBehaviour {
 
         if (   e.gameEvent == GameEvent.EVENT_HIT_GEM 
             || e.gameEvent == GameEvent.EVENT_LEAVR_GEM
-            || e.gameEvent == GameEvent.EVENT_GEM)
+            )
         {
             if (Instance)
             {
@@ -168,6 +174,16 @@ public class MainManager : MonoBehaviour {
         }
 
         eventHappaned.OnNext(e);
+
+        //after OnNext, because change eventObject
+        if (e.gameEvent == GameEvent.EVENT_GEM)
+        {
+            if (Instance)
+            {
+                e.eventObject = e.eventObject.GetComponentInParent<PlayerWand>().gameObject;
+                Instance.Server.SendEvent(e);
+            }
+        }
     }
 
     public static void LoadSceneAsync(string name)
