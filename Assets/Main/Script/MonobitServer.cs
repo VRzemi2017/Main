@@ -166,7 +166,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         if (obj)
         {
             MonobitView view = obj.GetComponent<MonobitView>();
-            if (view)
+            if (view && view.owner != null)
             {
                 return view.isMine;
             }
