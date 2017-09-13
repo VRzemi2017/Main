@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 public class InfoManager : MonoBehaviour {
 
@@ -39,6 +41,23 @@ public class InfoManager : MonoBehaviour {
         start_tmp = (int)MainManager.GameState.GAME_START;
         timeup_tmp = (int)MainManager.GameState.GAME_TIMEUP;
         result_tmp = (int)MainManager.GameState.GAME_RESULT;
+
+        MainManager.OnEventHappaned.Subscribe(e =>
+        {
+            switch (e.gameEvent)
+            {
+                case MainManager.GameEvent.EVENT_GEM:
+                    {
+                        CallCase(InfoCase.INFO_GET);
+                    }
+                    break;
+                case MainManager.GameEvent.EVENT_DAMAGE:
+                    {
+                        CallCase(InfoCase.INFO_DAMAGE);
+                    }
+                    break;
+            }
+        }).AddTo(this);
     }
 	
 	// Update is called once per frame
