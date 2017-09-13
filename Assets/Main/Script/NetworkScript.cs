@@ -13,7 +13,7 @@ public class NetworkScript : MonoBehaviour {
 
     private void Awake()
     {
-        if (CheckByHost && !MonobitEngineBase.MonobitNetwork.isHost)
+        if (CheckByHost && MonobitEngineBase.MonobitNetwork.inRoom && !MonobitEngineBase.MonobitNetwork.isHost)
         {
             DisableScript();
         }
