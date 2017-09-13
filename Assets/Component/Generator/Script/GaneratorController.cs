@@ -51,7 +51,7 @@ public class GaneratorController : MonoBehaviour {
         m_nowWaveNum = 0;
         MainManager.OnEventHappaned.Subscribe(e =>
         {
-            if (e.gameEvent == MainManager.GameEvent.EVENT_GEM) {
+            if (e.gameEvent == GameEvent.EVENT_GEM) {
                 IsGetGem();
             }
         }).AddTo(this);

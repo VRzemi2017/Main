@@ -46,12 +46,12 @@ public class InfoManager : MonoBehaviour {
         {
             switch (e.gameEvent)
             {
-                case MainManager.GameEvent.EVENT_GEM:
+                case GameEvent.EVENT_GEM:
                     {
                         CallCase(InfoCase.INFO_GET);
                     }
                     break;
-                case MainManager.GameEvent.EVENT_DAMAGE:
+                case GameEvent.EVENT_DAMAGE:
                     {
                         CallCase(InfoCase.INFO_DAMAGE);
                     }

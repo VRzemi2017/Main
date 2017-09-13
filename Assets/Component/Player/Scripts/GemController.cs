@@ -52,8 +52,8 @@ public class GemController : MonoBehaviour {
                 m_hit_gem.GetComponent<Gem>().HitByPlayer( _ => {
                     GetGemAction(_);
                 });
-                MainManager.EventData eventData;
-                eventData.gameEvent = MainManager.GameEvent.EVENT_HIT_GEM;
+                EventData eventData;
+                eventData.gameEvent = GameEvent.EVENT_HIT_GEM;
                 eventData.eventObject = m_hit_gem;
                 MainManager.EventTriggered(eventData);
                 m_Line_render_cont.ColorControllerOFF( );
@@ -75,8 +75,8 @@ public class GemController : MonoBehaviour {
             case "Gem":
                 m_is_hit_gem = false;
                 m_hit_gem.GetComponent<Gem>().HitPlayerLeave();
-                MainManager.EventData eventData;
-                eventData.gameEvent = MainManager.GameEvent.EVENT_LEAVR_GEM;
+                EventData eventData;
+                eventData.gameEvent = GameEvent.EVENT_LEAVR_GEM;
                 eventData.eventObject = m_hit_gem;
                 MainManager.EventTriggered(eventData);
 

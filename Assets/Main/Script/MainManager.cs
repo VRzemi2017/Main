@@ -30,6 +30,9 @@ public class MainManager : MonoBehaviour {
     private static GameObject localPlayer = null;
     public static GameObject LocalPlayer { get { return localPlayer; } }
     private static List<GameObject> players = new List<GameObject>();
+    private static GemController remoteWand = null;
+    public static GemController RemoteWand { get { return remoteWand; } }
+    private static List<GemController> playerWands = new List<GemController>();
 
     private static Messager message;
 
@@ -41,6 +44,11 @@ public class MainManager : MonoBehaviour {
 
     private static Subject<EventData> eventHappaned = new Subject<EventData>();
     public static IObservable<EventData> OnEventHappaned { get { return eventHappaned; } }
+
+    private static MainManager instance;
+    public static MainManager Instance { get { return instance; } }
+
+    public MonobitServer Server { get { return server; } }
 
     public int PlayerNo 
     {
@@ -55,24 +63,13 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public enum GameEvent
-    {
-        EVENT_HIT_GEM,
-        EVENT_LEAVR_GEM,
-        EVENT_GEM,
-        EVENT_DAMAGE,
-    }
-
-    public struct EventData {
-        public GameEvent gameEvent;
-        public GameObject eventObject;
-     }
-
     private static bool remoteReady;
 
 
     private void Awake() 
     {
+        instance = this;
+
         DontDestroyOnLoad(gameObject);
     }
 
@@ -101,18 +98,35 @@ public class MainManager : MonoBehaviour {
 				networks.ToList().ForEach(g => g.enabled = true);
             }).AddTo(this);
 
-            OnStateChanged.Subscribe(s =>
+            server.OnRecieveEvent.Subscribe(e =>
             {
-                switch (s)
+                switch (e.gameEvent)
                 {
-                    case GameState.GAME_NETWORK:
+                    case GameEvent.EVENT_HIT_GEM:
                         {
-                            ReadyToStart();
+                            e.eventObject.GetComponent<Gem>().HitByPlayer(g => remoteWand.GetGemAction(g));
+                        }
+                        break;
+                    case GameEvent.EVENT_LEAVR_GEM:
+                        {
+                            e.eventObject.GetComponent<Gem>().HitPlayerLeave();
                         }
                         break;
                 }
             }).AddTo(this);
         }
+
+        OnStateChanged.Subscribe(s =>
+        {
+            switch (s)
+            {
+                case GameState.GAME_NETWORK:
+                    {
+                        ReadyToStart();
+                    }
+                    break;
+            }
+        }).AddTo(this);
     }
 
     public static void ChangeState(GameState state)
@@ -141,6 +155,16 @@ public class MainManager : MonoBehaviour {
         if (e.gameEvent == GameEvent.EVENT_DAMAGE && e.eventObject != LocalPlayer)
         {
             return;
+        }
+
+        if (e.gameEvent == GameEvent.EVENT_GEM && e.eventObject.GetComponent<GemController>() == remoteWand)
+        {
+            return;
+        }
+
+        if (e.gameEvent == GameEvent.EVENT_HIT_GEM || e.gameEvent == GameEvent.EVENT_LEAVR_GEM)
+        {
+            Instance.Server.SendEvent(e);
         }
 
         eventHappaned.OnNext(e);
@@ -191,6 +215,31 @@ public class MainManager : MonoBehaviour {
             if (MonobitServer.IsLocalObj(obj))
             {
                 localPlayer = null;
+            }
+        }
+    }
+
+    public static void AddWand(GameObject obj, GemController c)
+    {
+        if (obj && c && !playerWands.Contains(c))
+        {
+            playerWands.Add(c);
+            if (!MonobitServer.IsLocalObj(obj))
+            {
+                remoteWand = c;
+            }
+        }
+    }
+
+    public static void RemoveWand(GameObject obj, GemController c)
+    {
+        if (obj && c && playerWands.Contains(c))
+        {
+            playerWands.Remove(c);
+
+            if (!MonobitServer.IsLocalObj(obj))
+            {
+                remoteWand = null;
             }
         }
     }

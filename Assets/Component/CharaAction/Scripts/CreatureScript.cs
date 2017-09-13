@@ -86,7 +86,7 @@ public class CreatureScript: MonoBehaviour {
 			}
 		} else if (playerSpotted && targetPlayer && attacked == false){
 			
-				MainManager.EventTriggered (new MainManager.EventData () { gameEvent = MainManager.GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
+				MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
 				target = targetPlayer.position;
 				dir = targetPlayer.position - myTransform.position;
 				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);

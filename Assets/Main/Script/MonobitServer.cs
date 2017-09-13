@@ -4,6 +4,7 @@ using UnityEngine;
 using MonobitEngine;
 using UniRx;
 using UniRx.Triggers;
+using System.Linq;
 
 public class MonobitServer : MonobitEngine.MonoBehaviour {
     [SerializeField]
@@ -36,6 +37,9 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     private Subject<Unit> recieveStart = new Subject<Unit>();
     public IObservable<Unit> OnStartGame { get { return recieveStart; } }
+
+    private Subject<EventData> recieveEvent = new Subject<EventData>();
+    public IObservable<EventData> OnRecieveEvent { get { return recieveEvent; } }
 
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
@@ -173,5 +177,23 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         }
 
         return false;
+    }
+
+    public void SendEvent(EventData data)
+    {
+        if (data.eventObject)
+        {
+            MonobitView view = data.eventObject.GetComponent<MonobitView>();
+            if (view)
+            {
+                monobitView.RPC("RecieveEvent", MonobitTargets.Others, data.gameEvent, view.viewID);
+            }
+        }
+    }
+
+    [MunRPC]
+    void RecieveEvent(GameEvent e, int ID)
+    {
+        recieveEvent.OnNext(new EventData() { gameEvent = e, eventObject = GameObject.FindObjectsOfType<MonobitView>().SingleOrDefault(v => v.viewID == ID).gameObject });
     }
 }

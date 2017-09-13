@@ -83,9 +83,10 @@ public class PlayerManager : MonoBehaviour {
     private void GetGemAction ( ) {
         m_gem_num++;
         m_GemController.ResetHitState( );
-        MainManager.EventData eventData;
-        eventData.gameEvent = MainManager.GameEvent.EVENT_GEM;
-        eventData.eventObject = null;
+        EventData eventData;
+        eventData.gameEvent = GameEvent.EVENT_GEM;
+        //need know whether remote wand
+        eventData.eventObject = m_GemController.gameObject;
         MainManager.EventTriggered(eventData);
       
     }
