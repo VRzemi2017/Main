@@ -111,6 +111,7 @@ public class ResultManager : MonoBehaviour {
     private void Start()
     {
         ComputeScore();
+        ComputeComment();
     }
 
     public void ComputeScore()
@@ -129,6 +130,24 @@ public class ResultManager : MonoBehaviour {
             if (pass)
             {
                 score = s.Score;
+            }
+        });
+    }
+
+    public void ComputeComment()
+    {
+        commentSetting.ForEach(s =>
+        {
+            bool pass = true;
+
+            s.conditions.ToList().ForEach(c =>
+            {
+                pass &= CheckCondition(c);
+            });
+
+            if (pass)
+            {
+                AddComment(s.Comment);
             }
         });
     }
