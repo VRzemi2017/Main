@@ -118,6 +118,22 @@ public class MainManager : MonoBehaviour {
                             eventHappaned.OnNext(e);
                         }
                         break;
+                    case GameEvent.EVENT_DAMAGE:
+                        {
+                            e.eventObject = localPlayer;
+                            eventHappaned.OnNext(e);
+                        }
+                        break;
+                    case GameEvent.EVENT_ENEMY_JUMP:
+                        {
+                            e.eventObject.GetComponent<NetworkCreature>().PlayAnimation(false);
+                        }
+                        break;
+                    case GameEvent.EVENT_ENEMY_WAIT:
+                        {
+                            e.eventObject.GetComponent<NetworkCreature>().PlayAnimation(true);
+                        }
+                        break;
                 }
             }).AddTo(this);
         }
@@ -160,6 +176,10 @@ public class MainManager : MonoBehaviour {
     {
         if (e.gameEvent == GameEvent.EVENT_DAMAGE && e.eventObject != LocalPlayer)
         {
+            if (Instance)
+            {
+                Instance.Server.SendEvent(e);
+            }
             return;
         }
 

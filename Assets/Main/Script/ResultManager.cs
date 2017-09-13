@@ -34,7 +34,7 @@ public class ResultManager : MonoBehaviour {
             CharaManager chara = GameObject.FindObjectOfType<CharaManager>();
             if (chara)
             {
-                return 0;
+                return chara.DamageCount;
             }
 
             return 0;
