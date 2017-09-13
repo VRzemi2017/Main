@@ -208,8 +208,14 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
-                   // audiosource.clip = TeleportAudio;
-                    //audiosource.Play();
+
+                    if ( audiosource == null ) {
+                        audiosource.clip = TeleportAudio;
+                        audiosource.Play( );
+                    } else {
+                        audiosource.Stop( );
+                    }
+
                     player.transform.position = GetPosition - new Vector3( CameraEyePosition.x, 0, CameraEyePosition.z );
                     Move_quantity++;
                     isWarpInput = true;
@@ -258,18 +264,13 @@ public class LineRendererController : MonoBehaviour {
     }
 
     private bool ColliderTag(Vector3 point) {
-        //Ray ray = new Ray(point, Vector3.down);
-        //RaycastHit hit2;
-        //if (Physics.Raycast(ray, out hit2)) {
-            if ( /*hit2.distance > 1f ||*/ TargetSetActive == true || GroundAngle_judge == true) {
+        if ( TargetSetActive == true || GroundAngle_judge == true) {
                 PointerInstance.SetActive(false);
                 return true;
-            } else {
+        } else {
                 PointerInstance.SetActive(true);
                 return false;
-            }
-        //}
-        return false;
+        }
     }
 
     public void DeleteLine() {
