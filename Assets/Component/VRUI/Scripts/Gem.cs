@@ -13,6 +13,10 @@ public class Gem : MonoBehaviour {
     public bool Is_End_Animation { get { return IsEndAnimation; } }
     [SerializeField]
     float Get_time = 1f;
+    [SerializeField]
+    AudioClip GemGetAudio;
+    [SerializeField]
+    AudioClip GemEffectAudio;
 
 
     bool IsGet = false;
@@ -21,11 +25,13 @@ public class Gem : MonoBehaviour {
 
     Action<GameObject> GetAction;
     private float Gem_Effect_Time = 0;
+    private AudioSource audiosource;
 
     private FieldObjectController m_FieldObjectCont;
 	// Use this for initialization
 	void Start () {
         m_FieldObjectCont = gameObject.GetComponent<FieldObjectController>();
+        audiosource = gameObject.GetComponent<AudioSource>( );
         IsGet = false;
     }
 	
@@ -37,6 +43,7 @@ public class Gem : MonoBehaviour {
 
         if(IsHitMy) {
             Gem_Effect_Time += Time.deltaTime;
+
             if (Gem_Effect_Time >= Get_time) {
                 GetAction(gameObject);
                 IsHitMy = false;
@@ -45,10 +52,17 @@ public class Gem : MonoBehaviour {
                 gameObject.tag = "Player";
                 gameObject.layer = 8;
                 Gem_Effect_Time = 0f;
+                audiosource.clip = GemGetAudio;
+                if ( audiosource != null ) {
+                    audiosource.Play( );
+                }
             }
         } else if ( Gem_Effect_Time > 0.0f ) {
             Gem_Effect_Time -= Time.deltaTime;
-            if(Gem_Effect_Time < 0.0f) {
+            if ( audiosource == null ) {
+                audiosource.Stop( );
+            }
+            if (Gem_Effect_Time < 0.0f) {
                 GemEffect.SetActive( false );
                 Gem_Effect_Time = 0f;
             }
@@ -69,6 +83,11 @@ public class Gem : MonoBehaviour {
         GetAction = action;
         GemEffect.SetActive(true);
         GemEffect.GetComponent<Animator>().SetFloat("Speed", 1);
+
+        audiosource.clip = GemEffectAudio;
+        if ( audiosource != null ) {
+            audiosource.Play( );
+        }
     }
 
     public void HitPlayerLeave() {
@@ -77,6 +96,11 @@ public class Gem : MonoBehaviour {
         }
         IsHitMy = false;
         GemEffect.GetComponent<Animator>().SetFloat("Speed", -1);
+
+        audiosource.clip = null;
+        if ( audiosource == null ) {
+            audiosource.Stop( );
+        }
 
     }
 

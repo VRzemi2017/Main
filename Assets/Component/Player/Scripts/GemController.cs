@@ -8,14 +8,13 @@ public class GemController : MonoBehaviour {
     [SerializeField] Transform m_SmallGemParent;
     [SerializeField] Vector3 m_SmallGemLenght;
     [SerializeField] GameObject m_LineRenderer;
-    [SerializeField] float m_getGemAnimationTime;
-    [SerializeField] GameObject m_hitAnimation;
-    [SerializeField] AudioClip GemGetAudio;
+    //[SerializeField] float m_getGemAnimationTime;
+    //[SerializeField] GameObject m_hitAnimation;
 
     private bool m_is_hit_gem = false;
     public bool Hit_Gem { get { return m_is_hit_gem; } }
 
-    private AudioSource audiosource;
+    
     private bool m_is_game_start = false;
     private bool m_is_get_gem = false;
     private LineRendererController m_Line_render_cont;
@@ -23,7 +22,6 @@ public class GemController : MonoBehaviour {
     private float m_hit_gem_time = 0;
     //ヒットしたGemを一時的に保存する
     private GameObject m_hit_gem;
-
     private List<GameObject> m_SmallGemList = new List<GameObject>();
     
     public bool IsGetGem { get { return m_is_get_gem; } }
@@ -31,7 +29,6 @@ public class GemController : MonoBehaviour {
 
     public void Start ( ) {
         m_Line_render_cont = m_LineRenderer.GetComponent<LineRendererController>( );
-        audiosource = gameObject.GetComponent<AudioSource>();
     }
 
     public void Update ( ) {
@@ -57,8 +54,6 @@ public class GemController : MonoBehaviour {
                 eventData.eventObject = m_hit_gem;
                 MainManager.EventTriggered(eventData);
                 m_Line_render_cont.ColorControllerOFF( );
-                //audiosource.clip = GemGetAudio;
-                //audiosource.Play();
                 break;
             default:
                 break;
@@ -81,8 +76,6 @@ public class GemController : MonoBehaviour {
                 MainManager.EventTriggered(eventData);
 
                 m_Line_render_cont.ColorControllerON( );
-                audiosource.clip = GemGetAudio;
-                audiosource.Stop();
                 break;
             default:
                 break;

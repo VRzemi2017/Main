@@ -208,14 +208,10 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
-
-                    if ( audiosource == null ) {
-                        audiosource.clip = TeleportAudio;
+                    audiosource.clip = TeleportAudio;
+                    if ( audiosource != null ) {
                         audiosource.Play( );
-                    } else {
-                        audiosource.Stop( );
                     }
-
                     player.transform.position = GetPosition - new Vector3( CameraEyePosition.x, 0, CameraEyePosition.z );
                     Move_quantity++;
                     isWarpInput = true;
