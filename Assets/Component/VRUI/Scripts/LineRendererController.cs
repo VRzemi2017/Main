@@ -238,15 +238,22 @@ public class LineRendererController : MonoBehaviour {
     }
 
     public void ColorControllerOFF( ) {
-
-        renderer.material.SetColor( "_TintColor", new Color( LineColor.r, LineColor.g, LineColor.b, 0 ) );
+        if (renderer)
+        {
+            renderer.material.SetColor("_TintColor", new Color(LineColor.r, LineColor.g, LineColor.b, 0));
+        }
+        
         TargetSetActive = true;
         CanTeleport = false;
 
     }
 
     public void ColorControllerON( ) {
-        renderer.material.SetColor( "_TintColor", new Color( LineColor.r, LineColor.g, LineColor.b, 150 ) );
+        if (renderer)
+        {
+            renderer.material.SetColor("_TintColor", new Color(LineColor.r, LineColor.g, LineColor.b, 150));
+        }
+        
         TargetSetActive = false;
         if ( MoveTargetInstance != null ) {
             Destroy( MoveTargetInstance );
