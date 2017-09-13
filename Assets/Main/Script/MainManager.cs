@@ -173,6 +173,7 @@ public class MainManager : MonoBehaviour {
     public static void LoadSceneAsync(string name)
     {
         remoteReady = false;
+        ChangeState(GameState.GAME_INIT);
         SteamVR_LoadLevel.Begin(name);
     }
 

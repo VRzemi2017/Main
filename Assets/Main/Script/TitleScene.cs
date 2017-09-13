@@ -25,8 +25,8 @@ public class TitleScene : SceneBase
                     MainManager.CurrentState == MainManager.GameState.GAME_NETWORK ||
                     MainManager.CurrentState == MainManager.GameState.GAME_PLAYING)
                 {
-                    MainManager.LoadSceneAsync(sceneName);
                     MainManager.ChangeState(MainManager.GameState.GAME_FINISH);
+                    MainManager.LoadSceneAsync(sceneName);
                 }
             }
         });
