@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UniRx;
 
 public class Info_switch : MonoBehaviour {
     //public GameObject text;             //表示するテキスト
@@ -13,8 +14,33 @@ public class Info_switch : MonoBehaviour {
     int state_pairs = 0;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         AdjustTitle();
+
+        MainManager.OnStateChanged.Subscribe(s =>
+        {
+            switch (s)
+            {
+                case MainManager.GameState.GAME_NETWORK:
+                    {
+                        if (MainManager.PlayerNo == 0)
+                        {
+                            Player1Ready();
+                        }
+                        else
+                        {
+                            Player2Ready();
+                        }
+                    }
+                    break;
+                case MainManager.GameState.GAME_START:
+                    {
+                        Player1Ready();
+                        Player2Ready();
+                    }
+                    break;
+            }
+        });
     }
 	
 	// Update is called once per frame
@@ -42,13 +68,13 @@ public class Info_switch : MonoBehaviour {
         }
 	}
 
-    public int Player1Ready()
+    public void Player1Ready()
     {
-        return state_p1;
+        state_p1 = 1;
     }
-    public int Player2Ready()
+    public void Player2Ready()
     {
-        return state_p2;
+        state_p2 = 1;
     }
 
     void UpdateText( ) {    //テキストの中身

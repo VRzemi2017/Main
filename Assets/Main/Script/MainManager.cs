@@ -50,11 +50,11 @@ public class MainManager : MonoBehaviour {
 
     public MonobitServer Server { get { return server; } }
 
-    public int PlayerNo 
+    public static int PlayerNo 
     {
         get 
         {
-            if (server && MonobitServer.PlayerNo >= 0)
+            if (MonobitServer.PlayerNo >= 0)
             {
                 return MonobitServer.PlayerNo;
             }
