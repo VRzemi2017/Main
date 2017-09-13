@@ -157,14 +157,14 @@ public class MainManager : MonoBehaviour {
             return;
         }
 
-        if (e.gameEvent == GameEvent.EVENT_GEM && e.eventObject.GetComponent<GemController>() == remoteWand)
+        if (   e.gameEvent == GameEvent.EVENT_HIT_GEM 
+            || e.gameEvent == GameEvent.EVENT_LEAVR_GEM
+            || e.gameEvent == GameEvent.EVENT_GEM)
         {
-            return;
-        }
-
-        if (e.gameEvent == GameEvent.EVENT_HIT_GEM || e.gameEvent == GameEvent.EVENT_LEAVR_GEM)
-        {
-            Instance.Server.SendEvent(e);
+            if (Instance)
+            {
+                Instance.Server.SendEvent(e);
+            }
         }
 
         eventHappaned.OnNext(e);
@@ -200,7 +200,7 @@ public class MainManager : MonoBehaviour {
         {
             players.Add(obj);
 
-            if (MonobitServer.IsLocalObj(obj))
+            if (!Instance || MonobitServer.IsLocalObj(obj))
             {
                 localPlayer = obj;
             }
@@ -213,7 +213,7 @@ public class MainManager : MonoBehaviour {
         {
             players.Remove(obj);
 
-            if (MonobitServer.IsLocalObj(obj))
+            if (!Instance || MonobitServer.IsLocalObj(obj))
             {
                 localPlayer = null;
             }
@@ -225,7 +225,7 @@ public class MainManager : MonoBehaviour {
         if (obj && c && !playerWands.Contains(c))
         {
             playerWands.Add(c);
-            if (!MonobitServer.IsLocalObj(obj))
+            if (Instance && !MonobitServer.IsLocalObj(obj))
             {
                 remoteWand = c;
             }
@@ -238,7 +238,7 @@ public class MainManager : MonoBehaviour {
         {
             playerWands.Remove(c);
 
-            if (!MonobitServer.IsLocalObj(obj))
+            if (Instance && !MonobitServer.IsLocalObj(obj))
             {
                 remoteWand = null;
             }
