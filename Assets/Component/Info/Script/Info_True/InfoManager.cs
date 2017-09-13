@@ -48,7 +48,7 @@ public class InfoManager : MonoBehaviour {
             {
                 case GameEvent.EVENT_GEM:
                     {
-                        if (MainManager.RemoteWand && e.eventObject != MainManager.RemoteWand.gameObject)
+                        if (MainManager.RemoteWand && e.eventObject == MainManager.RemoteWand.gameObject)
                         {
                             break;
                         }
