@@ -10,6 +10,11 @@ public class Info_Result : MonoBehaviour {
     private int _teleport;
     private int _event;
 
+    [SerializeField] private SpriteRenderer MainScreen;
+    [SerializeField] private SpriteRenderer SubScreen;
+    [SerializeField] private float LineSpace;
+
+
     public int PickUp { set { _pick_up = value; } }
     public int Damage { set { _damage = value; } }
     public int Teleport { set { _teleport = value; } }
@@ -21,7 +26,22 @@ public class Info_Result : MonoBehaviour {
     // Use this for initialization
     void Start () {
         AdjustResult();
-        
+
+        //Debug
+        /*List<string> comment = new List<string>();
+        comment.Add("アイウエオアイウエオアオイエオアイウエオアイウエオ");
+        comment.Add("アイウエオアイウエオアオイエオアイウエオアイウエオアｓダフェアｄファｄｓファ");
+        comment.Add("アイウエオアイウエオアオイエオアイウエオアイウエオ12313454321354648678796879641315351");
+
+        foreach (var String in comment)
+        {
+            string text = CheckTextCharaNum(String, 20);
+            text += "\n";
+            int line = CheckTextLinesNum(text);
+            SetScreenHeight(line, SubScreen);
+            Comm_Text.text += text + "\n";
+        }*/
+
 
         ResultManager result = GameObject.FindObjectOfType<ResultManager>();
         if (result)
@@ -30,9 +50,11 @@ public class Info_Result : MonoBehaviour {
             _damage = result.DamageCount;
             _teleport = result.TeleportCount;
 
+
+
             result.Spots.ToList().ForEach(s =>
             {
-                Event1_text.text += s.SpotName + "\n";
+                Event1_text.text += s + "\n";
             });
 
             if (result.Score == ResultManager.ScoreType.SCORE_D)
@@ -62,11 +84,34 @@ public class Info_Result : MonoBehaviour {
 
             result.Comment.ToList().ForEach(c =>
             {
-                Comm_Text.text += c + "\n";
+                string text = CheckTextCharaNum(c, 20);
+                text += "\n";
+                int line = CheckTextLinesNum(text);
+                SetScreenHeight(line, SubScreen);
+                Comm_Text.text += text + "\n";
             });
         }
     }
-	
+
+    void SetScreenHeight( int linesNum, SpriteRenderer screen )
+    {
+        float win_size = 0.05f;
+        float win_y = -0.05f;
+        screen.transform.localScale += new Vector3(0, win_size * linesNum, 0);
+        screen.transform.position += new Vector3(0, win_y * linesNum, 0);
+    }
+
+    string CheckTextCharaNum(string text, int oneLineMaxNum) {
+        string String = "";
+        String = SubstringAtCount(text, oneLineMaxNum);
+        return String;
+    }
+
+    int CheckTextLinesNum(string text) {
+        int count = CountChar(text, '\n');//text.ToList().Where(c => c.Equals("\n")) + 1;
+        return count;
+    }
+
 	// Update is called once per frame
 	void Update () {
         if ( Input.GetKeyDown( KeyCode.F6 ) )
@@ -103,4 +148,35 @@ public class Info_Result : MonoBehaviour {
         this.transform.position = pos;        //ウィンドウのポジション
         this.transform.rotation = qua;        //ウィンドウの角度
     }
+
+    public string SubstringAtCount( string self, int count)
+    {
+        string result = "";
+        var length = (int)Mathf.Ceil((float)self.Length / count);
+
+        for (int i = 0; i < length; i++)
+        {
+            int start = count * i;
+            if (self.Length <= start)
+            {
+                break;
+            }
+            if (self.Length < start + count)
+            {
+                result += self.Substring(start);
+                result += "\n";
+            }
+            else
+            {
+                result += self.Substring(start, count);
+                result += "\n";
+            }
+        }
+
+        return result;
+    }
+    public int CountChar(string s, char c) {
+        return s.Length - s.Replace(c.ToString(), "").Length;
+    }
+
 }
