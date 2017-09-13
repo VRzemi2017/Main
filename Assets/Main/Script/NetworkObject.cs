@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using UniRx.Triggers;
 
 public class NetworkObject : MonoBehaviour {
     [SerializeField]
@@ -15,6 +17,11 @@ public class NetworkObject : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        MainManager.OnStateChanged.Subscribe(s =>
+        {
+            enabled = (int)MainManager.CurrentState > (int)MainManager.GameState.GAME_NETWORK;
+        }).AddTo(this);
+
         if (MonobitEngine.MonobitNetwork.inRoom)
         {
             GameObject obj = MonobitEngine.MonobitNetwork.Instantiate(objName, Vector3.zero, Quaternion.identity, group);

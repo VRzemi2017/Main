@@ -31,8 +31,11 @@ public class NetworkScript : MonoBehaviour {
     {
         if (all)
         {
-            MonoBehaviour[] behaviours = GetComponentsInChildren<MonoBehaviour>();
-            behaviours.ToList().ForEach(s => s.enabled = false);
+            for (int i = 0; i < transform.childCount; ++i)
+            {
+                MonoBehaviour[] behaviours = transform.GetChild(i).GetComponentsInChildren<MonoBehaviour>();
+                behaviours.ToList().ForEach(s => s.enabled = false);
+            }
         }
         else
         {
