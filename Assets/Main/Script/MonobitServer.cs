@@ -112,7 +112,6 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
             GameObject tmp = MonobitNetwork.Instantiate(rpcName, Vector3.zero, Quaternion.identity, 0);
             rpcObj = tmp.GetComponent<MonobitRPC>();
             tmp.transform.parent = transform;
-            rpcObj.Server = this;
         }
 
         enterRoom.OnNext(Unit.Default);

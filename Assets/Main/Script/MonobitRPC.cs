@@ -5,7 +5,12 @@ using MonobitEngine;
 
 public class MonobitRPC : MonobitEngine.MonoBehaviour {
 
-    public MonobitServer Server;
+    private MonobitServer Server;
+
+    private void Start()
+    {
+        Server = GameObject.FindObjectOfType<MonobitServer>();
+    }
 
     public void RPC(string methodName, MonobitTargets target, params object[] parameters)
     {
@@ -15,22 +20,30 @@ public class MonobitRPC : MonobitEngine.MonoBehaviour {
         }
     }
 
-
     [MunRPC]
     void RemoteReady()
     {
-        Server.RemoteReady();
+        if (Server)
+        {
+            Server.RemoteReady();
+        }
     }
 
     [MunRPC]
     void RecieveStart()
     {
-        Server.RecieveStart();
+        if (Server)
+        {
+            Server.RecieveStart();
+        }
     }
 
     [MunRPC]
     void RecieveEvent(GameEvent e, int ID)
     {
-        Server.RecieveEvent(e, ID);
+        if (Server)
+        {
+            Server.RecieveEvent(e, ID);
+        }
     }
 }
