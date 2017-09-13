@@ -46,11 +46,6 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
 
-    private void Awake()
-    {
-        GetComponent<MonobitView>().viewID = 999;
-    }
-
     private void Start() {
         if (offline)
         {
