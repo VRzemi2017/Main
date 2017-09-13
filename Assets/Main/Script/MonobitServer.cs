@@ -181,7 +181,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
             MonobitView view = data.eventObject.GetComponent<MonobitView>();
             if (view && monobitView)
             {
-                monobitView.RPC("RecieveEvent", MonobitTargets.Others, data.gameEvent, view.viewID);
+                monobitView.RPC("RecieveEvent", MonobitTargets.Others, (int)data.gameEvent, view.viewID);
             }
         }
     }
@@ -199,8 +199,8 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     }
 
     [MunRPC]
-    void RecieveEvent(GameEvent e, int ID)
+    void RecieveEvent(int e, int ID)
     {
-        recieveEvent.OnNext(new EventData() { gameEvent = e, eventObject = GameObject.FindObjectsOfType<MonobitView>().SingleOrDefault(v => v.viewID == ID).gameObject });
+        recieveEvent.OnNext(new EventData() { gameEvent = (GameEvent)e, eventObject = GameObject.FindObjectsOfType<MonobitView>().SingleOrDefault(v => v.viewID == ID).gameObject });
     }
 }
