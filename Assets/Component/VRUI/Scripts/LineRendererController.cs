@@ -80,6 +80,8 @@ public class LineRendererController : MonoBehaviour {
         LineColor = GetComponent<Renderer>( ).material.GetColor( "_TintColor" );
         renderer = GetComponent<Renderer>( );
         audiosource = gameObject.GetComponent<AudioSource>();
+        audiosource.Stop();
+        audiosource.clip = TeleportAudio;
     }
 
     void Update( ) {
@@ -208,7 +210,8 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
-                    audiosource.clip = TeleportAudio;
+                    //この行を入れると最初にワープしたときにロードが走るので、なくしたい。
+                    //audiosource.clip = TeleportAudio;
                     if ( audiosource != null ) {
                         audiosource.Play( );
                     }
