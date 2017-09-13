@@ -8,6 +8,8 @@ public enum GameEvent
     EVENT_LEAVR_GEM,
     EVENT_GEM,
     EVENT_DAMAGE,
+    EVENT_ENEMY_WAIT,
+    EVENT_ENEMY_JUMP,
 }
 
 public struct EventData

@@ -30,7 +30,7 @@ public class SpotControl : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.transform.GetComponentInChildren<PlayerNoDisplay>())
+        if (other.gameObject.GetComponent<PlayerNoDisplay>())
         {
             reached = true;
             GetComponent<Collider>().enabled = false;

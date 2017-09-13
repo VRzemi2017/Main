@@ -25,6 +25,8 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private bool offline;
     [SerializeField]
     private string roomName = "TCA_JACK_ROOM";
+    [SerializeField]
+    private string rpcName = "RPC";
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
@@ -43,6 +45,8 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
+
+    private MonobitRPC rpcObj;
 
     private void Start() {
         if (offline)
@@ -101,6 +105,11 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
         playerNo = MonobitNetwork.player.ID - 1;
         SetMessage("Player: " + MonobitNetwork.player.ID + "P");
+
+        if (rpcObj == null)
+        {
+            //MonobitNetwork.Instantiate(rpcName)
+        }
 
         enterRoom.OnNext(Unit.Default);
     }

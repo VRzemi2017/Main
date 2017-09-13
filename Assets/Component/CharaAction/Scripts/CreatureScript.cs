@@ -169,9 +169,11 @@ public class CreatureScript: MonoBehaviour {
 	private void Animate(){
 		if (isJumping == true || playerSpotted == true ) {
 			anim.SetTrigger ("Wait");
-		} else if (isJumping == false) {
+            MainManager.EventTriggered(new EventData() { gameEvent = GameEvent.EVENT_ENEMY_WAIT, eventObject = gameObject });
+        } else if (isJumping == false) {
 			anim.SetTrigger ("Jump");
-		}
+            MainManager.EventTriggered(new EventData() { gameEvent = GameEvent.EVENT_ENEMY_JUMP, eventObject = gameObject });
+        }
 	}
 		
 }

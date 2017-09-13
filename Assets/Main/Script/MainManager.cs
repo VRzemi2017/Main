@@ -112,6 +112,28 @@ public class MainManager : MonoBehaviour {
                             e.eventObject.GetComponent<Gem>().HitPlayerLeave();
                         }
                         break;
+                    case GameEvent.EVENT_GEM:
+                        {
+                            e.eventObject = e.eventObject.GetComponentInChildren<GemController>().gameObject;
+                            eventHappaned.OnNext(e);
+                        }
+                        break;
+                    case GameEvent.EVENT_DAMAGE:
+                        {
+                            e.eventObject = localPlayer;
+                            eventHappaned.OnNext(e);
+                        }
+                        break;
+                    case GameEvent.EVENT_ENEMY_JUMP:
+                        {
+                            e.eventObject.GetComponent<NetworkCreature>().PlayAnimation(false);
+                        }
+                        break;
+                    case GameEvent.EVENT_ENEMY_WAIT:
+                        {
+                            e.eventObject.GetComponent<NetworkCreature>().PlayAnimation(true);
+                        }
+                        break;
                 }
             }).AddTo(this);
         }
@@ -154,12 +176,16 @@ public class MainManager : MonoBehaviour {
     {
         if (e.gameEvent == GameEvent.EVENT_DAMAGE && e.eventObject != LocalPlayer)
         {
+            if (Instance)
+            {
+                Instance.Server.SendEvent(e);
+            }
             return;
         }
 
         if (   e.gameEvent == GameEvent.EVENT_HIT_GEM 
             || e.gameEvent == GameEvent.EVENT_LEAVR_GEM
-            || e.gameEvent == GameEvent.EVENT_GEM)
+            )
         {
             if (Instance)
             {
@@ -168,6 +194,16 @@ public class MainManager : MonoBehaviour {
         }
 
         eventHappaned.OnNext(e);
+
+        //after OnNext, because change eventObject
+        if (e.gameEvent == GameEvent.EVENT_GEM)
+        {
+            if (Instance)
+            {
+                e.eventObject = e.eventObject.GetComponentInParent<PlayerWand>().gameObject;
+                Instance.Server.SendEvent(e);
+            }
+        }
     }
 
     public static void LoadSceneAsync(string name)
