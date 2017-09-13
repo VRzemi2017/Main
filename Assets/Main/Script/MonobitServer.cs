@@ -108,7 +108,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
         if (rpcObj == null)
         {
-            MonobitNetwork.Instantiate(rpcName)
+            //MonobitNetwork.Instantiate(rpcName)
         }
 
         enterRoom.OnNext(Unit.Default);
