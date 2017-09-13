@@ -95,7 +95,10 @@ public class GemController : MonoBehaviour {
         gem.GetComponent<Gem>().SetSoundActiveFalse();
         ResetSmallGemPos();
         m_is_get_gem = true; 
-        m_Line_render_cont.ColorControllerON();
+        if (m_Line_render_cont)
+        {
+            m_Line_render_cont.ColorControllerON();
+        }
     }
 
     private void ResetSmallGemPos() {
