@@ -20,7 +20,7 @@ public class NetworkScript : MonoBehaviour {
         else
         {
             MonobitEngine.MonobitView view = GetComponent<MonobitEngine.MonobitView>();
-            if (view && !view.isMine)
+            if (view && view.owner != null && !view.isMine)
             {
                 DisableScript();
             }
