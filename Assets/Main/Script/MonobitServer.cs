@@ -46,7 +46,10 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
 
-    private MonobitRPC rpcObj;
+    private void Awake()
+    {
+        GetComponent<MonobitView>().viewID = 999;
+    }
 
     private void Start() {
         if (offline)
@@ -106,14 +109,6 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         playerNo = MonobitNetwork.player.ID - 1;
         SetMessage("Player: " + MonobitNetwork.player.ID + "P");
 
-        //need monobitview to RPC, create by runtime to prevent id conflict in different scene.
-        if (rpcObj == null)
-        {
-            GameObject tmp = MonobitNetwork.Instantiate(rpcName, Vector3.zero, Quaternion.identity, 0);
-            rpcObj = tmp.GetComponent<MonobitRPC>();
-            tmp.transform.parent = transform;
-        }
-
         enterRoom.OnNext(Unit.Default);
     }
 
@@ -145,22 +140,22 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
             return;
         }
 
-        if (rpcObj)
+        if (monobitView)
         {
             if (!MonobitNetwork.isHost)
             {
-                rpcObj.RPC("RemoteReady", MonobitTargets.Host);
+                monobitView.RPC("RemoteReady", MonobitTargets.Host);
             }
         }
     }
 
     public void StartGame()
     {
-        if (rpcObj)
+        if (monobitView)
         {
             if (MonobitNetwork.isHost)
             {
-                rpcObj.RPC("RecieveStart", MonobitTargets.All);
+                monobitView.RPC("RecieveStart", MonobitTargets.All);
             }
         }
     }
@@ -184,24 +179,27 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
         if (data.eventObject)
         {
             MonobitView view = data.eventObject.GetComponent<MonobitView>();
-            if (view)
+            if (view && monobitView)
             {
-                rpcObj.RPC("RecieveEvent", MonobitTargets.Others, data.gameEvent, view.viewID);
+                monobitView.RPC("RecieveEvent", MonobitTargets.Others, data.gameEvent, view.viewID);
             }
         }
     }
 
-    public void RemoteReady()
+    [MunRPC]
+    void RemoteReady()
     {
         remoteReady.OnNext(Unit.Default);
     }
 
-    public void RecieveStart()
+    [MunRPC]
+    void RecieveStart()
     {
         recieveStart.OnNext(Unit.Default);
     }
 
-    public void RecieveEvent(GameEvent e, int ID)
+    [MunRPC]
+    void RecieveEvent(GameEvent e, int ID)
     {
         recieveEvent.OnNext(new EventData() { gameEvent = e, eventObject = GameObject.FindObjectsOfType<MonobitView>().SingleOrDefault(v => v.viewID == ID).gameObject });
     }
