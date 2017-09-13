@@ -27,6 +27,8 @@ public class MainManager : MonoBehaviour {
         GAME_STATE_MAX,
     }
 
+    private static GameObject localPlayer = null;
+    public static GameObject LocalPlayer { get { return localPlayer; } }
     private static List<GameObject> players = new List<GameObject>();
 
     private static Messager message;
@@ -134,7 +136,12 @@ public class MainManager : MonoBehaviour {
         }
     }
 
-    public static void EventTriggered(EventData e) {
+    public static void EventTriggered(EventData e)
+    {
+        if (e.gameEvent == GameEvent.EVENT_DAMAGE && e.eventObject != LocalPlayer)
+        {
+            return;
+        }
 
         eventHappaned.OnNext(e);
     }
@@ -167,6 +174,11 @@ public class MainManager : MonoBehaviour {
         if (obj && !players.Contains(obj))
         {
             players.Add(obj);
+
+            if (MonobitServer.IsLocalObj(obj))
+            {
+                localPlayer = obj;
+            }
         }
     }
 
@@ -175,6 +187,11 @@ public class MainManager : MonoBehaviour {
         if (obj && players.Contains(obj))
         {
             players.Remove(obj);
+
+            if (MonobitServer.IsLocalObj(obj))
+            {
+                localPlayer = null;
+            }
         }
     }
 }

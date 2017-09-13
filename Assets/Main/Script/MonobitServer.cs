@@ -160,4 +160,18 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     {
         recieveStart.OnNext(Unit.Default);
     }
+
+    public static bool IsLocalObj(GameObject obj)
+    {
+        if (obj)
+        {
+            MonobitView view = obj.GetComponent<MonobitView>();
+            if (view)
+            {
+                return view.isMine;
+            }
+        }
+
+        return false;
+    }
 }
