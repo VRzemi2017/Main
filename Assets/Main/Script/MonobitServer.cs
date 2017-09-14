@@ -14,7 +14,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     [SerializeField]
     private int sendRate = 30;
     [SerializeField]
-    private float reconnectTime = 3;
+    private float retryTime = 3;
 	[SerializeField]
 	private bool GUIDisplay = true;
 	[SerializeField]
@@ -25,8 +25,6 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private bool offline = true;
     [SerializeField]
     private string roomName = "TCA_JACK_ROOM";
-    [SerializeField]
-    private string rpcName = "RPC";
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";
@@ -36,6 +34,9 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     private Subject<Unit> remoteReady = new Subject<Unit>();
     public IObservable<Unit> OnRemoteReady { get { return remoteReady; } }
+
+    private Subject<Unit> checkRemoteReady = new Subject<Unit>();
+    public IObservable<Unit> OnCheckRemoteReady { get { return checkRemoteReady; } }
 
     private Subject<Unit> recieveStart = new Subject<Unit>();
     public IObservable<Unit> OnStartGame { get { return recieveStart; } }
@@ -50,6 +51,8 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
+
+    private System.IDisposable dis;
 
     private void Start() {
         instance = this;
@@ -78,7 +81,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private void OnDisconnectedFromServer()
     {
         SetMessage("Disconnected.");
-	    Observable.Timer(System.TimeSpan.FromSeconds(reconnectTime)).Subscribe(_ =>
+	    Observable.Timer(System.TimeSpan.FromSeconds(retryTime)).Subscribe(_ =>
         {
             ConnectServer ();
         });
@@ -148,6 +151,13 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
             {
                 monobitView.RPC("RemoteReady", MonobitTargets.Host);
             }
+            else
+            {
+                dis = Observable.Interval(System.TimeSpan.FromSeconds(retryTime)).Subscribe(_ =>
+                {
+                    monobitView.RPC("CheckRemoteReady", MonobitTargets.Others);
+                });
+            }
         }
     }
 
@@ -191,6 +201,12 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     [MunRPC]
     void RemoteReady()
     {
+        if (dis != null)
+        {
+            dis.Dispose();
+            dis = null;
+        }
+
         remoteReady.OnNext(Unit.Default);
     }
 
@@ -198,6 +214,12 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     void RecieveStart()
     {
         recieveStart.OnNext(Unit.Default);
+    }
+
+    [MunRPC]
+    void CheckRemoteReady()
+    {
+        checkRemoteReady.OnNext(Unit.Default);
     }
 
     [MunRPC]

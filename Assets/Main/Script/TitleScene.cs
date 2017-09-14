@@ -17,15 +17,20 @@ public class TitleScene : SceneBase
         InitPlayerPosition();
         MainManager.ChangeState(MainManager.GameState.GAME_NETWORK);
 
+        if (MonobitServer.OffLine)
+        {
+            Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ =>
+            {
+                MainManager.ChangeState(MainManager.GameState.GAME_START);
+            });
+        }
+
         this.UpdateAsObservable().Subscribe(_ =>
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (MainManager.CurrentState == MainManager.GameState.GAME_START ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_NETWORK ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_PLAYING)
+                if (MainManager.CurrentState == MainManager.GameState.GAME_START)
                 {
-                    MainManager.ChangeState(MainManager.GameState.GAME_FINISH);
                     MainManager.LoadSceneAsync(sceneName);
                 }
             }

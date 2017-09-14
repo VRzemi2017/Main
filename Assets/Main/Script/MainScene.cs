@@ -55,15 +55,11 @@ public class MainScene : SceneBase
         InitPlayerPosition();
         MainManager.ChangeState(MainManager.GameState.GAME_NETWORK);
 
-#if UNITY_EDITOR
-        MainManager mm = GameObject.FindObjectOfType<MainManager>();
-        if (!mm)
+        if (MonobitServer.OffLine)
         {
             Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ =>
             {
                 MainManager.ChangeState(MainManager.GameState.GAME_START);
-                NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
-                networks.ToList().ForEach(g => g.enabled = true);
             });
         }
 
@@ -71,18 +67,12 @@ public class MainScene : SceneBase
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (MainManager.CurrentState == MainManager.GameState.GAME_START ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_NETWORK ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_PLAYING ||
-                    MainManager.CurrentState == MainManager.GameState.GAME_RESULT)
+                if (MainManager.CurrentState == MainManager.GameState.GAME_RESULT)
                 {
-                    MainManager.ChangeState(MainManager.GameState.GAME_FINISH);
                     MainManager.LoadSceneAsync(sceneName);
                 }
             }
         });
-#endif
-
     }
 
     void InitLevelSetting()

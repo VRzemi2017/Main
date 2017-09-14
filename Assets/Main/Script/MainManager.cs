@@ -93,9 +93,8 @@ public class MainManager : MonoBehaviour {
 
             server.OnStartGame.Subscribe(_ =>
             {
+                remoteReady = false;
                 ChangeState(GameState.GAME_START);
-				NetworkObject[] networks = GameObject.FindObjectsOfType<NetworkObject>();
-				networks.ToList().ForEach(g => g.enabled = true);
             }).AddTo(this);
 
             server.OnRecieveEvent.Subscribe(e =>
@@ -208,8 +207,7 @@ public class MainManager : MonoBehaviour {
 
     public static void LoadSceneAsync(string name)
     {
-        remoteReady = false;
-        ChangeState(GameState.GAME_INIT);
+        ChangeState(GameState.GAME_FINISH);
         SteamVR_LoadLevel.Begin(name);
     }
 
