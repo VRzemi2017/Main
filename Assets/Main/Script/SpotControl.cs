@@ -25,8 +25,10 @@ public class SpotControl : MonoBehaviour {
         {
             UnityEditor.EditorUtility.DisplayDialog("警告", "SpotID衝突: " + ID + " \nGameObject Name: " + gameObject.name, "OK");
         }
-    }
 #endif
+
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {
