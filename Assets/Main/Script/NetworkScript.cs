@@ -13,6 +13,11 @@ public class NetworkScript : MonoBehaviour {
 
     private void Awake()
     {
+        if (MonobitServer.OffLine)
+        {
+            return;
+        }
+
         if (CheckByHost && MonobitEngineBase.MonobitNetwork.inRoom && !MonobitEngineBase.MonobitNetwork.isHost)
         {
             DisableScript();

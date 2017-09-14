@@ -10,18 +10,29 @@ public class NetworkObject : MonoBehaviour {
     [SerializeField]
     private int group;
 
+    private System.IDisposable dis;
+
 	void Awake()
 	{
-        enabled = (int)MainManager.CurrentState > (int)MainManager.GameState.GAME_NETWORK;
+        enabled = MonobitServer.OffLine;
+        if (!enabled)
+        {
+            dis = this.UpdateAsObservable().Subscribe(_ =>
+            {
+                if (    MainManager.CurrentState == MainManager.GameState.GAME_START
+                    || MainManager.CurrentState == MainManager.GameState.GAME_PLAYING)
+                {
+                    enabled = true;
+                    dis.Dispose();
+                    dis = null;
+                }
+            });
+        }
 	}
 
 	// Use this for initialization
-	void Start () {
-        MainManager.OnStateChanged.Subscribe(s =>
-        {
-            enabled = (int)MainManager.CurrentState > (int)MainManager.GameState.GAME_NETWORK;
-        }).AddTo(this);
-
+	void Start ()
+    {
         if (MonobitEngine.MonobitNetwork.inRoom)
         {
             GameObject obj = MonobitEngine.MonobitNetwork.Instantiate(objName, Vector3.zero, Quaternion.identity, group);

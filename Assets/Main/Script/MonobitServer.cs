@@ -22,7 +22,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     [SerializeField]
     private Messager message;
     [SerializeField]
-    private bool offline;
+    private bool offline = true;
     [SerializeField]
     private string roomName = "TCA_JACK_ROOM";
     [SerializeField]
@@ -43,10 +43,17 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private Subject<EventData> recieveEvent = new Subject<EventData>();
     public IObservable<EventData> OnRecieveEvent { get { return recieveEvent; } }
 
+    public static bool OffLine { get { return Instance == null || Instance.offline; } }
+
+    private static MonobitServer instance;
+    public static MonobitServer Instance { get { return instance; } }
+
     private static int playerNo = -1;
     public static int PlayerNo { get { return playerNo; } }
 
     private void Start() {
+        instance = this;
+
         if (offline)
         {
             MonobitView mv = GetComponent<MonobitView>();
