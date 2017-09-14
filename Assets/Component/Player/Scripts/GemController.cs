@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GemController : MonoBehaviour {
     [SerializeField] GameObject m_Gem;
@@ -93,6 +94,7 @@ public class GemController : MonoBehaviour {
         m_SmallGemList.Add(gem);
         gem.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
         gem.GetComponent<Gem>().SetSoundActiveFalse();
+        gem.GetComponentsInChildren<Light>().ToList().ForEach(l => l.enabled = false);
         ResetSmallGemPos();
         m_is_get_gem = true; 
         if (m_Line_render_cont)
