@@ -35,8 +35,7 @@ public class LineRendererController : MonoBehaviour {
     [SerializeField]
     LayerMask layerMask = -1;
 
-    [SerializeField]
-    AudioClip TeleportAudio;
+    [SerializeField] AudioClip TeleportAudio;
 
     float DelTime = 0.0f;
 
@@ -84,6 +83,7 @@ public class LineRendererController : MonoBehaviour {
         LineColor = GetComponent<Renderer>( ).material.GetColor( "_TintColor" );
         renderer = GetComponent<Renderer>( );
         audiosource = gameObject.GetComponent<AudioSource>();
+        audiosource.clip = TeleportAudio;
     }
 
     private void OnEnable()
@@ -222,16 +222,12 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
-                    //この行を入れると最初にワープしたときにロードが走るので、なくしたい。
-                    audiosource.clip = TeleportAudio;
-                    if ( audiosource != null ) {
-                        audiosource.Play( );
-                    }
                     player.transform.position = GetPosition - new Vector3( CameraEyePosition.x, 0, CameraEyePosition.z );
                     Move_quantity++;
                     isWarpInput = true;
                     DelTime = 0.0f;
                     Move = false;
+                    audiosource.Play();
                 }
             }
         }
@@ -246,12 +242,6 @@ public class LineRendererController : MonoBehaviour {
         DelTime = 0f;
         Move = false;
         GetPosition = Vector3.zero;
-
-        audiosource.clip = null;
-        if (audiosource == null) {
-            audiosource.Stop();
-        }
-
         Destroy( MoveTargetInstance );
     }
 
