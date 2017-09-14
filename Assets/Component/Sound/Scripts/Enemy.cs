@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-	Rigidbody rb;
+	//Rigidbody rb;
 	Transform target;
-	Vector3 dir;
+	//Vector3 dir;
 
 	// Use this for initialization
 	void Start () {
-		rb = GetComponent< Rigidbody > ();
+
+        //rb = GetComponent< Rigidbody > ();
 		target = GameObject.FindWithTag ( "Player" ).transform;
 	}
 	

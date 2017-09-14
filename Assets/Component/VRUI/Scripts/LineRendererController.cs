@@ -54,7 +54,7 @@ public class LineRendererController : MonoBehaviour {
     Vector3 GetPosition = Vector3.zero;
 
     Color LineColor;
-    Renderer renderer;
+    new Renderer renderer;
 
     float gravity_add;
 

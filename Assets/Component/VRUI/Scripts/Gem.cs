@@ -20,7 +20,7 @@ public class Gem : MonoBehaviour {
 
 
     bool IsGet = false;
-    bool Gem_Ain_Controller = false;
+    //bool Gem_Ain_Controller = false;
     public bool Gem_Effect_TimeFlag = false;
 
     Action<GameObject> GetAction;

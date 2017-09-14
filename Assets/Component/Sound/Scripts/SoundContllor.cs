@@ -4,8 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundContllor : MonoBehaviour {
-  
-    AudioSource audio;
+
+    new AudioSource audio;
 
     private void Start()
     {

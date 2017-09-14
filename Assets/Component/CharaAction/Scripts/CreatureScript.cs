@@ -37,7 +37,7 @@ public class CreatureScript: MonoBehaviour {
 	public bool patrolLoop; 			// path loop
 	private bool playerSpotted = false; // Player spotted
 
-	private bool onGround = false;
+	//private bool onGround = false;
 	private bool isJumping = false;
 
 	//Players
@@ -126,13 +126,13 @@ public class CreatureScript: MonoBehaviour {
 			stopTimer = 0f;
 			myTransform.localRotation = Quaternion.identity;
 			isJumping = true;
-			onGround = false;
+			//onGround = false;
 		} else if (other.CompareTag("Wait") || other.CompareTag("Spawn")) {
 			stopTimer = 3.0f;
 			moveSpeed = 15.0f;
 			myTransform.localRotation = Quaternion.identity;
 			isJumping = false;
-			onGround = true;
+			//onGround = true;
 		} 
 			
 		//Rotate self to targets

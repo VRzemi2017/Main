@@ -19,7 +19,7 @@ public class GemController : MonoBehaviour {
     private bool m_is_get_gem = false;
     private LineRendererController m_Line_render_cont;
     private Gem Gem_tauch_data;
-    private float m_hit_gem_time = 0;
+    //private float m_hit_gem_time = 0;
     //ヒットしたGemを一時的に保存する
     private GameObject m_hit_gem;
     private List<GameObject> m_SmallGemList = new List<GameObject>();

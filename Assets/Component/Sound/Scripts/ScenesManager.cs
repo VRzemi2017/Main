@@ -20,29 +20,34 @@ public class ScenesManager : MonoBehaviour {
 	void Update () {
 		if ( Input.GetKeyDown( KeyCode.Z ) ) {
 			Debug.Log( _sceneName1 + "に移動します" );
-			Application.LoadLevel ( _sceneName1 );
-			//SceneManager.LoadScene ( "b" );
-			Destroy( GameObject.Find( "DontDestroyObjects" ) );
+			//Application.LoadLevel ( _sceneName1 );
+            SceneManager.LoadScene( "_sceneName1", LoadSceneMode.Additive );
+            //SceneManager.LoadScene ( "b" );
+            Destroy( GameObject.Find( "DontDestroyObjects" ) );
 		}
 		if ( Input.GetKeyDown( KeyCode.X ) ) {
 			Debug.Log( _sceneName2 + "に移動します" );
-			Application.LoadLevel ( _sceneName2 );
-			//SceneManager.LoadScene ( "b" );
-		}
+            SceneManager.LoadScene("_sceneName2", LoadSceneMode.Additive);
+            //Application.LoadLevel ( _sceneName2 );
+            //SceneManager.LoadScene ( "b" );
+        }
 		if ( Input.GetKeyDown( KeyCode.C ) ) {
 			Debug.Log( _sceneName3 + "に移動します" );
-			Application.LoadLevel ( _sceneName3 );
+            SceneManager.LoadScene("_sceneName3", LoadSceneMode.Additive);
+            //Application.LoadLevel ( _sceneName3 );
 			//SceneManager.LoadScene ( "b" );
 		}
 		if ( Input.GetKeyDown( KeyCode.V ) ) {
 			Debug.Log( _sceneName4 + "に移動します" );
-			Application.LoadLevel ( _sceneName4 );
+            SceneManager.LoadScene("_sceneName4", LoadSceneMode.Additive);
+            //Application.LoadLevel ( _sceneName4 );
 			//SceneManager.LoadScene ( "b" );
 		}
 		if ( Input.GetKeyDown( KeyCode.B ) ) {
 			Debug.Log( _sceneName5 + "に移動します" );
-			Application.LoadLevel ( _sceneName5 );
-			//SceneManager.LoadScene ( "b" );
-		}
+            SceneManager.LoadScene("_sceneName5", LoadSceneMode.Additive);
+            //Application.LoadLevel ( _sceneName5 );
+            //SceneManager.LoadScene ( "b" );
+        }
 	}
 }

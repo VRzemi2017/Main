@@ -74,7 +74,7 @@ public class GaneratorController : MonoBehaviour {
                 UpdateWave();
                 break;
             case MainManager.GameState.GAME_FINISH:
-                int i = 0;
+                //int i = 0;
                 break;
             default:
                 break;

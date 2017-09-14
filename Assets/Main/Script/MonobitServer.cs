@@ -23,8 +23,7 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     private Messager message;
     [SerializeField]
     private bool offline = true;
-    [SerializeField]
-    private string roomName = "TCA_JACK_ROOM";
+    //[SerializeField] private string roomName = "TCA_JACK_ROOM";
 
     const string SERVER_NAME = "TCA_SERVER";
     const string LOBBY_NAME = "TCA_LOBBY";

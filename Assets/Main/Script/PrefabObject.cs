@@ -10,7 +10,7 @@ public class PrefabObject : MonoBehaviour {
 	void Start () {
         prefabs.ToList().ForEach(p =>
         {
-            GameObject obj = Instantiate(p);
+            //GameObject obj = Instantiate(p);
             p.transform.parent = transform;
             p.transform.localPosition = Vector3.zero;
             p.transform.localRotation = Quaternion.identity;
