@@ -69,9 +69,13 @@ public class LineRendererController : MonoBehaviour {
     public bool IsWarpInput { get { return isWarpInput; } }
     public int TeleportCount { get { return Move_quantity; } }
 
-    void Start() {
-
+    private void Awake()
+    {
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.enabled = false;
+    }
+
+    void Start() {
         player = GameObject.FindObjectOfType<SteamVR_ControllerManager>( );
         TrackedObject = player.right.GetComponent<SteamVR_TrackedObject>( );
         GetControllerRotation = GameObject.Find( "Controller (right)" );
@@ -82,6 +86,16 @@ public class LineRendererController : MonoBehaviour {
         audiosource = gameObject.GetComponent<AudioSource>();
         audiosource.Stop();
         audiosource.clip = TeleportAudio;
+    }
+
+    private void OnEnable()
+    {
+        lineRenderer.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        lineRenderer.enabled = false;
     }
 
     void Update( ) {
