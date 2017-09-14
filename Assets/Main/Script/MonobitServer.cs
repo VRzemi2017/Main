@@ -111,10 +111,15 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     {
         SetMessage("Enter Room.");
 
-        playerNo = MonobitNetwork.player.ID - 1;
-        SetMessage("Player: " + MonobitNetwork.player.ID + "P");
+        UpdatePlayerNo();
 
         enterRoom.OnNext(Unit.Default);
+    }
+
+    private void UpdatePlayerNo()
+    {
+        playerNo = MonobitNetwork.playerCountInRoom - 1;
+        SetMessage("Player: " + MonobitNetwork.playerCountInRoom + "P");
     }
 
 	private void OnGUI()

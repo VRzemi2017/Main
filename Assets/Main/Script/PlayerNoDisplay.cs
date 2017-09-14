@@ -15,7 +15,7 @@ public class PlayerNoDisplay : MonoBehaviour {
         {
             if (!view.isMine)
             {
-                mesh.text = view.owner.ID + "P";
+                mesh.text = (MainManager.PlayerNo + 1)  + "P";
                 mesh.gameObject.SetActive(true);
             }
         }
