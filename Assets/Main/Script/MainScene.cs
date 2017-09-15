@@ -33,6 +33,7 @@ public class MainScene : SceneBase
                         if (result)
                         {
                             result.ComputeScore();
+                            result.ComputeComment();
                         }
                     }
                     break;

@@ -54,7 +54,7 @@ public class Info_Result : MonoBehaviour {
 
             result.Spots.ToList().ForEach(s =>
             {
-                Event1_text.text += s + "\n";
+                Event1_text.text += s.SpotName + "\n";
             });
 
             if (result.Score == ResultManager.ScoreType.SCORE_D)

@@ -110,8 +110,6 @@ public class ResultManager : MonoBehaviour {
 
     private void Start()
     {
-        ComputeScore();
-        ComputeComment();
     }
 
     public void ComputeScore()
