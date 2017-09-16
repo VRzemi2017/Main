@@ -90,7 +90,7 @@ public class Info_Result : MonoBehaviour {
 
             result.Comment.ToList().ForEach(c =>
             {
-                string text = CheckTextCharaNum(c, 20);
+                string text = CheckTextCharaNum(c, 18);
                 text += "\n";
                 int line = CheckTextLinesNum(text);
                 SetScreenHeight(line, SubScreen);
