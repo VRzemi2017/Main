@@ -30,6 +30,8 @@ public class MainManager : MonoBehaviour {
     private static GameObject localPlayer = null;
     public static GameObject LocalPlayer { get { return localPlayer; } }
     private static List<GameObject> players = new List<GameObject>();
+    private static GemController localWand = null;
+    public static GemController LocalWand { get { return localWand; } }
     private static GemController remoteWand = null;
     public static GemController RemoteWand { get { return remoteWand; } }
     private static List<GemController> playerWands = new List<GemController>();
@@ -263,6 +265,10 @@ public class MainManager : MonoBehaviour {
             {
                 remoteWand = c;
             }
+            else
+            {
+                localWand = c;
+            }
         }
     }
 
@@ -275,6 +281,10 @@ public class MainManager : MonoBehaviour {
             if (Instance && !MonobitServer.IsLocalObj(obj))
             {
                 remoteWand = null;
+            }
+            else
+            {
+                localWand = c;
             }
         }
     }

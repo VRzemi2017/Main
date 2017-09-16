@@ -18,7 +18,7 @@ public class ResultManager : MonoBehaviour {
     {
         get 
         {
-            PlayerManager player = GameObject.FindObjectOfType<PlayerManager>();
+            PlayerManager player = MainManager.LocalWand.GetComponentInChildren<PlayerManager>();
             if (player)
             {
                 return player.GEM_NUM;
@@ -44,7 +44,7 @@ public class ResultManager : MonoBehaviour {
     {
         get 
         {
-            LineRendererController line = GameObject.FindObjectOfType<LineRendererController>();
+            LineRendererController line = MainManager.LocalWand.GetComponentInChildren<LineRendererController>();
             if (line)
             {
                 return line.TeleportCount;
