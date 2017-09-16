@@ -9,8 +9,10 @@ public class FieldObjectController : MonoBehaviour {
     public void SetSoundActive( bool active ) {
         if (active) {
             sound.soundData._sound.UnPause();
+            sound.soundData._sound_PauseFlag = false;
         } else { 
             sound.soundData._sound.Pause();
+            sound.soundData._sound_PauseFlag = true;
         }
     }
 }

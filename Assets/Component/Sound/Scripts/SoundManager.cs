@@ -22,17 +22,17 @@ public class SoundManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//SoundManagerのInspectorを初期化する
+		/*//SoundManagerのInspectorを初期化する
 		for (int i = 0; i < _music.Count; i++) {
 			_music [i].soundData = InitializeAudioSource (_music [i].soundData._sound);
-		}
+		}*/
 	
 	}
 
 	// Update is called once per frame
 	void Update () {
 		//Inspector内での調整を対応するAoudioSourceに反映する
-		for (int i = 0; i < _music.Count; i++) {
+		/*for (int i = 0; i < _music.Count; i++) {
 			_music [i].soundData = AdjustmentAudioSource (_music [i].soundData);
 		}
 
@@ -40,15 +40,15 @@ public class SoundManager : MonoBehaviour {
 		//ボタンによる_soundObjectの調整
 		for (int i = 0; i < _music.Count; i++) {
 			_music [i].soundData = ButtonControll (_music [i].soundData);
-		}
+		}*/
 
 	}
 		
 	void LateUpdate() {
-		//対応するAoudioSourceの値をInspector内に反映する
+		/*//対応するAoudioSourceの値をInspector内に反映する
 		for (int i = 0; i < _music.Count; i++) {
 			_music [i].soundData = ReflectAudioSource (_music [i].soundData);
-		}
+		}*/
 
 	}
 

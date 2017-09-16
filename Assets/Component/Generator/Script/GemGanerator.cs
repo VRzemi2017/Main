@@ -66,7 +66,7 @@ public class GemGanerator : MonoBehaviour {
             }
         }*/
         //表示するべきGemをActive化させる
-        SetGemWaveActive( true );
+        
 
     }
 	
@@ -76,6 +76,7 @@ public class GemGanerator : MonoBehaviour {
 
         switch ( game_state ) {
             case MainManager.GameState.GAME_START:
+                SetGemWaveActive(true);
                 break;
             case MainManager.GameState.GAME_PLAYING:
                 GenerateUpdate( );
