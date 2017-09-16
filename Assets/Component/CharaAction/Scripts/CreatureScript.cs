@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using UniRx;
+using UniRx.Triggers;
 
 public class CreatureScript: MonoBehaviour {
 
@@ -51,7 +53,7 @@ public class CreatureScript: MonoBehaviour {
 	private void Start( ){
 		enemyLayer = gameObject.layer;
 		myTransform = transform;
-		mainCamera = GameObject.FindGameObjectWithTag ( "MainCamera" ).transform;
+		mainCamera = Camera.main.transform;
 		anim = GetComponent<Animator> ();
 	}
 		
@@ -77,46 +79,50 @@ public class CreatureScript: MonoBehaviour {
 
 		// Targeting
 		if (dir.magnitude < 0.5f) {
-			if (timer == 0) {
-				timer = Time.time;
-			}
+
+
+
 			if ((Time.time - timer) >= stopTimer ) {
 				nowTarget++;
-				timer = 0; 
 			}
 		} else if (playerSpotted && targetPlayer && attacked == false){
 			
-				MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
-				target = targetPlayer.position;
-				dir = targetPlayer.position - myTransform.position;
-				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
-				myTransform.LookAt (mainCamera);
-				timer2 = Time.time;
-				Debug.Log ("Player damage");
-				attacked = true;
-			} 
+			MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
+			target = targetPlayer.position;
+			dir = targetPlayer.position - myTransform.position;
+			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
+			myTransform.LookAt (mainCamera);
+			Debug.Log ("Player damage");
+			attacked = true;
+		} 
+
+
+		//leave player alone after 4 seconds
+		if (playerSpotted && (targetPlayer == null || (Time.time - timer2) >= attackTimer)) {
+			
+			playerSpotted = false;
+			targetPlayer = null;
+			Debug.Log ("Leave player:"  + attacked + "Time: " + Time.time + " timer: " + timer2);
+		}
 
 //			if (attacked) {
-//				Debug.Log ("player:" + targetPlayer + " timer: " + timer2);
+//			Debug.Log ("player:" + targetPlayer + " timer: " + timer2);
 //			}
 
-			//leave player alone after 4 seconds
-			if (targetPlayer == null || timer2 >= attackTimer) {
-				timer2 = 0;
-				playerSpotted = false;
-				targetPlayer = null;
-				//Debug.Log ("Leave player");
-			}
+			
 
-			if (playerSpotted == false) {
-				attacked = false;
+			if (playerSpotted == false && attacked == true) {
+				Observable.Timer (System.TimeSpan.FromSeconds (10)).Subscribe (_ => {
+					attacked = false;
+				});
+				
 			}
 	}
 
 	//ENTER COLLIDER
 	private void OnTriggerEnter( Collider other ) {
 
-		if (enemyLayer != LayerMask.NameToLayer ("EnemyLayer")) {
+		if (enemyLayer != LayerMask.NameToLayer ("EnemyLayer") && attacked) {
 			return;
 		} 
 
@@ -132,6 +138,7 @@ public class CreatureScript: MonoBehaviour {
 			moveSpeed = 15.0f;
 			myTransform.localRotation = Quaternion.identity;
 			isJumping = false;
+			timer = Time.time;
 			//onGround = true;
 		} 
 			
@@ -145,25 +152,26 @@ public class CreatureScript: MonoBehaviour {
 			if (p == other.gameObject)
 			{
 				playerSpotted = true;
+				timer2 = Time.time;
 				moveSpeed = 15.0f;
-				Debug.Log("Player spotted");
+				Debug.Log("Player spotted: " + attacked + "Time: " + Time.time + " timer: " + timer2);
 				targetPlayer = p.transform;
 			}
 		});
 	}
 
 	// EXIT COLLIDER
-	private void OnTriggerExit ( Collider other ) {
+	//private void OnTriggerExit ( Collider other ) {
 		// reset timer to normal
-		if (other.CompareTag("Wait") || other.CompareTag("SpeedUp")) {
-			stopTimer = 0.5f;
-		}
+	//	if (other.CompareTag("Wait") || other.CompareTag("SpeedUp")) {
+	//		stopTimer = 0.5f;
+	//	}
 			
 // Destroy game object if it leaves Playzone ( DEBUG )
 //		if (other.CompareTag("Playzone")) {
 //			Destroy (gameObject);
 //		}
-	}
+	//}
 
 	//Animator
 	private void Animate(){
