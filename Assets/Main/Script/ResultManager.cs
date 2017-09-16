@@ -69,10 +69,14 @@ public class ResultManager : MonoBehaviour {
 
     public enum ConditionType
     {
-        CONDI_GEM,
-        CONDI_DAMEGE,
-        CONDI_TELEPORT,
-        CONDI_SPOT,
+        CONDI_TOTAL_GEM,
+        CONDI_SELF_DAMEGE,
+        CONDI_SELF_TELEPORT,
+        CONDI_SELF_SPOT,
+        CONDI_SELF_GEM,
+        CONDI_REMOTE_GEM,
+        CONDI_TOTAL_DAMEGE,
+        CONDI_REMOTE_DAMEGE,
     }
 
     public enum OPType
@@ -176,15 +180,15 @@ public class ResultManager : MonoBehaviour {
     {
         switch (sc.Type)
         {
-            case ConditionType.CONDI_DAMEGE:
+            case ConditionType.CONDI_SELF_DAMEGE:
                 {
                     return CompareCondition(sc.OP, DamageCount, sc.Param);
                 }
-            case ConditionType.CONDI_GEM:
+            case ConditionType.CONDI_TOTAL_GEM:
                 {
                     return CompareCondition(sc.OP, GemCount, sc.Param);
                 }
-            case ConditionType.CONDI_SPOT:
+            case ConditionType.CONDI_SELF_SPOT:
                 {
                     bool result = false;
 
@@ -195,7 +199,7 @@ public class ResultManager : MonoBehaviour {
 
                     return result;
                 }
-            case ConditionType.CONDI_TELEPORT:
+            case ConditionType.CONDI_SELF_TELEPORT:
                 {
                     return CompareCondition(sc.OP, TeleportCount, sc.Param);
                 }
