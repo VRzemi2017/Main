@@ -15,5 +15,13 @@ public class SoundDataComponent : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.UpArrow)) {
 			ParentChanger.ExploreAudioSource ( a,this.gameObject  );
 		}
+
+        if ( MainManager.CurrentState == MainManager.GameState.GAME_RESULT )
+        {
+            gameObject.GetComponent<AudioSource>().Pause();
+        }
 	}
+
+
+
 }
