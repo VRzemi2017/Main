@@ -22,9 +22,9 @@ public class Info_R_S_Win : MonoBehaviour {
         //spots.Add("てんさい");
         total_num = spots.Count;*/
 
-        win_size = 0.02f;
-        win_x = -0.12f;
-        win_y = -0.12f;
+        win_size = 0.01f;
+        win_x = -0.05f;
+        win_y = -0.05f;
         this.transform.localScale += new Vector3(win_size * total_num, win_size * total_num, 0);
         this.transform.position += new Vector3(win_x * total_num, win_y * total_num, 0);
 

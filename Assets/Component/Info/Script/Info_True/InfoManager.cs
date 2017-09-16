@@ -57,7 +57,10 @@ public class InfoManager : MonoBehaviour {
                     break;
                 case GameEvent.EVENT_DAMAGE:
                     {
-                        CallCase(InfoCase.INFO_DAMAGE);
+                        if (MainManager.LocalPlayer == e.eventObject)
+                        {
+                            CallCase(InfoCase.INFO_DAMAGE);
+                        }
                     }
                     break;
             }
