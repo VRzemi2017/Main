@@ -5,6 +5,7 @@ using UnityEngine;
 public class Info_R_S_Win : MonoBehaviour {
     private int total_num;
     private float win_size;
+    private float win_x;
     private float win_y;
 	// Use this for initialization
 	void Start () {
@@ -22,8 +23,10 @@ public class Info_R_S_Win : MonoBehaviour {
         total_num = spots.Count;*/
 
         win_size = 0.02f;
+        win_x = -0.12f;
         win_y = -0.12f;
-        this.transform.localScale += new Vector3(0, win_size * total_num, 0);
-        this.transform.position += new Vector3(0, win_y * total_num, 0);
+        this.transform.localScale += new Vector3(win_size * total_num, win_size * total_num, 0);
+        this.transform.position += new Vector3(win_x * total_num, win_y * total_num, 0);
+
     }
 }
