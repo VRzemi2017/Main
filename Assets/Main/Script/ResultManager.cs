@@ -14,7 +14,7 @@ public class ResultManager : MonoBehaviour {
     private List<string> comment = new List<string>();
     public string[] Comment { get { return comment.ToArray(); } }
 
-    public int GemCount 
+    public int SelfGemCount 
     {
         get 
         {
@@ -27,20 +27,15 @@ public class ResultManager : MonoBehaviour {
             return 0;
         }
     }
-    public int DamageCount 
+    public int SelfDamageCount 
     {
         get 
         {
-            CharaManager chara = GameObject.FindObjectOfType<CharaManager>();
-            if (chara)
-            {
-                return chara.DamageCount;
-            }
-
-            return 0;
+            return MainScene.Instance.SelfDamage;
         }
     }
-    public int TeleportCount 
+
+    public int SelfTeleportCount 
     {
         get 
         {
@@ -180,13 +175,29 @@ public class ResultManager : MonoBehaviour {
     {
         switch (sc.Type)
         {
-            case ConditionType.CONDI_SELF_DAMEGE:
-                {
-                    return CompareCondition(sc.OP, DamageCount, sc.Param);
-                }
             case ConditionType.CONDI_TOTAL_GEM:
                 {
-                    return CompareCondition(sc.OP, GemCount, sc.Param);
+                    return CompareCondition(sc.OP, SelfGemCount + MainScene.Instance.RemoteGem, sc.Param);
+                }
+            case ConditionType.CONDI_SELF_GEM:
+                {
+                    return CompareCondition(sc.OP, SelfGemCount, sc.Param);
+                }
+            case ConditionType.CONDI_REMOTE_GEM:
+                {
+                    return CompareCondition(sc.OP, MainScene.Instance.RemoteGem, sc.Param);
+                }
+            case ConditionType.CONDI_TOTAL_DAMEGE:
+                {
+                    return CompareCondition(sc.OP, MainScene.Instance.SelfDamage + MainScene.Instance.RemoteDamage, sc.Param);
+                }
+            case ConditionType.CONDI_SELF_DAMEGE:
+                {
+                    return CompareCondition(sc.OP, MainScene.Instance.SelfDamage, sc.Param);
+                }
+            case ConditionType.CONDI_REMOTE_DAMEGE:
+                {
+                    return CompareCondition(sc.OP, MainScene.Instance.RemoteDamage, sc.Param);
                 }
             case ConditionType.CONDI_SELF_SPOT:
                 {
@@ -201,7 +212,7 @@ public class ResultManager : MonoBehaviour {
                 }
             case ConditionType.CONDI_SELF_TELEPORT:
                 {
-                    return CompareCondition(sc.OP, TeleportCount, sc.Param);
+                    return CompareCondition(sc.OP, SelfTeleportCount, sc.Param);
                 }
         }
 

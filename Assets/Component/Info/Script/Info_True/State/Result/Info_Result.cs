@@ -46,9 +46,9 @@ public class Info_Result : MonoBehaviour {
         ResultManager result = GameObject.FindObjectOfType<ResultManager>();
         if (result)
         {
-            _pick_up = result.GemCount;
-            _damage = result.DamageCount;
-            _teleport = result.TeleportCount;
+            _pick_up = result.SelfGemCount;
+            _damage = result.SelfDamageCount;
+            _teleport = result.SelfTeleportCount;
 
 
 

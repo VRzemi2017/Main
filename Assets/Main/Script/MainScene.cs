@@ -13,6 +13,8 @@ public class MainScene : SceneBase
     static System.Nullable<LevelDesignManager.RandomTable> table;
     static int index = -1;
 
+    public static MainScene Instance;
+
     private static bool useForceLevel = false;
     private static int forceLevel = 0;
     public static void ForceLevel(int lv)
@@ -25,8 +27,14 @@ public class MainScene : SceneBase
 
     LevelDesignManager lv;
 
+    public int RemoteDamage { get; private set; }
+    public int RemoteGem { get; private set; }
+    public int SelfDamage { get; private set; }
+
     private void Awake()
     {
+        Instance = this;
+
         MainManager.ChangeState(MainManager.GameState.GAME_INIT);
 
         MainManager.OnStateChanged.Subscribe(s =>
@@ -85,6 +93,33 @@ public class MainScene : SceneBase
                 }
             }
         });
+
+        MainManager.OnEventHappaned.Subscribe(e =>
+        {
+            switch (e.gameEvent)
+            {
+                case GameEvent.EVENT_DAMAGE:
+                    {
+                        if (MainManager.LocalPlayer == e.eventObject)
+                        {
+                            ++SelfDamage;
+                        }
+                        else
+                        {
+                            ++RemoteDamage;
+                        }
+                    }
+                    break;
+                case GameEvent.EVENT_GEM:
+                    {
+                        if (MainManager.RemoteWand && e.eventObject == MainManager.RemoteWand.gameObject)
+                        {
+                            ++RemoteGem;
+                        }
+                    }
+                    break;
+            }
+        }).AddTo(this);
     }
 
     void InitLevelSetting()
