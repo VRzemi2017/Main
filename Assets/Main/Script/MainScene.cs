@@ -9,8 +9,19 @@ public class MainScene : SceneBase
 {
     [SerializeField] float playTime = 60f;
 
+    
     static System.Nullable<LevelDesignManager.RandomTable> table;
     static int index = -1;
+
+    private static bool useForceLevel = false;
+    private static int forceLevel = 0;
+    public static void ForceLevel(int lv)
+    {
+        forceLevel = lv;
+        useForceLevel = true;
+
+        Debug.Log("ForceLevel: " + lv);
+    }
 
     LevelDesignManager lv;
 
@@ -85,8 +96,17 @@ public class MainScene : SceneBase
 
         if (lv)
         {
-            index = ++index % table.Value.Sequence.Length;
-            System.Nullable<LevelDesignManager.LevelSetting> setting = lv.GetLevelSetting(table.Value.Sequence[index]);
+            System.Nullable<LevelDesignManager.LevelSetting> setting = null;
+            if (useForceLevel)
+            {
+                setting = lv.GetLevelSetting(forceLevel);
+                useForceLevel = false;
+            }
+            else
+            {
+                index = ++index % table.Value.Sequence.Length;
+                setting = lv.GetLevelSetting(table.Value.Sequence[index]);
+            }
             if (setting != null)
             {
                 setting.Value.GeneratorSetting.gameObject.SetActive(true);
