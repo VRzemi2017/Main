@@ -103,7 +103,6 @@ public class LineRendererController : MonoBehaviour {
         Quaternion ControllerRotation = GetControllerRotation.transform.rotation;
 
         Vector3 postion = ( PositionDiff.magnitude * TrackedObject.transform.forward.normalized ) + TrackedObject.transform.position;
-        Vector3 CameraEyePosition = EyeObject.transform.localPosition;
 
         //VRコントローラの処理
         var device = SteamVR_Controller.Input( ( int )TrackedObject.index );
@@ -174,7 +173,7 @@ public class LineRendererController : MonoBehaviour {
                 }
 
                 Point = hit.point;
-                Point.y = hit.point.y + 0.05f;
+                //Point.y = hit.point.y + 0.05f;
 
                 TargetSetActive = false;
                 break;
@@ -222,7 +221,8 @@ public class LineRendererController : MonoBehaviour {
             TargetSetActive = true;
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
-                    player.transform.position = GetPosition - new Vector3( CameraEyePosition.x, 0, CameraEyePosition.z );
+                    Vector3 diff = EyeObject.transform.localPosition;
+                    player.transform.position = GetPosition - player.transform.localRotation * new Vector3( diff.x, 0, diff.z );
                     Move_quantity++;
                     isWarpInput = true;
                     DelTime = 0.0f;
