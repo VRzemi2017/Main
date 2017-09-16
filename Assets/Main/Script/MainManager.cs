@@ -284,7 +284,7 @@ public class MainManager : MonoBehaviour {
             }
             else
             {
-                localWand = c;
+                localWand = null;
             }
         }
     }
