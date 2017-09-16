@@ -36,15 +36,11 @@ public class CreatureScript: MonoBehaviour {
 	public float damage = 1f;
 	private bool attacked = false;
 
-	public bool patrolLoop; 			// path loop
-	private bool playerSpotted = false; // Player spotted
+	public bool patrolLoop; 		
+	private bool playerSpotted = false; 
 
 	//private bool onGround = false;
 	private bool isJumping = false;
-
-	//Players
-	//private Transform player1;
-	//private Transform player2;
 
 	private Transform targetPlayer = null;
 
@@ -58,7 +54,6 @@ public class CreatureScript: MonoBehaviour {
 	}
 		
 	private void Update(){
-
 		// Move along array of targets
 		if (nowTarget < targets.Length) {
 			Move ();
@@ -71,6 +66,11 @@ public class CreatureScript: MonoBehaviour {
 		
 	// Move towards target
 	private void Move(){
+		if (myTransform == null) 
+		{
+			Debug.Log ("myTransform is null");
+			return;
+		}
 
 		// Path patrol
 		Vector3 target = targets[nowTarget].position;
@@ -80,23 +80,20 @@ public class CreatureScript: MonoBehaviour {
 		// Targeting
 		if (dir.magnitude < 0.5f) {
 
-
-
 			if ((Time.time - timer) >= stopTimer ) {
 				nowTarget++;
 			}
 		} else if (playerSpotted && targetPlayer && attacked == false){
 			
-			MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
-			target = targetPlayer.position;
-			dir = targetPlayer.position - myTransform.position;
-			myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
-			myTransform.LookAt (mainCamera);
-			Debug.Log ("Player damage");
-			attacked = true;
-		} 
-
-
+				MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
+				target = targetPlayer.position;
+				dir = targetPlayer.position - myTransform.position;
+				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
+				myTransform.LookAt (mainCamera);
+				Debug.Log ("Player damage");
+				attacked = true;
+		 } 
+			
 		//leave player alone after 4 seconds
 		if (playerSpotted && (targetPlayer == null || (Time.time - timer2) >= attackTimer)) {
 			
@@ -109,14 +106,11 @@ public class CreatureScript: MonoBehaviour {
 //			Debug.Log ("player:" + targetPlayer + " timer: " + timer2);
 //			}
 
-			
-
-			if (playerSpotted == false && attacked == true) {
-				Observable.Timer (System.TimeSpan.FromSeconds (10)).Subscribe (_ => {
-					attacked = false;
-				});
-				
-			}
+		if (playerSpotted == false && attacked == true) {
+			Observable.Timer (System.TimeSpan.FromSeconds (10)).Subscribe (_ => {
+				attacked = false;
+			});
+		}
 	}
 
 	//ENTER COLLIDER
@@ -159,19 +153,6 @@ public class CreatureScript: MonoBehaviour {
 			}
 		});
 	}
-
-	// EXIT COLLIDER
-	//private void OnTriggerExit ( Collider other ) {
-		// reset timer to normal
-	//	if (other.CompareTag("Wait") || other.CompareTag("SpeedUp")) {
-	//		stopTimer = 0.5f;
-	//	}
-			
-// Destroy game object if it leaves Playzone ( DEBUG )
-//		if (other.CompareTag("Playzone")) {
-//			Destroy (gameObject);
-//		}
-	//}
 
 	//Animator
 	private void Animate(){
