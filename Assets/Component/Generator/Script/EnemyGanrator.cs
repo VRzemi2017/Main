@@ -44,18 +44,20 @@ public class EnemyGanrator : MonoBehaviour {
     private void Start( ) {
         m_now_wave = 0;
         m_charaManager.SetAllEnemyActive(false);
-        SetEnemyWaveActice(true);
+
     }
 
     private void Update() {
         MainManager.GameState game_state = MainManager.CurrentState;
         switch (game_state) {
             case MainManager.GameState.GAME_START:
+                SetEnemyWaveActice(true);
                 break;
             case MainManager.GameState.GAME_PLAYING:
                 CheckWaveView();
                 break;
-            case MainManager.GameState.GAME_FINISH:
+            case MainManager.GameState.GAME_TIMEUP:
+                m_charaManager.SetAllEnemyActive(false);
                 break;
             default:
                 break;
