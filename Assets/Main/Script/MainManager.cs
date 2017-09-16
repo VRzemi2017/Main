@@ -175,17 +175,9 @@ public class MainManager : MonoBehaviour {
 
     public static void EventTriggered(EventData e)
     {
-        if (e.gameEvent == GameEvent.EVENT_DAMAGE && e.eventObject != LocalPlayer)
-        {
-            if (Instance)
-            {
-                Instance.Server.SendEvent(e);
-            }
-            return;
-        }
-
         if (   e.gameEvent == GameEvent.EVENT_HIT_GEM 
             || e.gameEvent == GameEvent.EVENT_LEAVR_GEM
+            || e.gameEvent == GameEvent.EVENT_DAMAGE
             )
         {
             if (Instance)
