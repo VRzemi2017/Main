@@ -123,7 +123,7 @@ public class InfoManager : MonoBehaviour {
     {
         Info_Called();
         Info_Case = InfoCase.INFO_WAIT;
-        info_text.text = ("石取られた");
+        info_text.text = ("敵に噛みつかれた");
         rob += rob_score;
     }
 
@@ -131,7 +131,7 @@ public class InfoManager : MonoBehaviour {
     {
         Info_Called();
         Info_Case = InfoCase.INFO_WAIT;
-        info_text.text = ("石拾った");
+        info_text.text = ("魔法石を拾った");
         pickup += pickup_score;
     }
 
