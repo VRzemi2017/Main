@@ -60,26 +60,32 @@ public class Info_Result : MonoBehaviour {
             if (result.Score == ResultManager.ScoreType.SCORE_D)
             {
                 Eval_Text.text = ("D");
+                Eval_Text.color = new Color(81f / 255f, 2f / 255f, 2f / 255f);
             }
             if (result.Score == ResultManager.ScoreType.SCORE_C)
             {
                 Eval_Text.text = ("C");
+                Eval_Text.color = new Color(1f / 255f, 31f / 255f, 101f / 255f);
             }
             if (result.Score == ResultManager.ScoreType.SCORE_B)
             {
                 Eval_Text.text = ("B");
+                Eval_Text.color = new Color(96f / 255f, 67f / 255f, 32f / 255f);
             }
-            if ( result.Score == ResultManager.ScoreType.SCORE_A )
+            if (result.Score == ResultManager.ScoreType.SCORE_A)
             {
                 Eval_Text.text = ("A");
+                Eval_Text.color = new Color(78f / 255f, 69f / 255f, 74f / 255f);
             }
             if (result.Score == ResultManager.ScoreType.SCORE_S)
             {
                 Eval_Text.text = ("S");
+                Eval_Text.color = new Color(162f / 255f, 126f / 255f, 57f / 255f);
             }
             if (result.Score == ResultManager.ScoreType.SCORE_SS)
             {
                 Eval_Text.text = ("SS");
+                Eval_Text.color = new Color(220f / 255f, 220f / 255f, 220f / 255f);
             }
 
             result.Comment.ToList().ForEach(c =>
