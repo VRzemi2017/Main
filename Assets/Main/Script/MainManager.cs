@@ -67,6 +67,7 @@ public class MainManager : MonoBehaviour {
 
     private static bool remoteReady;
 
+    private System.IDisposable dis;
 
     private void Awake() 
     {
@@ -79,9 +80,10 @@ public class MainManager : MonoBehaviour {
     {
         if (server)
         {
-            server.OnEnterRoom.Subscribe(_ =>
+            dis = server.OnEnterRoom.Subscribe(_ =>
             {
                 LoadSceneAsync(titleName);
+                dis.Dispose( );
             }).AddTo(this);
 
             server.OnRemoteReady.Subscribe(_ =>
