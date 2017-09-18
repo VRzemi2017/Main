@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class Info_Result : MonoBehaviour {
+    //リザルト中の改行する文字の数
+    private const int TEXT_CHAR_NUM = 15;
+
     private int _pick_up;
     private int _damage;
     private int _teleport;
@@ -90,7 +93,7 @@ public class Info_Result : MonoBehaviour {
 
             result.Comment.ToList().ForEach(c =>
             {
-                string text = CheckTextCharaNum(c, 18);
+                string text = CheckTextCharaNum(c, TEXT_CHAR_NUM);//"TEXT_CHAR_NUM"の数までのコメントを取得。
                 text += "\n";
                 int line = CheckTextLinesNum(text);
                 SetScreenHeight(line, SubScreen);
@@ -112,6 +115,7 @@ public class Info_Result : MonoBehaviour {
         String = SubstringAtCount(text, oneLineMaxNum);
         return String;
     }
+
 
     int CheckTextLinesNum(string text) {
         int count = CountChar(text, '\n');//text.ToList().Where(c => c.Equals("\n")) + 1;
@@ -155,34 +159,29 @@ public class Info_Result : MonoBehaviour {
         this.transform.rotation = qua;        //ウィンドウの角度
     }
 
-    public string SubstringAtCount( string self, int count)
-    {
+    public string SubstringAtCount( string self, int count) {
         string result = "";
         var length = (int)Mathf.Ceil((float)self.Length / count);
 
-        for (int i = 0; i < length; i++)
-        {
+        for ( int i = 0; i < length; i++ ) {
             int start = count * i;
-            if (self.Length <= start)
-            {
+            if ( self.Length <= start ) {
                 break;
             }
-            if (self.Length < start + count)
-            {
-                result += self.Substring(start);
+
+            if ( self.Length < start + count ) {
+                result += self.Substring( start );
                 result += "\n";
-            }
-            else
-            {
-                result += self.Substring(start, count);
+            } else {
+                result += self.Substring( start, count );
                 result += "\n";
             }
         }
 
         return result;
     }
-    public int CountChar(string s, char c) {
-        return s.Length - s.Replace(c.ToString(), "").Length;
-    }
 
+    public int CountChar(string s, char c) {
+        return s.Length - s.Replace(c.ToString( ), "").Length;
+    }
 }
