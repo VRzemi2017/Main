@@ -128,6 +128,11 @@ public class CreatureScript: MonoBehaviour {
 			return;
 		} 
 
+        if (myTransform == null)
+        {
+            return;
+        }
+
 		//Move self to targets and speed change
 		if (other.CompareTag("SpeedUp")) { 
 			moveSpeed = 15.0f;

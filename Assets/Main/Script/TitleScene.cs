@@ -34,13 +34,13 @@ public class TitleScene : SceneBase
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                MainScene.ForceLevel(0);
+                //MainScene.ForceLevel(0);
                 ToMain();
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                MainScene.ForceLevel(1);
+                //MainScene.ForceLevel(1);
                 ToMain();
             }
 
