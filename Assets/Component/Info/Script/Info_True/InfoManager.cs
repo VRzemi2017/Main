@@ -61,6 +61,7 @@ public class InfoManager : MonoBehaviour {
 
                         if (MainManager.LocalPlayer == e.eventObject)
                         {
+                            Debug.Log("Show Damage: " + MainManager.LocalPlayer.GetComponent<MonobitEngine.MonobitView>().viewID);
                             CallCase(InfoCase.INFO_DAMAGE);
                         }
                     }
