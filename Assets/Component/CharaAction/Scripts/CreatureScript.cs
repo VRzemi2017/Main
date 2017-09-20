@@ -46,6 +46,8 @@ public class CreatureScript: MonoBehaviour {
 
 	private Transform mainCamera;
 
+    private System.IDisposable dis;
+
 	private void Start( ){
 		enemyLayer = gameObject.layer;
 		myTransform = transform;
@@ -86,6 +88,7 @@ public class CreatureScript: MonoBehaviour {
 		} else if (playerSpotted && targetPlayer && attacked == false){
 			
 				MainManager.EventTriggered (new EventData () { gameEvent = GameEvent.EVENT_DAMAGE, eventObject = targetPlayer.gameObject });
+                Debug.Log("Send Damage player: " + targetPlayer.gameObject.GetComponent<MonobitEngine.MonobitView>().viewID);
 				target = targetPlayer.position;
 				dir = targetPlayer.position - myTransform.position;
 				myTransform.position = Vector3.MoveTowards (myTransform.position, target, moveSpeed * Time.deltaTime);
@@ -107,9 +110,14 @@ public class CreatureScript: MonoBehaviour {
 //			}
 
 		if (playerSpotted == false && attacked == true) {
-			Observable.Timer (System.TimeSpan.FromSeconds (10)).Subscribe (_ => {
-				attacked = false;
-			});
+            if (dis == null)
+            {
+                dis = Observable.Timer (System.TimeSpan.FromSeconds (10)).Subscribe (_ => {
+				    attacked = false;
+                    dis.Dispose();
+                    dis = null;
+			    });
+            }
 		}
 	}
 

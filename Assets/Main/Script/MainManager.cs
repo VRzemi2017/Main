@@ -180,6 +180,8 @@ public class MainManager : MonoBehaviour {
         if (   e.gameEvent == GameEvent.EVENT_HIT_GEM 
             || e.gameEvent == GameEvent.EVENT_LEAVR_GEM
             || e.gameEvent == GameEvent.EVENT_DAMAGE
+            || e.gameEvent == GameEvent.EVENT_ENEMY_JUMP
+            || e.gameEvent == GameEvent.EVENT_ENEMY_WAIT
             )
         {
             if (Instance)
