@@ -197,6 +197,11 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
             MonobitView view = data.eventObject.GetComponent<MonobitView>();
             if (view && monobitView)
             {
+                if (data.gameEvent == GameEvent.EVENT_DAMAGE)
+                {
+                    Debug.Log("EVENT_DAMAGE SendEvent: " + data.gameEvent + " ID: " + view.viewID);
+                }
+                
                 monobitView.RPC("RecieveEvent", MonobitTargets.Others, (int)data.gameEvent, view.viewID);
             }
         }
