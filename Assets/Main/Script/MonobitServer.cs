@@ -234,11 +234,24 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
     [MunRPC]
     void RecieveEvent(int e, int ID)
     {
+        
+
+        EventData data = new EventData() { gameEvent = (GameEvent)e };
+
+        MonobitView[] views = GameObject.FindObjectsOfType<MonobitView>();
+        views.ToList().ForEach(v => 
+        {
+            if (v.viewID == ID)
+            {
+                data.eventObject = v.gameObject;
+            }
+        });
+
         if ((GameEvent)e == GameEvent.EVENT_DAMAGE)
         {
-             Debug.Log("EVENT_DAMAGE RecieveEvent: " + (GameEvent)e + " ID: " + ID);
+             Debug.Log("EVENT_DAMAGE RecieveEvent: " + (GameEvent)e + " ID: " + ID + " RealID: " + data.eventObject.GetComponent<MonobitView>().viewID);
         }
 
-        recieveEvent.OnNext(new EventData() { gameEvent = (GameEvent)e, eventObject = GameObject.FindObjectsOfType<MonobitView>().SingleOrDefault(v => v.viewID == ID).gameObject });
+        recieveEvent.OnNext(data);
     }
 }
