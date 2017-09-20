@@ -57,11 +57,8 @@ public class InfoManager : MonoBehaviour {
                     break;
                 case GameEvent.EVENT_DAMAGE:
                     {
-                        Debug.Log("Damaged player: " + e.eventObject.GetComponent<MonobitEngine.MonobitView>().viewID);
-
                         if (MainManager.LocalPlayer == e.eventObject)
                         {
-                            Debug.Log("Show Damage: " + MainManager.LocalPlayer.GetComponent<MonobitEngine.MonobitView>().viewID);
                             CallCase(InfoCase.INFO_DAMAGE);
                         }
                     }

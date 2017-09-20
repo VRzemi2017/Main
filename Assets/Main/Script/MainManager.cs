@@ -123,7 +123,6 @@ public class MainManager : MonoBehaviour {
                         break;
                     case GameEvent.EVENT_DAMAGE:
                         {
-                            e.eventObject = localPlayer;
                             eventHappaned.OnNext(e);
                         }
                         break;
