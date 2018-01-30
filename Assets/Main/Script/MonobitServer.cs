@@ -178,6 +178,11 @@ public class MonobitServer : MonobitEngine.MonoBehaviour {
 
     public static bool IsLocalObj(GameObject obj)
     {
+		if (Instance.offline)
+		{
+			return true;
+		}
+
         if (obj)
         {
             MonobitView view = obj.GetComponent<MonobitView>();
