@@ -14,19 +14,19 @@ public class SceneBase : MonoBehaviour {
     protected MainManager main;
     protected Messager message;
 
-    GameObject player;
+    VRProxy player;
 
     protected void InitPlayerPosition()
     {
         if (!player)
         {
-            player = GameObject.FindObjectOfType<SteamVR_ControllerManager>().gameObject;
+            player = GameObject.FindObjectOfType<VRProxy>();
         }
 
         if (player && MainManager.PlayerNo < startPosition.Count)
         {
             Vector3 shift = new Vector3();
-            SteamVR_Camera eye = GameObject.FindObjectOfType<SteamVR_Camera>();
+            Camera eye = player.Camera;
             if (eye)
             {
                 shift = eye.gameObject.transform.localPosition;

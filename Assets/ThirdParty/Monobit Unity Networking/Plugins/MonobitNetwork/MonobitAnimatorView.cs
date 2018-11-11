@@ -4,7 +4,7 @@ using System.Collections.Generic;
 #if UNITY_EDITOR
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
 using UnityEditorInternal;
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
 using UnityEditor.Animations;
 #endif // UNITY_4 || UNITY_5
 #endif // UNITY_EDITOR
@@ -246,7 +246,7 @@ namespace MonobitEngine
             }
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
             return  AnimatorController.GetEffectiveAnimatorController(m_Animator);
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
             RuntimeAnimatorController animController = m_Animator.runtimeAnimatorController;
             AnimatorOverrideController animOverrideController = animController as AnimatorOverrideController;
             if (animOverrideController != null)
@@ -330,7 +330,7 @@ namespace MonobitEngine
         {
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
             return  this.m_Animator.layerCount;
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
             return (this.m_Controller != null) ? this.m_Controller.layers.Length : 0;
 #endif // UNITY_4 || UNITY_5
         }
@@ -344,7 +344,7 @@ namespace MonobitEngine
         {
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
             return  this.m_Animator.GetLayerName(index);
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
             return (this.m_Controller != null) ? this.m_Controller.layers[index].name : null;
 #endif // UNITY_4 || UNITY_5
         }
@@ -375,7 +375,7 @@ namespace MonobitEngine
         {
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
             return (this.m_Controller != null) ? this.m_Controller.parameterCount : 0;
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
             return (this.m_Controller != null) ? this.m_Controller.parameters.Length : 0;
 #endif // UNITY_4 || UNITY_5
         }
@@ -389,7 +389,7 @@ namespace MonobitEngine
         {
 #if UNITY_4_3 || UNITY_4_5 || UNITY_4_6 || UNITY_4_7
             return this.m_Controller.GetParameter(paramIndex);
-#elif UNITY_5
+#elif UNITY_5 || UNITY_2017_1_OR_NEWER
             return this.m_Controller.parameters[paramIndex];
 #endif // UNITY_4 || UNITY_5
         }

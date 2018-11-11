@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 
 public class LineRendererController : MonoBehaviour {
 
-    SteamVR_ControllerManager player;
+    VRProxy player;
     [SerializeField]
     GameObject Pointer; //移動位置のTarget
     [SerializeField]
@@ -60,7 +61,7 @@ public class LineRendererController : MonoBehaviour {
     private GameObject PointerInstance;
     private GameObject MoveTargetInstance;
     private LineRenderer lineRenderer;
-    private SteamVR_TrackedObject TrackedObject;
+    private GameObject TrackedObject;
     private bool CanTeleport;
     private AudioSource audiosource;
 
@@ -75,8 +76,8 @@ public class LineRendererController : MonoBehaviour {
     }
 
     void Start() {
-        player = GameObject.FindObjectOfType<SteamVR_ControllerManager>( );
-        TrackedObject = player.right.GetComponent<SteamVR_TrackedObject>( );
+        player = GameObject.FindObjectOfType<VRProxy>( );
+        TrackedObject = player.Right;
         GetControllerRotation = GameObject.Find( "Controller (right)" );
         EyeObject = GameObject.Find( "Camera (eye)" );
         PointerInstance = Instantiate( Pointer, Point, Quaternion.identity );
@@ -104,9 +105,6 @@ public class LineRendererController : MonoBehaviour {
 
         Vector3 postion = ( PositionDiff.magnitude * TrackedObject.transform.forward.normalized ) + TrackedObject.transform.position;
 
-        //VRコントローラの処理
-        var device = SteamVR_Controller.Input( ( int )TrackedObject.index );
-
         //線とTargetの処理
         int index = 0;
 
@@ -119,7 +117,7 @@ public class LineRendererController : MonoBehaviour {
 
         currentPosition.y = postion.y - 0.01f;
 
-        if ( device.GetPressDown( SteamVR_Controller.ButtonMask.Trigger ) ) {
+        if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand)) {
             WandEffect.SetActive( true );
         }
 
@@ -141,7 +139,7 @@ public class LineRendererController : MonoBehaviour {
 
 
                 //VRコントローラの処理
-                if ( device.GetPressDown( SteamVR_Controller.ButtonMask.Trigger ) && Projectile_judge == false ) {
+                if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand) && Projectile_judge == false ) {
                     GetPosition = Point;
                     if ( Move == false && MoveTargetInstance == null && CanTeleport ) {
                         MoveTargetInstance = Instantiate( MoveTarget, new Vector3( GetPosition.x, GetPosition.y + 0.1f, GetPosition.z ), Quaternion.identity );
@@ -152,7 +150,7 @@ public class LineRendererController : MonoBehaviour {
 
                 }
 
-                if ( device.GetPress( SteamVR_Controller.ButtonMask.Trigger ) && Projectile_judge == false ) {
+                if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand) && Projectile_judge == false ) {
                     if ( GetPosition == Vector3.zero ) {
                         GetPosition = Point;
                         if ( MoveTargetInstance == null && CanTeleport ) {
@@ -209,13 +207,13 @@ public class LineRendererController : MonoBehaviour {
         }
 
         //コントローラー初期化
-        if ( device.GetTouchUp( SteamVR_Controller.ButtonMask.Trigger ) ) {
+        if (player.Trigger.GetStateUp(SteamVR_Input_Sources.RightHand)) {
             Initialized( );
             
         }
 
         //転移処理
-        if ( device.GetPress( SteamVR_Controller.ButtonMask.Trigger) && MoveTargetInstance != null  ) {
+        if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand) && MoveTargetInstance != null  ) {
             DelTime += Time.deltaTime;
             renderer.material.SetColor( "_TintColor", new Color( LineColor.r, LineColor.g, LineColor.b, 0 ) );
             TargetSetActive = true;

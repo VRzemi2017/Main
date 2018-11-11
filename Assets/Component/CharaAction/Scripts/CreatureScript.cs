@@ -51,7 +51,7 @@ public class CreatureScript: MonoBehaviour {
 	private void Start( ){
 		enemyLayer = gameObject.layer;
 		myTransform = transform;
-		mainCamera = Camera.main.transform;
+		mainCamera = GameObject.FindObjectOfType<VRProxy>().Camera.transform;
 		anim = GetComponent<Animator> ();
 	}
 		

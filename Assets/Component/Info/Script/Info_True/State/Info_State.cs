@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Info_State : MonoBehaviour {
 
+    Camera camera;
+
 	// Use this for initialization
 	void Start () {
-		
-	}
+        camera = GameObject.FindObjectOfType<VRProxy>().Camera;
+    }
 	
 	// Update is called once per frame
 	void Update () {
         float info_pos_y = 0.01f;     //ウィンドウの高さ
-        GameObject camera = GameObject.Find("Camera (eye)");  //プレイヤーのカメラの取得
         Vector3 camera_pos = camera.transform.position;         //プレイヤーのカメラ座標
         Vector3 front = camera.transform.forward * 2.0f;        //カメラの正面*距離
         Quaternion camera_rot = camera.transform.rotation;      //プレイヤーのカメラの角度

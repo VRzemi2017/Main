@@ -205,7 +205,7 @@ public class MainManager : MonoBehaviour {
     public static void LoadSceneAsync(string name)
     {
         ChangeState(GameState.GAME_FINISH);
-        SteamVR_LoadLevel.Begin(name);
+        SceneManager.LoadScene(name);
     }
 
     public void ReadyToStart()
