@@ -13,6 +13,7 @@ public class VRProxy : MonoBehaviour {
 
     [SerializeField] GameObject wand;
 
+    public GameObject Base { get { return TrackBase; } }
     public GameObject Right { get { return TrackRight; } }
     public GameObject Left { get { return TrackLeft; } }
     public Camera Camera { get { return TrackCamera; } }

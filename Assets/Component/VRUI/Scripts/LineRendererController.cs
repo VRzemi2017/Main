@@ -78,8 +78,8 @@ public class LineRendererController : MonoBehaviour {
     void Start() {
         player = GameObject.FindObjectOfType<VRProxy>( );
         TrackedObject = player.Right;
-        GetControllerRotation = GameObject.Find( "Controller (right)" );
-        EyeObject = GameObject.Find( "Camera (eye)" );
+        GetControllerRotation = player.Right;
+        EyeObject = player.Camera.gameObject;
         PointerInstance = Instantiate( Pointer, Point, Quaternion.identity );
         LineColor = GetComponent<Renderer>( ).material.GetColor( "_TintColor" );
         renderer = GetComponent<Renderer>( );
@@ -150,7 +150,7 @@ public class LineRendererController : MonoBehaviour {
 
                 }
 
-                if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand) && Projectile_judge == false ) {
+                if (player.Trigger.GetState(SteamVR_Input_Sources.RightHand) && Projectile_judge == false ) {
                     if ( GetPosition == Vector3.zero ) {
                         GetPosition = Point;
                         if ( MoveTargetInstance == null && CanTeleport ) {
@@ -213,14 +213,15 @@ public class LineRendererController : MonoBehaviour {
         }
 
         //転移処理
-        if (player.Trigger.GetStateDown(SteamVR_Input_Sources.RightHand) && MoveTargetInstance != null  ) {
+        if (player.Trigger.GetState(SteamVR_Input_Sources.RightHand) && MoveTargetInstance != null  ) {
             DelTime += Time.deltaTime;
             renderer.material.SetColor( "_TintColor", new Color( LineColor.r, LineColor.g, LineColor.b, 0 ) );
             TargetSetActive = true;
+
             if ( DelTime >= Delay ) {
                 if ( Move == true ) {
                     Vector3 diff = EyeObject.transform.localPosition;
-                    player.transform.position = GetPosition - player.transform.localRotation * new Vector3( diff.x, 0, diff.z );
+                    player.Base.transform.position = GetPosition - player.transform.localRotation * new Vector3( diff.x, 0, diff.z );
                     Move_quantity++;
                     isWarpInput = true;
                     DelTime = 0.0f;
